@@ -1,0 +1,21 @@
+# ============================================================
+#  ALERT TELEGRAM
+#  Edit file ini langsung di GitHub (bisa dari HP).
+#  Dicek otomatis tiap ±30 menit saat jam bursa + sesudah tutup.
+#  Satu alert hanya dikirim 1x per hari.
+# ============================================================
+
+# Kirim daftar hasil screener (id dari docs/screeners.json)
+screeners:
+  - bbs
+  - near_ara
+
+# Alert harga / indikator per saham (tanpa .JK)
+# kondisi yang tersedia: above, below, rsi_above, rsi_below, change_above, change_below
+saham:
+  - kode: BBCA
+    below: 5000
+  - kode: TLKM
+    rsi_below: 30
+  - kode: ANTM
+    change_above: 5

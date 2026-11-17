@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1419">
+<title>Casaham</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">Ca<b>saham</b></div>
+  <div class="upd" id="upd">memuat…</div>
+</header>
+
+<main>
+  <!-- SCREENER -->
+  <section id="tab-screener" class="tab active">
+    <div class="chips" id="presets"></div>
+    <p class="desc" id="presetDesc"></p>
+    <details class="builder" id="builder">
+      <summary>Aturan filter <span id="ruleCount"></span></summary>
+      <div id="rules"></div>
+      <div class="row gap">
+        <button class="btn ghost" id="addRule">+ Aturan</button>
+        <button class="btn ghost" id="saveScreen">Simpan sebagai…</button>
+      </div>
+    </details>
+    <div class="resultbar"><span id="hitCount"></span>
+      <select id="sortSel">
+        <option value="ret1d">Urut: % Hari ini</option>
+        <option value="value">Urut: Value</option>
+        <option value="volRatio">Urut: Vol / Rata2</option>
+        <option value="rsi14">Urut: RSI</option>
+        <option value="mcap">Urut: Market cap</option>
+        <option value="code">Urut: Kode</option>
+      </select>
+    </div>
+    <div class="list" id="results"></div>
+  </section>
+
+  <!-- CHART -->
+  <section id="tab-chart" class="tab">
+    <div class="search">
+      <input id="codeInput" list="codeList" placeholder="Kode saham, mis. BBCA" autocomplete="off" autocapitalize="characters">
+      <datalist id="codeList"></datalist>
+      <button class="star" id="starBtn" title="Watchlist">☆</button>
+    </div>
+    <div class="quote" id="quoteHead"></div>
+    <div class="chips small" id="rangeChips">
+      <button data-r="66">3B</button><button data-r="130" class="on">6B</button><button data-r="260">1T</button>
+    </div>
+    <div id="chartMain" class="chartbox"></div>
+    <div class="chartlabel">RSI 14</div>
+    <div id="chartRsi" class="chartbox sm"></div>
+    <div class="grid" id="stats"></div>
+  </section>
+
+  <!-- WATCHLIST -->
+  <section id="tab-watch" class="tab">
+    <h2>Watchlist</h2>
+    <div class="list" id="watchList"></div>
+    <p class="muted" id="watchEmpty">Belum ada. Buka chart lalu ketuk ☆ untuk menambah.</p>
+  </section>
+
+  <!-- ALERT -->
+  <section id="tab-alert" class="tab">
+    <h2>Alert Telegram</h2>
+    <p class="muted">Alert dicek otomatis ±30 menit sekali saat jam bursa dan dikirim ke Telegram, maksimal 1x per hari per alert.</p>
+    <h3>Alert aktif</h3>
+    <div id="alertActive" class="card"></div>
+    <h3>Buat alert baru</h3>
+    <div class="card form">
+      <label>Kode <input id="aCode" placeholder="BBCA" autocapitalize="characters"></label>
+      <label>Kondisi
+        <select id="aCond">
+          <option value="above">Harga di atas</option>
+          <option value="below">Harga di bawah</option>
+          <option value="change_above">Naik lebih dari (%)</option>
+          <option value="change_below">Turun lebih dari (%) — isi negatif</option>
+          <option value="rsi_below">RSI di bawah</option>
+          <option value="rsi_above">RSI di atas</option>
+        </select></label>
+      <label>Nilai <input id="aVal" type="number" inputmode="decimal" placeholder="5000"></label>
+      <button class="btn" id="aMake">Buat & salin</button>
+      <pre id="aOut" class="code" hidden></pre>
+      <a class="btn ghost" id="aEdit" target="_blank" rel="noopener">Buka alerts.yml di GitHub ↗</a>
+      <p class="muted small">Tempel teks yang disalin di bawah bagian <code>saham:</code>, lalu Commit.</p>
+    </div>
+    <h3>Riwayat alert terkirim</h3>
+    <div id="alertLog"></div>
+  </section>
+</main>
+
+<nav class="bottom">
+  <button data-tab="screener" class="on"><span>⚡</span>Screener</button>
+  <button data-tab="chart"><span>📈</span>Chart</button>
+  <button data-tab="watch"><span>★</span>Watchlist</button>
+  <button data-tab="alert"><span>🔔</span>Alert</button>
+</nav>
+
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
