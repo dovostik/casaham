@@ -1,7 +1,8 @@
 """Watchlist PARTY bertahap (candle 5 menit):
 
-  1. 📌 Masuk watchlist  : saham lolos screener PARTY (kapan pun di jam bursa)
-  2. 🟢 Koreksi memantul : koreksi >= 50% lonjakan, lalu 2 candle 5m tanpa low baru,
+  1. 📌 Masuk watchlist  : saham lolos screener PARTY & masih dekat high (kapan pun di jam bursa)
+  ⚠️ Bandar keluar       : candle 15m tutup di bawah tengah lonjakan (open -> high) -> keluar watchlist
+  2. 🟢 Koreksi memantul : koreksi >= 35% lonjakan (dari open), lalu 2 candle 15m tanpa low baru,
                            volume mengering, candle hijau, harga masih >= +3%  -> kirim SL/TP1/TP2
   3. Watchlist lanjutan  : 🔴 koreksi gagal (harga <= SL) · 🎯 TP1/TP2 · 🚀 tembus high lonjakan
 Watchlist dihapus tiap hari (state per tanggal). Setiap sinyal dicatat untuk evaluasi (/evaluasi).
@@ -13,11 +14,12 @@ import pandas as pd
 
 import update as U
 
-RETR = 0.5          # koreksi minimal: porsi lonjakan yang terhapus
+RETR = 0.35         # koreksi minimal: porsi lonjakan (open -> high) yang terhapus
+HALF = 0.5          # harga tutup candle di bawah tengah lonjakan = bandar dianggap keluar
 DRY = 0.35          # volume 2 candle pantul <= 35% volume candle lonjakan terbesar
 MIN_UP = 1.03       # harga tetap >= +3% dari harga kemarin
 NEAR_HIGH = -5.0    # syarat masuk watchlist: harga maksimal 5% di bawah high hari ini (masih di fase lonjak)
-TF = "5min"
+TF = "15m"           # hasil uji 59 hari: 15 menit lebih baik dari 5 menit untuk aturan ini
 
 PATH = U.STATE / "watch.json"
 LOG = U.STATE / "watch_log.json"
@@ -68,7 +70,7 @@ def intraday(codes):
     if not codes:
         return {}
     syms = [c + ".JK" for c in codes]
-    df = yf.download(syms, period="1d", interval="5m", group_by="ticker", progress=False, threads=True)
+    df = yf.download(syms, period="1d", interval=TF, group_by="ticker", progress=False, threads=True)
     out = {}
     for c, s in zip(codes, syms):
         try:
@@ -82,11 +84,13 @@ def intraday(codes):
     return out
 
 
-def find_bounce(bars, prev, added_at):
-    """Cari koreksi + pantulan sejak saham masuk watchlist. Return dict atau None."""
-    if len(bars) < 4:
+def find_bounce(bars, prev, added_at, day_open=None):
+    """Cari koreksi + pantulan sejak saham masuk watchlist.
+    Lonjakan diukur dari harga open. Return dict (time= sinyal pantul, out= bandar keluar) atau None."""
+    if len(bars) < 3:
         return None
-    t0 = pd.Timestamp(added_at).floor("5min")
+    base = float(day_open or bars["Open"].iloc[0])
+    t0 = pd.Timestamp(added_at).floor("15min")
     pre = bars[bars.index <= t0]
     H = float(pre["High"].max()) if len(pre) else float(bars["High"].iloc[0])
     spike_vol = float(pre["Volume"].max()) if len(pre) else 0.0
@@ -98,15 +102,18 @@ def find_bounce(bars, prev, added_at):
         if corr_i is None:
             H = max(H, float(b.High))
             spike_vol = max(spike_vol, float(b.Volume))
-            if (H - b.Close) >= RETR * (H - prev) and b.Close >= prev * MIN_UP:
+            if (H - b.Close) >= RETR * (H - base) and b.Close >= prev * MIN_UP:
                 corr_i, L = i, float(b.Low)
             continue
+        if b.Close < base + HALF * (H - base):
+            return {"H": H, "out": True, "price": float(b.Close), "mid": base + HALF * (H - base),
+                    "time_out": idx[i].strftime("%H:%M")}
         if i >= corr_i + 2:
             b1 = bars.iloc[i - 1]
             if (b1.Low > L and b.Low > L and b.Close > b.Open and b.Close >= prev * MIN_UP
                     and (b1.Volume + b.Volume) / 2 <= DRY * spike_vol):
                 return {"H": H, "L": L, "time": idx[i].strftime("%H:%M"), "close": float(b.Close),
-                        "retr": (H - L) / (H - prev) * 100 if H > prev else 0}
+                        "retr": (H - L) / (H - base) * 100 if H > base else 0}
         L = min(L, float(b.Low))
     return {"H": H, "corr": corr_i is not None, "L": L} if corr_i is not None else {"H": H}
 
@@ -172,15 +179,23 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         b = bars.get(c)
         if b is None:
             continue
-        res = find_bounce(b, it["prev"], it["added_at"])
+        q = quotes.get(c + ".JK", {})
+        res = find_bounce(b, it["prev"], it["added_at"], q.get("regularMarketOpen"))
         if not res:
             continue
         it["H"] = res["H"]
+        if res.get("out"):
+            it["stage"] = "OUT"
+            send("bandar_keluar",
+                 f"⚠️ <b>BANDAR KELUAR? · {c}</b> · data {data_time}\n"
+                 f"Candle {res['time_out']} tutup {nf(res['price'])}, di bawah tengah lonjakan {nf(res['mid'])} "
+                 f"(open → high {nf(res['H'])}). Dikeluarkan dari watchlist.")
+            sent += 1
+            continue
         if "time" not in res:
             if res.get("corr") and "CORR" not in it["flags"]:
                 it["flags"].append("CORR")
             continue
-        q = quotes.get(c + ".JK", {})
         price = float(q.get("regularMarketPrice") or res["close"])
         L = res["L"]
         sl = int(round(L - tick(L)))
@@ -197,7 +212,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         it.update(stage="BOUNCE", entry=price, sl=sl, tp1=tp1, tp2=tp2, L=L, bounce_at=now_s)
         send("memantul",
             f"🟢 <b>KOREKSI MEMANTUL · {c}</b> · data {data_time}\n"
-            f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan\n"
+            f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan (candle 15m)\n"
             f"<b>SL {nf(sl)}</b> ({pc((sl / price - 1) * 100)}) · <b>TP1 {nf(tp1)}</b> ({pc((tp1 / price - 1) * 100)}) · "
             f"<b>TP2 {nf(tp2)}</b> ({pc((tp2 / price - 1) * 100)})\n"
             f"High lonjakan {nf(res['H'])} · jarak ke ARA {pc((ara / price - 1) * 100)}\n"
@@ -264,7 +279,8 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
 
 
 # ------------------------------------------------------------------ perintah Telegram
-LABEL = {"WATCH": "⏳ menunggu koreksi/pantulan", "BOUNCE": "🟢 sudah memantul", "FAILED": "🔴 gagal", "DONE": "⚪ selesai"}
+LABEL = {"WATCH": "⏳ menunggu koreksi/pantulan", "BOUNCE": "🟢 sudah memantul", "FAILED": "🔴 gagal",
+         "DONE": "⚪ selesai", "OUT": "⚠️ bandar keluar"}
 
 
 def watch_text(today):
@@ -294,4 +310,4 @@ def eval_text():
             f"Kena SL: {s('sl_hit') / n * 100:.0f}% · TP1: {s('tp1_hit') / n * 100:.0f}% · "
             f"TP2: {s('tp2_hit') / n * 100:.0f}% · tembus high: {s('brk') / n * 100:.0f}%\n"
             f"Rata-rata harga terakhir vs harga sinyal: {pc(avg_last)} (belum fee ±0,4%)\n"
-            f"Pembanding uji 59 hari: SL 22–34%, TP1 25–36%, TP2 5–8%.")
+            f"Pembanding uji 59 hari (aturan 15m): SL 15–20%, TP1 20–32%, TP2 7–8%, tembus high 37–47%.")
