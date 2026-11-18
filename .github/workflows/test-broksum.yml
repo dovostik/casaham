@@ -18,7 +18,7 @@ jobs:
         run: |
           python - <<'PY'
           import json, broksum as B
-          for sym, d, extra in [("BBCA", "2026-11-17", {}), ("SOLA", "2026-11-13", {})]:
+          for sym, d, extra in [("HOPE", "2026-11-17", {}), ("NTBK", "2026-11-17", {}), ("AREA", "2026-11-17", {})]:
               try:
                   js = B._get(f"/{sym}/broker_summary", date=d, **extra)
                   rows = (js.get("data") or {}).get("results") or []
