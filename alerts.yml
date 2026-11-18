@@ -14,8 +14,25 @@ party:
   tp: true            # 🎯 TP1 / TP2 tercapai
   tembus_high: true   # 🚀 tembus high lonjakan
 
-# Screener lain yang hasilnya ingin dikirim ke Telegram (id dari docs/screeners.json).
-# Contoh mengaktifkan lagi:  screeners: [bbs, near_ara]
+# Screener lain yang hasilnya ingin dikirim ke Telegram.
+# Cara pakai: salin salah satu baris contoh di bawah (tanpa tanda #),
+# lalu ganti baris "screeners: []" dengan baris itu.
+#
+#   screeners: [bbs]
+#   screeners: [bbs, oversold]
+#   screeners: [bbs, oversold, vol_spike]
+#   screeners: [bbs, near_ara, oversold, vol_spike, golden_cross, breakout52, value_fund, party_koreksi]
+#
+# Daftar id:
+#   bbs           = BBS (versi data Yahoo)
+#   near_ara      = Mendekati ARA
+#   vol_spike     = Volume Spike
+#   golden_cross  = Golden Cross MA20/MA50
+#   oversold      = Oversold mulai pantul
+#   breakout52    = Dekat High 52 Minggu
+#   value_fund    = Fundamental murah
+#   party_koreksi = PARTY KOREKSI (screener biasa, terpisah dari watchlist PARTY)
+#   (screeners: [] = semua screener lain mati)
 screeners: []
 
 # Alert harga / indikator per saham (tanpa .JK)
