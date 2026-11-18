@@ -1,84 +1,48 @@
-"""Uji GoAPI: bentuk respons, cakupan, dan jeda dibanding Yahoo. Hasil ditulis sebagai anotasi Actions."""
+"""Uji GoAPI vs Yahoo pada saham fluktuatif.
+Pembanding utama: volume kumulatif hari ini (selalu naik) -> volume lebih besar = data lebih baru.
+Hemat kuota: 1 panggilan GoAPI per putaran."""
 import json, os, time, urllib.parse, urllib.request
 from datetime import datetime, timedelta, timezone
 import yfinance as yf
 
 KEY = os.environ["GOAPI_KEY"].strip()
 WIB = timezone(timedelta(hours=7))
-SYMS = ["BBCA", "BBRI", "TLKM", "ANTM", "GOTO"]
+SYMS = os.environ.get("SYMS", "TRIN,BBYB,TRUE,TINS,AMRT,BBCA,EMAS,INET,WIFI,FOLK").split(",")
+ROUNDS = int(os.environ.get("ROUNDS", "8"))
 
 
 def note(msg):
-    print("::notice::" + msg.replace("\n", " | ").replace(KEY, "***")[:3500], flush=True)
+    print("::notice::" + msg.replace(KEY, "***")[:4000], flush=True)
 
 
-def get(path, **params):
-    params["api_key"] = KEY
-    url = "https://api.goapi.io" + path + "?" + urllib.parse.urlencode(params)
-    t = time.time()
+def goapi():
+    url = "https://api.goapi.io/stock/idx/prices?" + urllib.parse.urlencode({"symbols": ",".join(SYMS), "api_key": KEY})
+    with urllib.request.urlopen(url, timeout=20) as r:
+        return {x["symbol"]: x for x in json.loads(r.read())["data"]["results"]}
+
+
+ahead = {"goapi": 0, "yahoo": 0, "sama": 0}
+for i in range(ROUNDS):
+    t = datetime.now(WIB).strftime("%H:%M:%S")
     try:
-        with urllib.request.urlopen(url, timeout=20) as r:
-            body = r.read().decode()
-            code = r.status
-    except urllib.error.HTTPError as e:
-        body, code = e.read().decode(), e.code
-    return code, body, time.time() - t
-
-
-# 1. bentuk respons tiap endpoint
-for path, params in [("/stock/idx/prices", {"symbols": ",".join(SYMS)}),
-                     ("/stock/idx/trending", {}),
-                     ("/stock/idx/top_gainer", {}),
-                     ("/stock/idx/companies", {}),
-                     ("/stock/idx/BBCA/historical", {"from": "2026-11-10", "to": "2026-11-18"})]:
-    code, body, dt = get(path, **params)
-    note(f"{path} HTTP {code} {dt:.1f}s len={len(body)} :: {body[:600]}")
-    time.sleep(2)
-
-# 2. batas jumlah simbol per panggilan
-companies = []
-try:
-    _, body, _ = get("/stock/idx/companies")
-    companies = [c.get("symbol") for c in json.loads(body)["data"]["results"]]
-except Exception as e:
-    note(f"companies parse gagal: {e}")
-if companies:
-    big = companies[:200]
-    code, body, dt = get("/stock/idx/prices", symbols=",".join(big))
-    try:
-        n = len(json.loads(body)["data"]["results"])
-    except Exception:
-        n = "?"
-    note(f"prices 200 simbol: HTTP {code} {dt:.1f}s hasil={n} :: {body[:300]}")
-
-# 3. jeda: bandingkan tiap 60 dtk selama 6 menit
-for i in range(6):
-    code, body, _ = get("/stock/idx/prices", symbols=",".join(SYMS))
-    g = {}
-    try:
-        for r in json.loads(body)["data"]["results"]:
-            g[r["symbol"]] = r
-    except Exception:
-        pass
-    y = {}
+        g = goapi()
+    except Exception as e:
+        note(f"[{t}] GoAPI gagal: {e}")
+        break
+    parts = []
     for s in SYMS:
         try:
             fi = yf.Ticker(s + ".JK").fast_info
-            y[s] = fi["last_price"]
+            yp, yv = fi["last_price"], fi["last_volume"]
         except Exception:
-            y[s] = None
-    yd = yf.download([s + ".JK" for s in SYMS], period="1d", interval="1m", progress=False, group_by="ticker")
-    ylast = {}
-    for s in SYMS:
-        try:
-            d = yd[s + ".JK"].dropna()
-            ylast[s] = d.index[-1].tz_convert(WIB).strftime("%H:%M")
-        except Exception:
-            ylast[s] = "-"
-    now = datetime.now(WIB).strftime("%H:%M:%S")
-    parts = []
-    for s in SYMS:
+            yp, yv = None, None
         r = g.get(s, {})
-        parts.append(f"{s} goapi={r.get('close')} (t={r.get('last_update') or r.get('date') or r.get('time')}) yahoo={y[s]} (bar {ylast[s]})")
-    note(f"[{now}] HTTP {code} :: " + " ; ".join(parts))
-    time.sleep(60)
+        gv = r.get("volume")
+        if gv and yv:
+            k = "goapi" if gv > yv * 1.001 else "yahoo" if yv > gv * 1.001 else "sama"
+            ahead[k] += 1
+        parts.append(f"{s} G {r.get('close')}/{(gv or 0)/1e6:.1f}jt · Y {yp}/{(yv or 0)/1e6:.1f}jt")
+    note(f"[{t}] " + " ; ".join(parts))
+    if i < ROUNDS - 1:
+        time.sleep(60)
+note(f"RINGKASAN volume lebih besar (data lebih baru): GoAPI {ahead['goapi']}x, Yahoo {ahead['yahoo']}x, sama {ahead['sama']}x")
