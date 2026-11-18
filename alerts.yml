@@ -35,7 +35,7 @@ party:
 #   value_fund    = Fundamental murah
 #   party_koreksi = PARTY KOREKSI (screener biasa, terpisah dari watchlist PARTY)
 #   (screeners: [] = semua screener lain mati)
-screeners: []
+screeners: [bbs]
 
 # Alert harga / indikator per saham (tanpa .JK)
 # kondisi: above, below, rsi_above, rsi_below, change_above, change_below

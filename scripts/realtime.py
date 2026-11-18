@@ -187,6 +187,28 @@ def main():
         P.U.tg_send(P.summary_text().replace("📋 <b>Posisi</b>", "📋 <b>Ringkasan posisi — penutupan</b>"))
         sum_sent["close"] = today
         SUM_PATH.write_text(json.dumps(sum_sent))
+    # rekap penutupan BBS: status ARA saat tutup untuk saham yang dialertkan hari ini
+    bbs_codes = [k.split(":")[2] for k, v in sent.items() if k.startswith("scr:bbs:") and v == today]
+    if UNTIL >= "15:50" and bbs_codes and sum_sent.get("bbs_close") != today:
+        try:
+            qs = U.fetch_quotes()
+            lines = [f"📋 <b>Rekap penutupan BBS</b> · {today}"]
+            for c in bbs_codes:
+                q = qs.get(c + ".JK") or {}
+                px, prev = q.get("regularMarketPrice"), q.get("regularMarketPreviousClose")
+                if not px or not prev:
+                    continue
+                ara = U.ara_price(prev)
+                if px >= ara:
+                    lines.append(f"• <b>{c}</b> {px:,.0f} = ARA ✅ terkunci saat tutup → cek antrean jual (harus kosong) & IEP besok")
+                else:
+                    lines.append(f"• <b>{c}</b> {px:,.0f} (ARA {ara:,.0f}, {((px / prev) - 1) * 100:+.1f}%) ❌ tidak terkunci → tidak valid ditahan")
+            lines.append("Antrean jual di buku penutupan tidak terlihat di data gratis — pastikan di Stockbit.")
+            U.tg_send("\n".join(lines))
+            sum_sent["bbs_close"] = today
+            SUM_PATH.write_text(json.dumps(sum_sent))
+        except Exception as e:  # noqa
+            print("rekap BBS gagal:", e)
     if not max_rounds:
         trigger_web_update()   # data web final sesudah sesi
     print("Sesi selesai,", rounds, "putaran scan")

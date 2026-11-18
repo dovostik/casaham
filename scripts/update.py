@@ -302,7 +302,12 @@ def do_alerts(rows, presets, today, page_url, sent, cfg, stamp="", respect_windo
             continue
         lines = [f"📊 <b>{p['name']}</b> — {len(new)} saham baru{stamp}"]
         for h in new[:25]:
-            lines.append(f"• <b>{h['code']}</b> {h['close']:,.0f} ({h['ret1d']:+.1f}%) val {fmt_idr(h['value'])}")
+            line = f"• <b>{h['code']}</b> {h['close']:,.0f} ({h['ret1d']:+.1f}%) val {fmt_idr(h['value'])}"
+            if p.get("detail") == "ara" and h.get("prev"):
+                line += f" · ARA {ara_price(h['prev']):,.0f} (progres {h.get('araPct') or 0:.0f}%)"
+            lines.append(line)
+        if p.get("note"):
+            lines.append("\n" + p["note"])
         if page_url:
             lines.append(f'\n<a href="{page_url}#screener={pid}">Buka screener</a>')
         if not tg_send("\n".join(lines)):

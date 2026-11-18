@@ -41,7 +41,9 @@
           ">",
           50
         ]
-      ]
+      ],
+      "detail": "ara",
+      "note": "<b>Cara menilai:</b>\n✅ <b>VALID</b> (boleh tahan semalam): terkunci ARA <i>tanpa antrean jual</i> di buku penutupan 15:45–15:49.\n❌ <b>TIDAK VALID</b>: tidak terkunci ARA / ada antrean jual saat penutupan → jual hari ini.\n🌅 <b>Besok, cek IEP di Stockbit</b>: IEP ≥ 70% jarak ARA = berpotensi ARA lagi (5 dari 7) · IEP 40–69% = zona jual · IEP ≤ harga kemarin = tidak valid, jual.\n🚪 <b>Keluar</b>: high besok biasanya di 15 menit pertama → jual di lelang pembukaan 08:58 atau 09:01–09:04."
     },
     {
       "id": "bbs_lama",
