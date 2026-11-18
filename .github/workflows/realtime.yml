@@ -2,10 +2,10 @@ name: Screener realtime (tiap 1 menit)
 
 on:
   schedule:
-    # Sesi 1: mulai 08:40 WIB, scan sampai 12:05 WIB
-    - cron: "40 1 * * 1-5"
-    # Sesi 2: mulai 13:10 WIB, scan sampai 16:10 WIB
-    - cron: "10 6 * * 1-5"
+    # Sesi 1: mulai 08:38 WIB, scan sampai 12:05 WIB
+    - cron: "38 1 * * 1-5"
+    # Sesi 2: mulai 13:08 WIB, scan sampai 16:10 WIB
+    - cron: "8 6 * * 1-5"
   workflow_dispatch:
     inputs:
       until:
