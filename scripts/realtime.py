@@ -14,6 +14,7 @@ from datetime import datetime
 
 import pandas as pd
 
+import positions as P
 import update as U
 
 INTERVAL = int(os.environ.get("INTERVAL", "60"))
@@ -69,12 +70,15 @@ def main():
     scr = [presets[p] for p in cfg.get("screeners") or [] if p in presets]
     print(f"Screener aktif: {[p['id'] for p in scr]}, alert saham: {sorted(watch_codes)}")
 
+    P.poll(0)  # proses perintah Telegram yang masuk di luar jam bursa
     quotes = U.fetch_quotes()
     print("Unduh riwayat", len(quotes), "saham…")
     frames = U.fetch_history(sorted(quotes))
     print("riwayat siap:", len(frames))
 
     sent = U.load_sent(today)
+    SUM_PATH = U.STATE / "summary_sent.json"
+    sum_sent = json.loads(SUM_PATH.read_text()) if SUM_PATH.exists() else {}
     STATE_LOG = U.STATE / "alerts_log.json"
     last_mkt_time, rounds = None, 0
 
@@ -122,10 +126,28 @@ def main():
                 old = json.loads(STATE_LOG.read_text()) if STATE_LOG.exists() else []
                 old.insert(0, {"time": datetime.now(U.WIB).strftime("%Y-%m-%d %H:%M WIB"), "items": log})
                 STATE_LOG.write_text(json.dumps(old[:50], ensure_ascii=False))
+            # monitor posisi + ringkasan buka/tutup
+            slot = None
+            if mkt_dt.hour < 12 and sum_sent.get("open") != today:
+                slot, sum_sent["open"] = "Ringkasan posisi — pembukaan", today
+            elif (mkt_dt.hour, mkt_dt.minute) >= (15, 50) and sum_sent.get("close") != today:
+                slot, sum_sent["close"] = "Ringkasan posisi — penutupan", today
+            n_pos = P.monitor(quotes, frames, f"{mkt_dt:%H:%M}", force_summary=slot)
+            SUM_PATH.write_text(json.dumps(sum_sent))
             rounds += 1
             print(f"{datetime.now(U.WIB):%H:%M:%S} data {mkt_dt:%H:%M} · kandidat {len(cand)} · "
-                  f"alert {len(log)} · {time.time() - t0:.1f}s")
-        time.sleep(max(5, INTERVAL - (time.time() - t0)))
+                  f"alert {len(log)} · notif posisi {n_pos} · {time.time() - t0:.1f}s")
+        # jeda sambil mendengarkan perintah Telegram (long-poll)
+        while True:
+            left = INTERVAL - (time.time() - t0)
+            if left < 2 or max_rounds:
+                time.sleep(max(0, left)) if max_rounds else None
+                break
+            P.poll(timeout=min(left - 1, 50))
+    if UNTIL >= "15:50" and sum_sent.get("close") != today and P.load_pos():
+        P.U.tg_send(P.summary_text().replace("📋 <b>Posisi</b>", "📋 <b>Ringkasan posisi — penutupan</b>"))
+        sum_sent["close"] = today
+        SUM_PATH.write_text(json.dumps(sum_sent))
     print("Sesi selesai,", rounds, "putaran scan")
 
 

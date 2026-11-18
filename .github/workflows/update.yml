@@ -49,13 +49,6 @@ jobs:
           NO_ALERTS: "1"  # alert ditangani workflow realtime
         run: python scripts/update.py
 
-      - name: Simpan status alert
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: .state
-          key: alert-state-${{ github.run_id }}
-
       - name: Deploy ke Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

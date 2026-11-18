@@ -32,6 +32,21 @@ Aplikasi web pribadi ala Stockbit: **screener**, **chart teknikal** (candlestick
 Kuota gratis: Cloudflare 500 deploy/bulan (pemakaian ±375), GitHub Actions repo private 2.000 menit/bulan
 (pemakaian ±1.500; repo public tidak dibatasi).
 
+## Monitor posisi (Telegram)
+Kirim ke bot Telegram Anda:
+| Perintah | Fungsi |
+|---|---|
+| `/buy KODE HARGA LOT [SL TP1 TP2]` | catat beli; tanpa SL/TP → SL −2,5%, TP1 +2,5%, TP2 +4,5%; beli lagi = average |
+| `/sell KODE [LOT] [HARGA]` | jual sebagian/semua, hitung P/L net |
+| `/setpos KODE SL TP1 TP2` | ubah SL/TP |
+| `/posisi` | ringkasan semua posisi |
+
+Posisi dicek tiap ±1 menit; notifikasi hanya saat status berubah
+(AMAN/HOLD → TP1 → TP2, dekat SL, SL kena/CUT, sapuan SL, waspada distribusi).
+Setelah TP1 tercapai SL otomatis naik ke harga beli. Ringkasan dikirim saat buka & tutup bursa.
+Perintah dibaca selama jam bursa; di luar itu diproses saat sesi berikutnya mulai.
+Data posisi disimpan di cache GitHub Actions (tidak ikut terlihat di repo publik).
+
 ## Mengatur
 | Yang diubah | File |
 |---|---|
