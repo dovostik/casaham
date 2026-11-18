@@ -133,7 +133,40 @@ def send(kind, text):
     return False
 
 
-def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
+def round_levels(lo, hi):
+    """Harga bulat psikologis di antara lo..hi."""
+    step_ = 10 if hi < 200 else 50 if hi < 1000 else 100 if hi < 5000 else 500
+    k = int(lo // step_) + 1
+    out = []
+    while k * step_ <= hi:
+        out.append(float(k * step_))
+        k += 1
+    return out
+
+
+def resist_tp(price, sl, H, ara, daily=None):
+    """TP di level resisten (perkiraan letak offer tebal):
+    high lonjakan hari ini, high 20 hari terakhir, harga bulat, harga ARA.
+    TP1 = resisten terdekat yang memberi minimal 0,8R; TP2 = resisten berikutnya (>= TP1 + 0,5R)."""
+    R = price - sl
+    lv = {float(H), float(ara)}
+    if daily is not None and len(daily) > 2:
+        d = daily.iloc[:-1].tail(20)          # tanpa hari ini
+        for h in d["High"]:
+            lv.add(float(h))
+        # puncak lokal (high yang lebih tinggi dari tetangganya) lebih kuat
+    lv.update(round_levels(price, ara))
+    lv = sorted(x for x in lv if price + 0.8 * R <= x <= ara)
+    tp1 = lv[0] if lv else min(price + R, ara)
+    rest = [x for x in lv if x >= tp1 + 0.5 * R]
+    tp2 = rest[0] if rest else min(max(price + 2 * R, tp1 + tick(tp1)), ara)
+    # pasang sedikit di bawah level resisten (antre di depan offer tebal)
+    tp1 = tp1 - tick(tp1) if tp1 - tick(tp1) > price else tp1
+    tp2 = tp2 - tick(tp2) if tp2 - tick(tp2) > tp1 else tp2
+    return int(round(tp1)), int(round(tp2))
+
+
+def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame=None):
     """quotes: hasil fetch_quotes; full_row(sym) -> row lengkap (indikator) atau None."""
     st = load(today)
     items = st["items"]
@@ -202,19 +235,15 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         if price <= sl:
             it["stage"] = "DONE"
             continue
-        R = price - sl
-        tp1 = price + R
-        tp2 = max(res["H"], price + 2 * R)
-        tp1 = int(round(tp1 / tick(tp1)) * tick(tp1))
-        tp2 = int(round(tp2 / tick(tp2)) * tick(tp2))
         lim = U.ara_limit(it["prev"])
-        ara = it["prev"] * (1 + lim / 100)
+        ara = U.ara_price(it["prev"])
+        tp1, tp2 = resist_tp(price, sl, res["H"], ara, daily_frame(c + ".JK") if daily_frame else None)
         it.update(stage="BOUNCE", entry=price, sl=sl, tp1=tp1, tp2=tp2, L=L, bounce_at=now_s)
         send("memantul",
             f"🟢 <b>KOREKSI MEMANTUL · {c}</b> · data {data_time}\n"
             f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan (candle 15m)\n"
             f"<b>SL {nf(sl)}</b> ({pc((sl / price - 1) * 100)}) · <b>TP1 {nf(tp1)}</b> ({pc((tp1 / price - 1) * 100)}) · "
-            f"<b>TP2 {nf(tp2)}</b> ({pc((tp2 / price - 1) * 100)})\n"
+            f"<b>TP2 {nf(tp2)}</b> ({pc((tp2 / price - 1) * 100)}) · TP di bawah resisten (perkiraan offer tebal)\n"
             f"High lonjakan {nf(res['H'])} · jarak ke ARA {pc((ara / price - 1) * 100)}\n"
             f"Kalau beli: <code>/buy {c} {nf(price).replace('.', '')} LOT {sl} {tp1} {tp2}</code>"
             + (f'\n<a href="{page_url}#chart={c}">Chart</a>' if page_url else ""))

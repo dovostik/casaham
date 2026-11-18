@@ -164,7 +164,8 @@ def main():
                 except Exception:  # noqa
                     return None
             try:
-                n_pos += W.step(quotes, today, mkt_dt, presets["party"]["rules"], full_row, page_url)
+                n_pos += W.step(quotes, today, mkt_dt, presets["party"]["rules"], full_row, page_url,
+                                daily_frame=lambda sym: frames.get(sym))
             except Exception as e:  # noqa
                 print("watch error:", e)
             SUM_PATH.write_text(json.dumps(sum_sent))

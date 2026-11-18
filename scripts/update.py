@@ -93,6 +93,13 @@ def ara_limit(prev):
     return 20.0
 
 
+def ara_price(prev):
+    """Harga ARA (dibulatkan ke bawah sesuai fraksi harga)."""
+    raw = prev * (1 + ara_limit(prev) / 100)
+    t = 1 if raw < 200 else 2 if raw < 500 else 5 if raw < 2000 else 10 if raw < 5000 else 25
+    return int(raw // t * t)
+
+
 def num(x, nd=2):
     if x is None:
         return None
