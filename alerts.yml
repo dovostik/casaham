@@ -3,9 +3,16 @@
 #  Edit file ini langsung di GitHub (bisa dari HP).
 #  Dicek otomatis tiap ±1 menit selama jam bursa. Satu alert hanya dikirim 1x per hari.
 #
-#  Watchlist PARTY bertahap SELALU aktif dan tidak diatur di sini:
-#  masuk watchlist -> koreksi memantul (SL/TP) -> koreksi gagal / TP / tembus high.
 # ============================================================
+
+# Watchlist PARTY bertahap: ubah ke false untuk mematikan jenis alert tertentu.
+# (Watchlist tetap berjalan di belakang layar; /watch tetap bisa dipakai.)
+party:
+  watchlist: true     # 📌 saham masuk watchlist PARTY
+  memantul: true      # 🟢 koreksi memantul + SL/TP1/TP2
+  gagal: true         # 🔴 koreksi gagal (tembus SL)
+  tp: true            # 🎯 TP1 / TP2 tercapai
+  tembus_high: true   # 🚀 tembus high lonjakan
 
 # Screener lain yang hasilnya ingin dikirim ke Telegram (id dari docs/screeners.json).
 # Contoh mengaktifkan lagi:  screeners: [bbs, near_ara]

@@ -112,6 +112,20 @@ def find_bounce(bars, prev, added_at):
 
 
 # ------------------------------------------------------------------ langkah tiap putaran
+def _on(kind):
+    """Saklar alert dari alerts.yml (bagian party:). Default menyala."""
+    try:
+        return bool((U.load_alert_cfg().get("party") or {}).get(kind, True))
+    except Exception:  # noqa
+        return True
+
+
+def send(kind, text):
+    if _on(kind):
+        return U.tg_send(text)
+    return False
+
+
 def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
     """quotes: hasil fetch_quotes; full_row(sym) -> row lengkap (indikator) atau None."""
     st = load(today)
@@ -147,7 +161,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         for code, r in sorted(new, key=lambda x: -x[1]["ret1d"]):
             lines.append(f"• <b>{code}</b> {nf(r['close'])} ({pc(r['ret1d'])}) val {U.fmt_idr(r['value'])}")
         lines.append("Tunggu koreksi & pantulan, alert dikirim otomatis.")
-        U.tg_send("\n".join(lines))
+        send("watchlist", "\n".join(lines))
         sent += 1
 
     # 2) cari pantulan untuk yang masih WATCH
@@ -181,7 +195,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         lim = U.ara_limit(it["prev"])
         ara = it["prev"] * (1 + lim / 100)
         it.update(stage="BOUNCE", entry=price, sl=sl, tp1=tp1, tp2=tp2, L=L, bounce_at=now_s)
-        U.tg_send(
+        send("memantul",
             f"🟢 <b>KOREKSI MEMANTUL · {c}</b> · data {data_time}\n"
             f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan\n"
             f"<b>SL {nf(sl)}</b> ({pc((sl / price - 1) * 100)}) · <b>TP1 {nf(tp1)}</b> ({pc((tp1 / price - 1) * 100)}) · "
@@ -208,8 +222,9 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         rec = next((r for r in reversed(log) if r["date"] == today and r["code"] == c), None)
         if rec:
             rec["last"] = p
-        msg = None
+        msg, kind = None, None
         if p <= it["sl"]:
+            kind = "gagal"
             it["stage"] = "FAILED"
             msg = (f"🔴 <b>KOREKSI GAGAL · {c}</b> · data {data_time}\n"
                    f"Harga {nf(p)} tembus SL {nf(it['sl'])} (dasar {nf(it['L'])}). "
@@ -219,12 +234,14 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         else:
             if p >= it["tp1"] and "TP1" not in it["flags"]:
                 it["flags"].append("TP1")
+                kind = "tp"
                 msg = f"🎯 <b>{c} TP1 {nf(it['tp1'])} tercapai</b> · data {data_time}\nHarga {nf(p)}. Jual sebagian, SL naik ke harga sinyal {nf(it['entry'])}."
                 it["sl"] = it["entry"]
                 if rec:
                     rec["tp1_hit"] = 1
             if p >= it["tp2"] and "TP2" not in it["flags"]:
                 it["flags"].append("TP2")
+                kind = "tp"
                 msg = f"🎯 <b>{c} TP2 {nf(it['tp2'])} tercapai</b> · data {data_time}\nHarga {nf(p)}. Amankan profit."
                 if rec:
                     rec["tp2_hit"] = 1
@@ -232,13 +249,14 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
                 it["flags"].append("BRK")
                 lim = U.ara_limit(it["prev"])
                 ara = it["prev"] * (1 + lim / 100)
+                kind = "tembus_high"
                 msg = (f"🚀 <b>{c} TEMBUS HIGH LONJAKAN {nf(it['H'])}</b> · data {data_time}\n"
                        f"Harga {nf(p)} · jarak ke ARA {pc((ara / p - 1) * 100)}. Bisa jadi titik tambah muatan — "
                        f"SL tambahan di bawah {nf(it['H'])}. Hati-hati, data telat ±10 menit.")
                 if rec:
                     rec["brk"] = 1
         if msg:
-            U.tg_send(msg)
+            send(kind, msg)
             sent += 1
     save_log(log)
     save(st)
