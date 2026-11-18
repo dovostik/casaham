@@ -28,7 +28,7 @@ def _get(path, **params):
 
 def fetch(code, day):
     """Daftar broker BUY (net) untuk satu hari."""
-    js = _get(f"/{code}/broker_summary", date=day.isoformat(), investor="ALL")
+    js = _get(f"/{code}/broker_summary", date=day.isoformat())
     rows = (js.get("data") or {}).get("results") or []
     buys = [x for x in rows if str(x.get("side", "")).upper() == "BUY"]
     buys.sort(key=lambda x: -(float(x.get("value") or 0)))
@@ -90,8 +90,9 @@ def check(code, today_str, day_open):
         return True, f"Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di {band} (open ±5%)"
     gap = (info["avg"] / day_open - 1) * 100
     ok = abs(gap) <= MAX_GAP
-    txt = (f"Broksum {info['date']}: top 3 buyer {', '.join(info['top'])} rata-rata "
-           f"{info['avg']:,.0f}".replace(",", ".") + f" ({gap:+.1f}% dari open) {'✅' if ok else '❌'}")
+    avg_s = f"{info['avg']:,.0f}".replace(",", ".")
+    txt = (f"Broksum {info['date']}: top 3 buyer {', '.join(info['top'])} rata-rata {avg_s} "
+           f"({gap:+.1f}% dari open {int(day_open)}) {'✅' if ok else '❌'}")
     return ok, txt
 
 

@@ -57,6 +57,7 @@ jobs:
           PAGE_URL: https://casaham.pages.dev/
           UNTIL: ${{ steps.t.outputs.until }}
           PYTHONUNBUFFERED: "1"
+          GOAPI_KEY: ${{ secrets.GOAPI_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
         run: python realtime.py

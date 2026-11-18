@@ -12,6 +12,7 @@ from datetime import datetime
 
 import pandas as pd
 
+import broksum as B
 import update as U
 
 RETR = 0.35         # koreksi minimal: porsi lonjakan (open -> high) yang terhapus
@@ -235,6 +236,13 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         if price <= sl:
             it["stage"] = "DONE"
             continue
+        # syarat broksum: rata-rata top 3 buyer kemarin <= 5% dari open hari ini (GoAPI)
+        b_ok, b_txt = B.check(c, today, float(q["regularMarketOpen"]) if q.get("regularMarketOpen") else None)
+        if not b_ok:
+            it.update(stage="SKIP", skip_reason=b_txt)
+            send("memantul", f"⏭️ <b>{c}</b> memantul tapi dilewati · data {data_time}\n{b_txt}")
+            sent += 1
+            continue
         lim = U.ara_limit(it["prev"])
         ara = U.ara_price(it["prev"])
         tp1, tp2 = resist_tp(price, sl, res["H"], ara, daily_frame(c + ".JK") if daily_frame else None)
@@ -245,8 +253,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
             f"<b>SL {nf(sl)}</b> ({pc((sl / price - 1) * 100)}) · <b>TP1 {nf(tp1)}</b> ({pc((tp1 / price - 1) * 100)}) · "
             f"<b>TP2 {nf(tp2)}</b> ({pc((tp2 / price - 1) * 100)}) · TP di bawah resisten (perkiraan offer tebal)\n"
             f"High lonjakan {nf(res['H'])} · jarak ke ARA {pc((ara / price - 1) * 100)}\n"
-            + (f"Cek broksum kemarin di Stockbit: rata-rata top 3 buyer harus di {nf(float(q['regularMarketOpen']) * 0.95)}–{nf(float(q['regularMarketOpen']) * 1.05)} "
-               f"(open {nf(float(q['regularMarketOpen']))} ±5%)\n" if q.get("regularMarketOpen") else "")
+            + f"{b_txt}\n"
             + f"Kalau beli: <code>/buy {c} {nf(price).replace('.', '')} LOT {sl} {tp1} {tp2}</code>"
             + (f'\n<a href="{page_url}#chart={c}">Chart</a>' if page_url else ""))
         sent += 1
@@ -311,7 +318,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
 
 # ------------------------------------------------------------------ perintah Telegram
 LABEL = {"WATCH": "⏳ menunggu koreksi/pantulan", "BOUNCE": "🟢 sudah memantul", "FAILED": "🔴 gagal",
-         "DONE": "⚪ selesai", "OUT": "⚠️ bandar keluar"}
+         "DONE": "⚪ selesai", "OUT": "⚠️ bandar keluar", "SKIP": "⏭️ dilewati (broksum)"}
 
 
 def watch_text(today):
