@@ -93,6 +93,19 @@ def ara_limit(prev):
     return 20.0
 
 
+def idx_tick(p):
+    return 1 if p < 200 else 2 if p < 500 else 5 if p < 2000 else 10 if p < 5000 else 25
+
+
+def near_high_bbs(close, high):
+    """Rule '3' BBS: harga <= 3% di bawah high; untuk harga < 100 cukup <= 2 tick."""
+    if not close or not high:
+        return 0
+    if close < 100:
+        return int((high - close) / idx_tick(close) <= 2)
+    return int(close >= high * 0.97)
+
+
 def ara_price(prev):
     """Harga ARA (dibulatkan ke bawah sesuai fraksi harga)."""
     raw = prev * (1 + ara_limit(prev) / 100)
@@ -160,6 +173,7 @@ def build_row(sym, d, q):
         "code": sym.replace(".JK", ""),
         "issi": int(sym.replace(".JK", "") in ISSI),
         "fromHighD": num((last / hi_d - 1) * 100) if hi_d else None,
+        "nearHighBBS": near_high_bbs(last, hi_d),
         "highRet1d": num((hi_d / prev - 1) * 100) if prev else None,
         "name": q.get("longName") or q.get("shortName") or "",
         "close": num(last, 0),

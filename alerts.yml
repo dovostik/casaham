@@ -25,7 +25,8 @@ party:
 #   screeners: [bbs, near_ara, oversold, vol_spike, golden_cross, breakout52, value_fund, party_koreksi]
 #
 # Daftar id:
-#   bbs           = BBS (versi data Yahoo)
+#   bbs           = BBS 70·3·1 (syariah, mengejar ARA)
+#   bbs_lama      = BBS trial lama (naik > 10%, RSI, Stoch)
 #   near_ara      = Mendekati ARA
 #   vol_spike     = Volume Spike
 #   golden_cross  = Golden Cross MA20/MA50

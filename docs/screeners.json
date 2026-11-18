@@ -3,8 +3,50 @@
   "presets": [
     {
       "id": "bbs",
-      "name": "BBS (versi data Yahoo)",
-      "desc": "Turunan screener BBS trial. Frequency & Frequency Analyzer tidak tersedia di data gratis, jadi tidak dipakai.",
+      "name": "BBS 70·3·1 (syariah)",
+      "desc": "Mengejar ARA: progres ≥ 70% dari batas ARA, harga ≤ 3% di bawah high (harga < 100: ≤ 2 tick), value > 1 M. Syariah, mcap < 6 T, volume > 100 rb, harga > 50. Frequency > 300 tidak tersedia di data gratis. Kunci ARA & IEP tetap cek manual di Stockbit.",
+      "rules": [
+        [
+          "issi",
+          "==",
+          1
+        ],
+        [
+          "araPct",
+          ">=",
+          70
+        ],
+        [
+          "nearHighBBS",
+          "==",
+          1
+        ],
+        [
+          "value",
+          ">",
+          1000000000.0
+        ],
+        [
+          "mcap",
+          "<",
+          6000000000000.0
+        ],
+        [
+          "volume",
+          ">",
+          100000
+        ],
+        [
+          "close",
+          ">",
+          50
+        ]
+      ]
+    },
+    {
+      "id": "bbs_lama",
+      "name": "BBS trial lama (versi Yahoo)",
+      "desc": "Rule BBS trial lama: naik > 10%, RSI > 30, Stoch > 20. Frequency & Frequency Analyzer tidak tersedia di data gratis.",
       "rules": [
         [
           "ret1d",

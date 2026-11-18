@@ -22,7 +22,7 @@ INTERVAL = int(os.environ.get("INTERVAL", "60"))
 UNTIL = os.environ.get("UNTIL", "16:15")
 
 # field yang bisa dihitung langsung dari quote (tanpa riwayat)
-QUICK = {"ret1d", "close", "volume", "value", "mcap", "per", "pbv", "araPct", "issi", "fromHighD", "highRet1d"}
+QUICK = {"ret1d", "close", "volume", "value", "mcap", "per", "pbv", "araPct", "issi", "fromHighD", "highRet1d", "nearHighBBS"}
 
 
 def quick_row(q):
@@ -36,7 +36,8 @@ def quick_row(q):
     return {"ret1d": ret1d, "close": price, "volume": vol, "value": price * vol,
             "mcap": q.get("marketCap"), "per": q.get("trailingPE"), "pbv": q.get("priceToBook"),
             "araPct": ret1d / lim * 100, "issi": int(q["symbol"][:-3] in U.ISSI),
-            "fromHighD": (price / hi - 1) * 100, "highRet1d": (hi / prev - 1) * 100}
+            "fromHighD": (price / hi - 1) * 100, "highRet1d": (hi / prev - 1) * 100,
+            "nearHighBBS": U.near_high_bbs(price, hi)}
 
 
 def passes_quick(qr, rules):
