@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import urllib.parse
+import urllib.error
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -196,16 +197,23 @@ def run_screen(rows, rules):
 
 # ---------------------------------------------------------------- alert
 def tg_send(text):
+    """Kirim ke Telegram. True hanya bila benar-benar terkirim."""
     tok, chat = os.environ.get("TELEGRAM_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     if not tok or not chat:
-        print("[telegram belum diset]\n" + text)
-        return
-    data = urllib.parse.urlencode({"chat_id": chat, "text": text, "parse_mode": "HTML",
+        print("[telegram belum diset — alert TIDAK ditandai terkirim]\n" + text)
+        return False
+    data = urllib.parse.urlencode({"chat_id": chat.strip(), "text": text, "parse_mode": "HTML",
                                    "disable_web_page_preview": "true"}).encode()
     try:
-        urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/sendMessage", data, timeout=20)
+        with urllib.request.urlopen(f"https://api.telegram.org/bot{tok.strip()}/sendMessage", data, timeout=20) as r:
+            ok = json.loads(r.read()).get("ok", False)
+            print("Telegram terkirim" if ok else "Telegram menolak pesan")
+            return ok
+    except urllib.error.HTTPError as e:
+        print("::error::Gagal kirim Telegram:", e.code, e.read().decode()[:300])
     except Exception as e:  # noqa
-        print("Gagal kirim Telegram:", e)
+        print("::error::Gagal kirim Telegram:", e)
+    return False
 
 
 def fmt_idr(x):
@@ -223,7 +231,7 @@ def do_alerts(rows, presets, today, page_url):
         return []
     cfg = yaml.safe_load(cfg_path.read_text()) or {}
     STATE.mkdir(parents=True, exist_ok=True)
-    sent_path = STATE / "sent.json"
+    sent_path = STATE / "sent_v2.json"
     sent = json.loads(sent_path.read_text()) if sent_path.exists() else {}
     sent = {k: v for k, v in sent.items() if v == today}  # buang hari lalu
     by_code = {r["code"]: r for r in rows}
@@ -240,10 +248,12 @@ def do_alerts(rows, presets, today, page_url):
         lines = [f"📊 <b>{p['name']}</b> — {len(new)} saham baru"]
         for h in new[:25]:
             lines.append(f"• <b>{h['code']}</b> {h['close']:,.0f} ({h['ret1d']:+.1f}%) val {fmt_idr(h['value'])}")
-            sent[f"scr:{pid}:{h['code']}"] = today
         if page_url:
             lines.append(f'\n<a href="{page_url}#screener={pid}">Buka screener</a>')
-        tg_send("\n".join(lines))
+        if not tg_send("\n".join(lines)):
+            continue
+        for h in new[:25]:
+            sent[f"scr:{pid}:{h['code']}"] = today
         log.append({"type": "screener", "id": pid, "name": p["name"], "codes": [h["code"] for h in new]})
 
     conds = {
@@ -270,7 +280,8 @@ def do_alerts(rows, presets, today, page_url):
                    f"Harga {r['close']:,.0f} ({r['ret1d']:+.2f}%) · RSI {r['rsi14']}")
             if page_url:
                 msg += f'\n<a href="{page_url}#chart={code}">Lihat chart</a>'
-            tg_send(msg)
+            if not tg_send(msg):
+                continue
             sent[sid] = today
             log.append({"type": "saham", "code": code, "cond": key, "target": target, "close": r["close"]})
 
