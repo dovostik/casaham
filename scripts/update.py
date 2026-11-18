@@ -34,13 +34,13 @@ def fetch_quotes():
     q = EquityQuery("eq", ["region", "id"])
     quotes, off = {}, 0
     while True:
-        for attempt in range(3):
+        for attempt in range(5):
             try:
                 r = yf.screen(q, offset=off, size=250, sortField="intradaymarketcap", sortAsc=False)
                 break
             except Exception as e:  # noqa
                 print("screen retry", e)
-                time.sleep(5)
+                time.sleep(5 * (attempt + 1))
         else:
             raise RuntimeError("Gagal ambil daftar saham")
         qs = r.get("quotes", [])

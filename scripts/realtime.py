@@ -93,7 +93,16 @@ def main():
     print(f"Screener aktif: {[p['id'] for p in scr]}, alert saham: {sorted(watch_codes)}")
 
     P.poll(0)  # proses perintah Telegram yang masuk di luar jam bursa
-    quotes = U.fetch_quotes()
+    quotes = None
+    for attempt in range(20):           # Yahoo kadang menolak sementara (429/401): coba ulang ±10 menit
+        try:
+            quotes = U.fetch_quotes()
+            break
+        except Exception as e:  # noqa
+            print("daftar saham gagal, coba lagi:", e)
+            P.poll(timeout=30)
+    if not quotes:
+        raise SystemExit("Yahoo tidak bisa diakses")
     print("Unduh riwayat", len(quotes), "saham…")
     frames = U.fetch_history(sorted(quotes))
     print("riwayat siap:", len(frames))
