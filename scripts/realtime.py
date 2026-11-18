@@ -61,6 +61,24 @@ def with_today(d, q, today):
     return pd.concat([d, bar])
 
 
+def trigger_web_update():
+    """Picu workflow 'Update data web' (jadwal GitHub tidak bisa diandalkan)."""
+    import urllib.request
+    tok, repo = os.environ.get("GH_TOKEN"), os.environ.get("GH_REPO")
+    if not tok or not repo:
+        return
+    req = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/actions/workflows/update.yml/dispatches",
+        data=b'{"ref":"main"}', method="POST",
+        headers={"Authorization": f"Bearer {tok}", "Accept": "application/vnd.github+json",
+                 "Content-Type": "application/json"})
+    try:
+        urllib.request.urlopen(req, timeout=20)
+        print("update web dipicu")
+    except Exception as e:  # noqa
+        print("gagal memicu update web:", e)
+
+
 def main():
     now = datetime.now(U.WIB)
     today = os.environ.get("TEST_TODAY") or now.strftime("%Y-%m-%d")  # TEST_TODAY: uji coba
@@ -84,6 +102,7 @@ def main():
     sum_sent = json.loads(SUM_PATH.read_text()) if SUM_PATH.exists() else {}
     STATE_LOG = U.STATE / "alerts_log.json"
     last_mkt_time, rounds = None, 0
+    last_web = 0.0
 
     while datetime.now(U.WIB) < end or (max_rounds and rounds < max_rounds):
         t0 = time.time()
@@ -152,6 +171,9 @@ def main():
             rounds += 1
             print(f"{datetime.now(U.WIB):%H:%M:%S} data {mkt_dt:%H:%M} · kandidat {len(cand)} · "
                   f"alert {len(log)} · notif posisi {n_pos} · {time.time() - t0:.1f}s")
+        if last_mkt_time and time.time() - last_web >= 1800 and not max_rounds:
+            trigger_web_update()
+            last_web = time.time()
         # jeda sambil mendengarkan perintah Telegram (long-poll)
         while True:
             left = INTERVAL - (time.time() - t0)
@@ -163,6 +185,8 @@ def main():
         P.U.tg_send(P.summary_text().replace("📋 <b>Posisi</b>", "📋 <b>Ringkasan posisi — penutupan</b>"))
         sum_sent["close"] = today
         SUM_PATH.write_text(json.dumps(sum_sent))
+    if not max_rounds:
+        trigger_web_update()   # data web final sesudah sesi
     print("Sesi selesai,", rounds, "putaran scan")
 
 

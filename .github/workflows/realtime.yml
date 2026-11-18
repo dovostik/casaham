@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  actions: write   # untuk memicu 'Update data web' tiap 30 menit
 
 concurrency:
   group: realtime
@@ -56,6 +57,8 @@ jobs:
           PAGE_URL: https://casaham.pages.dev/
           UNTIL: ${{ steps.t.outputs.until }}
           PYTHONUNBUFFERED: "1"
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: python realtime.py
 
       - name: Simpan status alert
