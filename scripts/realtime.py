@@ -21,7 +21,7 @@ INTERVAL = int(os.environ.get("INTERVAL", "60"))
 UNTIL = os.environ.get("UNTIL", "16:15")
 
 # field yang bisa dihitung langsung dari quote (tanpa riwayat)
-QUICK = {"ret1d", "close", "volume", "value", "mcap", "per", "pbv", "araPct"}
+QUICK = {"ret1d", "close", "volume", "value", "mcap", "per", "pbv", "araPct", "issi", "fromHighD", "highRet1d"}
 
 
 def quick_row(q):
@@ -31,9 +31,11 @@ def quick_row(q):
     ret1d = (price / prev - 1) * 100
     lim = U.ara_limit(prev)
     vol = q.get("regularMarketVolume") or 0
+    hi = q.get("regularMarketDayHigh") or price
     return {"ret1d": ret1d, "close": price, "volume": vol, "value": price * vol,
             "mcap": q.get("marketCap"), "per": q.get("trailingPE"), "pbv": q.get("priceToBook"),
-            "araPct": ret1d / lim * 100}
+            "araPct": ret1d / lim * 100, "issi": int(q["symbol"][:-3] in U.ISSI),
+            "fromHighD": (price / hi - 1) * 100, "highRet1d": (hi / prev - 1) * 100}
 
 
 def passes_quick(qr, rules):
@@ -111,7 +113,7 @@ def main():
                     cand.add(s)
                     continue
                 qr = quick_row(q)
-                if qr and any(passes_quick(qr, p["rules"]) for p in scr):
+                if qr and any(U.in_window(p) and passes_quick(qr, p["rules"]) for p in scr):
                     cand.add(s)
             rows = []
             for s in cand:

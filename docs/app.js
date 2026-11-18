@@ -13,6 +13,7 @@ const FIELDS = {
   macdHist: "MACD histogram", aboveMA20: "Di atas MA20 (1/0)", aboveMA50: "Di atas MA50 (1/0)",
   gc2050: "Golden cross 20/50 (1/0)", fromHigh52: "% dari high 52M", araPct: "% menuju ARA",
   per: "PER", pbv: "PBV", roe: "ROE %", divYield: "Dividend yield %",
+  issi: "Syariah ISSI (1/0)", fromHighD: "% dari high hari ini", highRet1d: "% high hari ini vs kemarin",
 };
 const OPS = { ">": (a, b) => a > b, ">=": (a, b) => a >= b, "<": (a, b) => a < b, "<=": (a, b) => a <= b, "==": (a, b) => a == b, "!=": (a, b) => a != b };
 

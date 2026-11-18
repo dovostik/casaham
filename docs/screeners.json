@@ -5,43 +5,277 @@
       "id": "bbs",
       "name": "BBS (versi data Yahoo)",
       "desc": "Turunan screener BBS trial. Frequency & Frequency Analyzer tidak tersedia di data gratis, jadi tidak dipakai.",
-      "rules": [["ret1d", ">", 10], ["mcap", "<", 6e12], ["close", ">", 50], ["volume", ">", 100000], ["value", ">", 150000000], ["rsi14", ">", 30], ["stochK", ">", 20]]
+      "rules": [
+        [
+          "ret1d",
+          ">",
+          10
+        ],
+        [
+          "mcap",
+          "<",
+          6000000000000.0
+        ],
+        [
+          "close",
+          ">",
+          50
+        ],
+        [
+          "volume",
+          ">",
+          100000
+        ],
+        [
+          "value",
+          ">",
+          150000000
+        ],
+        [
+          "rsi14",
+          ">",
+          30
+        ],
+        [
+          "stochK",
+          ">",
+          20
+        ]
+      ]
+    },
+    {
+      "id": "party",
+      "name": "PARTY (syariah)",
+      "window": [
+        "09:00",
+        "10:00"
+      ],
+      "desc": "Saham syariah yang sedang dilonjakkan: harga < 400, naik ≥ 7% hari ini, value ≥ 500 jt, mcap ≤ 1 T, return 1 minggu −25% s/d +35%. Alert Telegram hanya 09:00–10:00.",
+      "rules": [
+        [
+          "issi",
+          "==",
+          1
+        ],
+        [
+          "close",
+          "<",
+          400
+        ],
+        [
+          "ret5d",
+          ">=",
+          -25
+        ],
+        [
+          "ret5d",
+          "<=",
+          35
+        ],
+        [
+          "mcap",
+          "<=",
+          1000000000000.0
+        ],
+        [
+          "value",
+          ">=",
+          500000000
+        ],
+        [
+          "ret1d",
+          ">=",
+          7
+        ]
+      ]
+    },
+    {
+      "id": "party_koreksi",
+      "name": "PARTY KOREKSI",
+      "window": [
+        "10:15",
+        "11:00"
+      ],
+      "desc": "Setelah lonjakan, di dasar koreksi: high hari ini ≥ +10% dari kemarin, harga kini 5–20% di bawah high, masih ≥ +3%. Alert Telegram hanya 10:15–11:00. Cek di chart 15 menit: volume mengering & 2 bar tanpa low baru.",
+      "rules": [
+        [
+          "issi",
+          "==",
+          1
+        ],
+        [
+          "close",
+          "<",
+          400
+        ],
+        [
+          "ret5d",
+          ">=",
+          -25
+        ],
+        [
+          "ret5d",
+          "<=",
+          35
+        ],
+        [
+          "mcap",
+          "<=",
+          1000000000000.0
+        ],
+        [
+          "value",
+          ">=",
+          500000000
+        ],
+        [
+          "ret1d",
+          ">=",
+          3
+        ],
+        [
+          "highRet1d",
+          ">=",
+          10
+        ],
+        [
+          "fromHighD",
+          "<=",
+          -5
+        ],
+        [
+          "fromHighD",
+          ">=",
+          -20
+        ]
+      ]
     },
     {
       "id": "near_ara",
       "name": "Mendekati ARA",
       "desc": "Kenaikan hari ini >= 80% dari batas ARA fraksinya, value > 1 M",
-      "rules": [["araPct", ">=", 80], ["value", ">", 1000000000]]
+      "rules": [
+        [
+          "araPct",
+          ">=",
+          80
+        ],
+        [
+          "value",
+          ">",
+          1000000000
+        ]
+      ]
     },
     {
       "id": "vol_spike",
       "name": "Volume Spike",
       "desc": "Volume > 3x rata-rata 20 hari, harga naik, value > 1 M",
-      "rules": [["volRatio", ">", 3], ["ret1d", ">", 0], ["value", ">", 1000000000]]
+      "rules": [
+        [
+          "volRatio",
+          ">",
+          3
+        ],
+        [
+          "ret1d",
+          ">",
+          0
+        ],
+        [
+          "value",
+          ">",
+          1000000000
+        ]
+      ]
     },
     {
       "id": "golden_cross",
       "name": "Golden Cross MA20/MA50",
       "desc": "MA20 memotong ke atas MA50 dalam 3 hari terakhir",
-      "rules": [["gc2050", "==", 1], ["avgValue20", ">", 500000000]]
+      "rules": [
+        [
+          "gc2050",
+          "==",
+          1
+        ],
+        [
+          "avgValue20",
+          ">",
+          500000000
+        ]
+      ]
     },
     {
       "id": "oversold",
       "name": "Oversold mulai pantul",
       "desc": "RSI < 35 dan harga hijau hari ini",
-      "rules": [["rsi14", "<", 35], ["ret1d", ">", 0], ["avgValue20", ">", 500000000]]
+      "rules": [
+        [
+          "rsi14",
+          "<",
+          35
+        ],
+        [
+          "ret1d",
+          ">",
+          0
+        ],
+        [
+          "avgValue20",
+          ">",
+          500000000
+        ]
+      ]
     },
     {
       "id": "breakout52",
       "name": "Dekat High 52 Minggu",
       "desc": "Harga dalam 3% dari tertinggi 52 minggu",
-      "rules": [["fromHigh52", ">", -3], ["avgValue20", ">", 1000000000]]
+      "rules": [
+        [
+          "fromHigh52",
+          ">",
+          -3
+        ],
+        [
+          "avgValue20",
+          ">",
+          1000000000
+        ]
+      ]
     },
     {
       "id": "value_fund",
       "name": "Fundamental murah",
       "desc": "PER 0–10, PBV < 1.5, ROE > 10%",
-      "rules": [["per", ">", 0], ["per", "<", 10], ["pbv", "<", 1.5], ["roe", ">", 10], ["mcap", ">", 1e12]]
+      "rules": [
+        [
+          "per",
+          ">",
+          0
+        ],
+        [
+          "per",
+          "<",
+          10
+        ],
+        [
+          "pbv",
+          "<",
+          1.5
+        ],
+        [
+          "roe",
+          ">",
+          10
+        ],
+        [
+          "mcap",
+          ">",
+          1000000000000.0
+        ]
+      ]
     }
   ]
 }

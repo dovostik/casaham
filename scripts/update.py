@@ -105,6 +105,25 @@ def num(x, nd=2):
     return round(x, nd)
 
 
+def load_issi():
+    p = DOCS / "issi.txt"
+    if not p.exists():
+        return set()
+    return {ln.strip().upper() for ln in p.read_text().splitlines() if ln.strip() and not ln.startswith("#")}
+
+
+ISSI = load_issi()
+
+
+def in_window(preset, now=None):
+    """True bila sekarang di dalam jam alert preset (mis. ["09:00","10:00"]) atau preset tanpa jam."""
+    w = preset.get("window")
+    if not w:
+        return True
+    hm = (now or datetime.now(WIB)).strftime("%H:%M")
+    return w[0] <= hm <= w[1]
+
+
 def build_row(sym, d, q):
     c, h, l, v = d["Close"], d["High"], d["Low"], d["Volume"]
     last = c.iloc[-1]
@@ -129,8 +148,12 @@ def build_row(sym, d, q):
     eps, bv = q.get("epsTrailingTwelveMonths"), q.get("bookValue")
     roe = (eps / bv * 100) if eps and bv and bv > 0 else None
     lim = ara_limit(prev)
+    hi_d = h.iloc[-1]
     return {
         "code": sym.replace(".JK", ""),
+        "issi": int(sym.replace(".JK", "") in ISSI),
+        "fromHighD": num((last / hi_d - 1) * 100) if hi_d else None,
+        "highRet1d": num((hi_d / prev - 1) * 100) if prev else None,
         "name": q.get("longName") or q.get("shortName") or "",
         "close": num(last, 0),
         "prev": num(prev, 0),
@@ -243,14 +266,14 @@ def load_alert_cfg():
     return (yaml.safe_load(p.read_text()) or {}) if p.exists() else {}
 
 
-def do_alerts(rows, presets, today, page_url, sent, cfg, stamp=""):
+def do_alerts(rows, presets, today, page_url, sent, cfg, stamp="", respect_window=True):
     """Kirim alert yang belum terkirim hari ini. `sent` diubah di tempat."""
     by_code = {r["code"]: r for r in rows}
     log = []
 
     for pid in cfg.get("screeners") or []:
         p = presets.get(pid)
-        if not p:
+        if not p or (respect_window and not in_window(p)):
             continue
         hits = run_screen(rows, p["rules"])
         new = [h for h in hits if f"scr:{pid}:{h['code']}" not in sent]
