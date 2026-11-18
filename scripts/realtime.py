@@ -15,6 +15,7 @@ from datetime import datetime
 import pandas as pd
 
 import positions as P
+import watch as W
 import update as U
 
 INTERVAL = int(os.environ.get("INTERVAL", "60"))
@@ -135,6 +136,18 @@ def main():
             elif (mkt_dt.hour, mkt_dt.minute) >= (15, 50) and sum_sent.get("close") != today:
                 slot, sum_sent["close"] = "Ringkasan posisi — penutupan", today
             n_pos = P.monitor(quotes, frames, f"{mkt_dt:%H:%M}", force_summary=slot)
+
+            def full_row(sym):
+                if sym not in frames:
+                    return None
+                try:
+                    return U.build_row(sym, with_today(frames[sym], quotes[sym], today), quotes[sym])
+                except Exception:  # noqa
+                    return None
+            try:
+                n_pos += W.step(quotes, today, mkt_dt, presets["party"]["rules"], full_row, page_url)
+            except Exception as e:  # noqa
+                print("watch error:", e)
             SUM_PATH.write_text(json.dumps(sum_sent))
             rounds += 1
             print(f"{datetime.now(U.WIB):%H:%M:%S} data {mkt_dt:%H:%M} · kandidat {len(cand)} · "

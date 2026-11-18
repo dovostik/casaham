@@ -141,7 +141,8 @@ HELP = (
     "/buy KODE HARGA LOT [SL TP1 TP2]\n  contoh: <code>/buy INDF 6810 25</code>\n"
     "  (tanpa SL/TP → SL −2,5%, TP1 +2,5%, TP2 +4,5%; beli lagi = average)\n"
     "/sell KODE [LOT] [HARGA]\n  contoh: <code>/sell INDF 10 7125</code> · <code>/sell INDF</code> = jual semua\n"
-    "/setpos KODE SL TP1 TP2\n/posisi — ringkasan\n\n"
+    "/setpos KODE SL TP1 TP2\n/posisi — ringkasan\n"
+    "/watch — watchlist PARTY hari ini & tahapnya\n/evaluasi — statistik sinyal koreksi memantul\n\n"
     "Perintah dibaca selama jam bursa (±08:40–16:10 WIB). Di luar itu diproses saat sesi berikutnya mulai."
 )
 
@@ -153,6 +154,12 @@ def handle(text):
         return HELP
     if cmd == "/posisi":
         return summary_text()
+    if cmd in ("/watch", "/watchlist"):
+        import watch as W
+        return W.watch_text(datetime.now(U.WIB).strftime("%Y-%m-%d"))
+    if cmd == "/evaluasi":
+        import watch as W
+        return W.eval_text()
     if cmd == "/buy":
         return cmd_buy(parts)
     if cmd == "/sell":

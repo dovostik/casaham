@@ -46,11 +46,7 @@
     {
       "id": "party",
       "name": "PARTY (syariah)",
-      "window": [
-        "09:00",
-        "10:00"
-      ],
-      "desc": "Saham syariah yang sedang dilonjakkan: harga < 400, naik ≥ 7% hari ini, value ≥ 500 jt, mcap ≤ 1 T, return 1 minggu −25% s/d +35%. Alert Telegram hanya 09:00–10:00.",
+      "desc": "Saham syariah yang sedang dilonjakkan: harga < 400, naik ≥ 7%, value ≥ 500 jt, mcap ≤ 1 T, return 1 minggu −25% s/d +35%. Lolos = masuk watchlist PARTY (alert koreksi memantul / gagal otomatis lewat Telegram).",
       "rules": [
         [
           "issi",
@@ -92,11 +88,7 @@
     {
       "id": "party_koreksi",
       "name": "PARTY KOREKSI",
-      "window": [
-        "10:15",
-        "11:00"
-      ],
-      "desc": "Setelah lonjakan, di dasar koreksi: high hari ini ≥ +10% dari kemarin, harga kini 5–20% di bawah high, masih ≥ +3%. Alert Telegram hanya 10:15–11:00. Cek di chart 15 menit: volume mengering & 2 bar tanpa low baru.",
+      "desc": "Tampilan cepat: high hari ini ≥ +10%, harga kini 5–20% di bawah high, masih ≥ +3%. Sinyal pantulan resmi dikirim oleh watchlist PARTY (candle 5 menit).",
       "rules": [
         [
           "issi",

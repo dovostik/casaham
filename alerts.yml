@@ -6,11 +6,11 @@
 # ============================================================
 
 # Kirim daftar hasil screener (id dari docs/screeners.json)
+# PARTY tidak perlu ditulis di sini: watchlist PARTY bertahap selalu aktif
+# (masuk watchlist -> koreksi memantul + SL/TP -> koreksi gagal / TP / tembus high).
 screeners:
   - bbs
   - near_ara
-  - party          # alert 09:00–10:00
-  - party_koreksi  # alert 10:15–11:00
 
 # Alert harga / indikator per saham (tanpa .JK)
 # kondisi yang tersedia: above, below, rsi_above, rsi_below, change_above, change_below
