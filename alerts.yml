@@ -1,23 +1,19 @@
 # ============================================================
 #  ALERT TELEGRAM
 #  Edit file ini langsung di GitHub (bisa dari HP).
-#  Dicek otomatis tiap ±30 menit saat jam bursa + sesudah tutup.
-#  Satu alert hanya dikirim 1x per hari.
+#  Dicek otomatis tiap ±1 menit selama jam bursa. Satu alert hanya dikirim 1x per hari.
+#
+#  Watchlist PARTY bertahap SELALU aktif dan tidak diatur di sini:
+#  masuk watchlist -> koreksi memantul (SL/TP) -> koreksi gagal / TP / tembus high.
 # ============================================================
 
-# Kirim daftar hasil screener (id dari docs/screeners.json)
-# PARTY tidak perlu ditulis di sini: watchlist PARTY bertahap selalu aktif
-# (masuk watchlist -> koreksi memantul + SL/TP -> koreksi gagal / TP / tembus high).
-screeners:
-  - bbs
-  - near_ara
+# Screener lain yang hasilnya ingin dikirim ke Telegram (id dari docs/screeners.json).
+# Contoh mengaktifkan lagi:  screeners: [bbs, near_ara]
+screeners: []
 
 # Alert harga / indikator per saham (tanpa .JK)
-# kondisi yang tersedia: above, below, rsi_above, rsi_below, change_above, change_below
-saham:
-  - kode: BBCA
-    below: 5000
-  - kode: TLKM
-    rsi_below: 30
-  - kode: ANTM
-    change_above: 5
+# kondisi: above, below, rsi_above, rsi_below, change_above, change_below
+# contoh:
+#   - kode: BBCA
+#     below: 5000
+saham: []
