@@ -16,6 +16,7 @@ import update as U
 RETR = 0.5          # koreksi minimal: porsi lonjakan yang terhapus
 DRY = 0.35          # volume 2 candle pantul <= 35% volume candle lonjakan terbesar
 MIN_UP = 1.03       # harga tetap >= +3% dari harga kemarin
+NEAR_HIGH = -5.0    # syarat masuk watchlist: harga maksimal 5% di bawah high hari ini (masih di fase lonjak)
 TF = "5min"
 
 PATH = U.STATE / "watch.json"
@@ -115,6 +116,8 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
     """quotes: hasil fetch_quotes; full_row(sym) -> row lengkap (indikator) atau None."""
     st = load(today)
     items = st["items"]
+    for c in [c for c, it in items.items() if it["stage"] == "WATCH" and "from_high_add" not in it]:
+        items.pop(c)   # masuk sebelum aturan "dekat high" berlaku
     sent = 0
     data_time = data_dt.strftime("%H:%M")
     now_s = data_time  # jam data (Yahoo telat ±10 mnt), supaya selaras dengan candle
@@ -131,9 +134,13 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url=""):
         r = full_row(s)
         if not r:
             continue
+        hi = q.get("regularMarketDayHigh") or p
+        from_high = (p / hi - 1) * 100 if hi else 0
+        if from_high < NEAR_HIGH:      # sudah jauh dari high = lonjakan sudah lewat, jangan dimasukkan
+            continue
         if all(r.get(f) is not None and U.OPS[op](r[f], v) for f, op, v in party_rules):
             items[code] = {"stage": "WATCH", "added": now_s, "added_at": data_dt.isoformat(),
-                           "prev": float(prev), "price_add": float(p), "flags": []}
+                           "prev": float(prev), "price_add": float(p), "from_high_add": round(from_high, 1), "flags": []}
             new.append((code, r))
     if new:
         lines = [f"📌 <b>Masuk watchlist PARTY</b> — {len(new)} saham · data {data_time}"]
