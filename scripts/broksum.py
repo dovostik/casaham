@@ -1,106 +1,101 @@
-"""Broker summary harian dari halaman publik Indo Premier (tanpa login).
-Dipakai untuk syarat watchlist PARTY: rata-rata harga top 3 broker net buy kemarin
-harus dekat (<= 5%) dengan harga open hari ini. Hasil di-cache per saham per tanggal."""
+"""Broker summary hari bursa sebelumnya dari GoAPI (secret GOAPI_KEY).
+Syarat watchlist PARTY: rata-rata harga top 3 broker net buy kemarin harus dekat
+(<= 5%) dengan harga open hari ini. Dicek hanya saat sinyal memantul (hemat kuota:
+paket gratis 30 permintaan/hari, 500/bulan). Hasil di-cache per saham per hari."""
 import json
-import re
+import os
+import urllib.parse
 import urllib.request
 from datetime import date, timedelta
 
 import update as U
 
-ENDPOINT = "https://www.indopremier.com/module/saham/include/data-brokersummary.php"
+BASE = "https://api.goapi.io/stock/idx"
 CACHE = U.STATE / "broksum.json"
-MAX_GAP = 5.0   # % jarak rata-rata harga top 3 buyer ke harga open
+MAX_GAP = 5.0          # % jarak rata-rata harga top 3 buyer ke harga open
+DAILY_LIMIT = 25       # sisakan cadangan dari kuota 30/hari
 
 
-def _num(t):
-    t = re.sub(r"<[^>]*>", "", t or "").replace("&nbsp;", " ").replace(",", "").strip()
-    if not t:
-        return None
-    mult = {"K": 1e3, "M": 1e6, "B": 1e9, "T": 1e12}.get(t[-1:].upper())
-    try:
-        return float(t[:-1] if mult else t) * (mult or 1)
-    except ValueError:
-        return None
-
-
-def parse(html):
-    if re.search(r"invalid stock code", html, re.I):
-        return None
-    a, b = html.find("<tbody>"), html.find("</tbody>")
-    if a < 0 or b < 0:
-        return None
-    buyers, sellers = [], []
-    for row in html[a:b].split("</tr>"):
-        cells = re.findall(r"<td[^>]*>([\s\S]*?)</td>", row)
-        if len(cells) < 9:
-            continue
-        for side, at in ((buyers, 0), (sellers, 5)):
-            code = re.sub(r"<[^>]*>", "", cells[at]).strip().upper()
-            if code:
-                side.append({"code": code, "lots": _num(cells[at + 1]), "value": _num(cells[at + 2]),
-                             "avg": _num(cells[at + 3])})
-    return {"buyers": buyers, "sellers": sellers}
+def _get(path, **params):
+    key = os.environ.get("GOAPI_KEY", "").strip()
+    if not key:
+        raise RuntimeError("GOAPI_KEY belum diset")
+    url = f"{BASE}{path}?{urllib.parse.urlencode(params)}"
+    req = urllib.request.Request(url, headers={"X-API-KEY": key, "Accept": "application/json"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        return json.loads(r.read())
 
 
 def fetch(code, day):
-    d = f"{day:%m/%d/%Y}"
-    url = f"{ENDPOINT}?code={code}&start={d}&end={d}&fd=all&board=all"
-    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (casaham; personal use)"})
-    with urllib.request.urlopen(req, timeout=20) as r:
-        return parse(r.read().decode("utf-8", "replace"))
+    """Daftar broker BUY (net) untuk satu hari."""
+    js = _get(f"/{code}/broker_summary", date=day.isoformat(), investor="ALL")
+    rows = (js.get("data") or {}).get("results") or []
+    buys = [x for x in rows if str(x.get("side", "")).upper() == "BUY"]
+    buys.sort(key=lambda x: -(float(x.get("value") or 0)))
+    return buys, rows
 
 
-def _cache():
+def _load():
     try:
         return json.loads(CACHE.read_text())
     except Exception:  # noqa
         return {}
 
 
+def _save(c):
+    U.STATE.mkdir(parents=True, exist_ok=True)
+    CACHE.write_text(json.dumps(c))
+
+
 def top3_prev(code, today_str):
-    """Ringkasan broker hari bursa sebelumnya (mundur maks 5 hari kalender). Cache per hari."""
-    c = _cache()
-    key = f"{code}:{today_str}"
-    if key in c:
-        return c[key]
+    """{"date","top","avg"} hari bursa sebelumnya, None bila kosong, "ERR" bila gagal/kuota habis."""
+    c = _load()
+    if c.get("_day") != today_str:
+        c = {"_day": today_str, "_calls": 0}
+    if code in c:
+        return c[code]
     res = None
     day = date.fromisoformat(today_str)
     for back in range(1, 6):
         d = day - timedelta(days=back)
         if d.weekday() >= 5:
             continue
+        if c["_calls"] >= DAILY_LIMIT:
+            return "ERR"
+        c["_calls"] += 1
+        _save(c)
         try:
-            p = fetch(code, d)
+            buys, rows = fetch(code, d)
         except Exception as e:  # noqa
             print("broksum gagal", code, e)
-            return None          # sumber tidak bisa diakses -> jangan cache
-        if p and p["buyers"]:
-            top = [x for x in p["buyers"][:3] if x["avg"] and x["value"]]
+            return "ERR"
+        if rows:
+            top = [x for x in buys[:3] if x.get("avg") and x.get("value")]
             if top:
-                avg = sum(x["avg"] * x["value"] for x in top) / sum(x["value"] for x in top)
-                res = {"date": d.isoformat(), "top": [x["code"] for x in top], "avg": round(avg, 1),
-                       "value": sum(x["value"] for x in top)}
+                v = [float(x["value"]) for x in top]
+                avg = sum(float(x["avg"]) * w for x, w in zip(top, v)) / sum(v)
+                res = {"date": d.isoformat(), "avg": round(avg, 1),
+                       "top": [(x.get("broker") or {}).get("code") or x.get("code") for x in top]}
             break
-    c = {k: v for k, v in c.items() if k.endswith(today_str)}   # simpan hanya hari ini
-    c[key] = res
-    U.STATE.mkdir(parents=True, exist_ok=True)
-    CACHE.write_text(json.dumps(c))
+    c[code] = res
+    _save(c)
     return res
 
 
 def check(code, today_str, day_open):
-    """(lolos, info). Kalau data tidak tersedia -> lolos=True dengan info 'tidak ada data' (tidak memblokir)."""
+    """(lolos, teks). Data tidak tersedia -> lolos=True (tidak memblokir), teks minta cek manual."""
+    band = f"{day_open * 0.95:,.0f}–{day_open * 1.05:,.0f}".replace(",", ".") if day_open else "-"
     info = top3_prev(code, today_str)
-    if not info or not day_open:
-        return True, None
+    if info == "ERR" or info is None or not day_open:
+        return True, f"Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di {band} (open ±5%)"
     gap = (info["avg"] / day_open - 1) * 100
-    info = dict(info, gap=round(gap, 1))
-    return abs(gap) <= MAX_GAP, info
+    ok = abs(gap) <= MAX_GAP
+    txt = (f"Broksum {info['date']}: top 3 buyer {', '.join(info['top'])} rata-rata "
+           f"{info['avg']:,.0f}".replace(",", ".") + f" ({gap:+.1f}% dari open) {'✅' if ok else '❌'}")
+    return ok, txt
 
 
-if __name__ == "__main__":   # uji: python broksum.py SOLA BBCA
+if __name__ == "__main__":   # uji: GOAPI_KEY=... python broksum.py SOLA 2026-11-18
     import sys
-    t = date.today().isoformat()
-    for c in sys.argv[1:]:
-        print(c, top3_prev(c, t))
+    t = sys.argv[2] if len(sys.argv) > 2 else date.today().isoformat()
+    print(top3_prev(sys.argv[1], t))

@@ -1,0 +1,32 @@
+name: Uji broksum GoAPI
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - working-directory: scripts
+        env:
+          GOAPI_KEY: ${{ secrets.GOAPI_KEY }}
+        run: |
+          python - <<'PY'
+          import json, broksum as B
+          try:
+              js = B._get("/SOLA/broker_summary", date="2026-11-17", investor="ALL")
+              rows = (js.get("data") or {}).get("results") or []
+              print("::notice::", js.get("status"), js.get("message"), "rows", len(rows), json.dumps(rows[:2])[:700])
+              sides = {}
+              for r in rows: sides[r.get("side")] = sides.get(r.get("side"), 0) + 1
+              print("::notice:: sides", sides, "tx", {r.get("transaction_type") for r in rows}, "inv", {r.get("investor") for r in rows})
+              buys = sorted([r for r in rows if str(r.get("side","")).upper()=="BUY"], key=lambda x: -float(x.get("value") or 0))[:5]
+              print("::notice:: top buy", [(r["broker"]["code"], r["lot"], r["value"], r["avg"]) for r in buys])
+          except Exception as e:
+              print("::notice:: ERROR", repr(e)[:500])
+          PY
