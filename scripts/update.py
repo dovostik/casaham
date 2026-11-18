@@ -225,15 +225,26 @@ def fmt_idr(x):
     return f"{x:,.0f}"
 
 
-def do_alerts(rows, presets, today, page_url):
-    cfg_path = ROOT / "alerts.yml"
-    if not cfg_path.exists():
-        return []
-    cfg = yaml.safe_load(cfg_path.read_text()) or {}
+SENT_PATH = STATE / "sent_v2.json"
+
+
+def load_sent(today):
+    sent = json.loads(SENT_PATH.read_text()) if SENT_PATH.exists() else {}
+    return {k: v for k, v in sent.items() if v == today}  # buang hari lalu
+
+
+def save_sent(sent):
     STATE.mkdir(parents=True, exist_ok=True)
-    sent_path = STATE / "sent_v2.json"
-    sent = json.loads(sent_path.read_text()) if sent_path.exists() else {}
-    sent = {k: v for k, v in sent.items() if v == today}  # buang hari lalu
+    SENT_PATH.write_text(json.dumps(sent))
+
+
+def load_alert_cfg():
+    p = ROOT / "alerts.yml"
+    return (yaml.safe_load(p.read_text()) or {}) if p.exists() else {}
+
+
+def do_alerts(rows, presets, today, page_url, sent, cfg, stamp=""):
+    """Kirim alert yang belum terkirim hari ini. `sent` diubah di tempat."""
     by_code = {r["code"]: r for r in rows}
     log = []
 
@@ -245,7 +256,7 @@ def do_alerts(rows, presets, today, page_url):
         new = [h for h in hits if f"scr:{pid}:{h['code']}" not in sent]
         if not new:
             continue
-        lines = [f"📊 <b>{p['name']}</b> — {len(new)} saham baru"]
+        lines = [f"📊 <b>{p['name']}</b> — {len(new)} saham baru{stamp}"]
         for h in new[:25]:
             lines.append(f"• <b>{h['code']}</b> {h['close']:,.0f} ({h['ret1d']:+.1f}%) val {fmt_idr(h['value'])}")
         if page_url:
@@ -276,7 +287,7 @@ def do_alerts(rows, presets, today, page_url):
             sid = f"px:{code}:{key}:{target}"
             if sid in sent:
                 continue
-            msg = (f"🔔 <b>{code}</b> — {label} {target:g}\n"
+            msg = (f"🔔 <b>{code}</b> — {label} {target:g}{stamp}\n"
                    f"Harga {r['close']:,.0f} ({r['ret1d']:+.2f}%) · RSI {r['rsi14']}")
             if page_url:
                 msg += f'\n<a href="{page_url}#chart={code}">Lihat chart</a>'
@@ -284,8 +295,6 @@ def do_alerts(rows, presets, today, page_url):
                 continue
             sent[sid] = today
             log.append({"type": "saham", "code": code, "cond": key, "target": target, "close": r["close"]})
-
-    sent_path.write_text(json.dumps(sent))
     return log
 
 
@@ -325,7 +334,14 @@ def main():
     }
     presets = {p["id"]: p for p in json.loads((DOCS / "screeners.json").read_text())["presets"]}
     page_url = os.environ.get("PAGE_URL", "")
-    log = do_alerts(rows, presets, now.strftime("%Y-%m-%d"), page_url)
+    log = []
+    if os.environ.get("NO_ALERTS") != "1":
+        today = now.strftime("%Y-%m-%d")
+        sent = load_sent(today)
+        log = do_alerts(rows, presets, today, page_url, sent, load_alert_cfg())
+        save_sent(sent)
+    else:
+        print("Alert dilewati (ditangani workflow realtime)")
 
     # riwayat alert disimpan di STATE (bertahan antar-run lewat cache Actions)
     STATE.mkdir(parents=True, exist_ok=True)

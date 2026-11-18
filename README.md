@@ -4,8 +4,11 @@ Aplikasi web pribadi ala Stockbit: **screener**, **chart teknikal** (candlestick
 **watchlist**, dan **alert Telegram**. Jalan 100% gratis: data diolah GitHub Actions, web di-host Cloudflare Pages (casaham.pages.dev).
 
 - Data: Yahoo Finance, ±835 saham BEI, tertunda ±10–15 menit.
-- Update otomatis tiap ±30 menit saat jam bursa (Senin–Jumat 09:00–16:00 WIB) + sekali sesudah tutup.
+- **Alert realtime**: screener & alert harga dicek **tiap ±1 menit** sepanjang sesi bursa
+  (workflow *Screener realtime*). Data Yahoo untuk BEI tertunda ±10 menit; jam data tertera di tiap notifikasi.
+- Data web (chart, tabel) diperbarui tiap ±30 menit (workflow *Update data web*).
   Jadwal GitHub kadang molor 5–20 menit.
+- Repo harus **public** agar menit GitHub Actions tidak terbatas.
 - Bisa dipasang di layar utama HP (buka di Chrome → ⋮ → *Tambahkan ke layar utama*).
 
 ## Pasang (sekali saja)
@@ -21,7 +24,7 @@ Aplikasi web pribadi ala Stockbit: **screener**, **chart teknikal** (candlestick
      `https://api.telegram.org/bot<TOKEN>/getUpdates` → salin angka `"chat":{"id": ...}`.
 4. **Secrets** di repo → Settings → Secrets and variables → Actions → *New repository secret*:
    `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `TELEGRAM_TOKEN`, `TELEGRAM_CHAT_ID`.
-5. **Jalankan pertama**: tab Actions → *Update data & alert* → **Run workflow**.
+5. **Jalankan pertama**: tab Actions → *Update data web* → **Run workflow**.
    Setelah ±5 menit aplikasi ada di **https://casaham.pages.dev**
    (kalau nama itu sudah dipakai orang, Cloudflare memberi alamat lain — cek di dashboard,
    lalu ganti `PAGE_URL` di `.github/workflows/update.yml`).

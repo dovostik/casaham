@@ -1,0 +1,66 @@
+name: Screener realtime (tiap 1 menit)
+
+on:
+  schedule:
+    # Sesi 1: mulai 08:40 WIB, scan sampai 12:05 WIB
+    - cron: "40 1 * * 1-5"
+    # Sesi 2: mulai 13:10 WIB, scan sampai 16:10 WIB
+    - cron: "10 6 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      until:
+        description: "Scan sampai jam (WIB, HH:MM)"
+        default: "16:10"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: realtime
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - run: pip install -r requirements.txt
+
+      - name: Pulihkan status alert
+        uses: actions/cache/restore@v4
+        with:
+          path: .state
+          key: alert-state-${{ github.run_id }}
+          restore-keys: alert-state-
+
+      - name: Tentukan jam selesai
+        id: t
+        run: |
+          if [ -n "${{ inputs.until }}" ]; then echo "until=${{ inputs.until }}" >> $GITHUB_OUTPUT
+          elif [ "$(TZ=Asia/Jakarta date +%H)" -lt 12 ]; then echo "until=12:05" >> $GITHUB_OUTPUT
+          else echo "until=16:10" >> $GITHUB_OUTPUT; fi
+
+      - name: Scan tiap menit
+        working-directory: scripts
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          PAGE_URL: https://casaham.pages.dev/
+          UNTIL: ${{ steps.t.outputs.until }}
+          PYTHONUNBUFFERED: "1"
+        run: python realtime.py
+
+      - name: Simpan status alert
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .state
+          key: alert-state-${{ github.run_id }}

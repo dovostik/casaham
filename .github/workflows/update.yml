@@ -1,4 +1,4 @@
-name: Update data & alert
+name: Update data web
 
 on:
   schedule:
@@ -46,6 +46,7 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           PAGE_URL: https://casaham.pages.dev/
           REPO: ${{ github.repository }}
+          NO_ALERTS: "1"  # alert ditangani workflow realtime
         run: python scripts/update.py
 
       - name: Simpan status alert
