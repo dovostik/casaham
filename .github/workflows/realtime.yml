@@ -45,9 +45,16 @@ jobs:
       - name: Tentukan jam selesai
         id: t
         run: |
-          if [ -n "${{ inputs.until }}" ]; then echo "until=${{ inputs.until }}" >> $GITHUB_OUTPUT
-          elif [ "$(TZ=Asia/Jakarta date +%H)" -lt 12 ]; then echo "until=12:05" >> $GITHUB_OUTPUT
-          else echo "until=16:10" >> $GITHUB_OUTPUT; fi
+          H=$(TZ=Asia/Jakarta date +%H%M)
+          U="${{ inputs.until }}"
+          # sesi pagi selalu berhenti 12:05 (batas runner 5 jam), sesi siang 16:10
+          if [ "$H" -lt 1200 ]; then
+            if [ -z "$U" ] || [ "${U/:/}" -gt 1205 ]; then U="12:05"; fi
+          else
+            [ -z "$U" ] && U="16:10"
+          fi
+          echo "until=$U" >> $GITHUB_OUTPUT
+          echo "Mulai $(TZ=Asia/Jakarta date +%H:%M) WIB, scan sampai $U"
 
       - name: Scan tiap menit
         working-directory: scripts

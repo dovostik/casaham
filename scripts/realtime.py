@@ -94,6 +94,9 @@ def main():
     print(f"Screener aktif: {[p['id'] for p in scr]}, alert saham: {sorted(watch_codes)}")
 
     P.poll(0)  # proses perintah Telegram yang masuk di luar jam bursa
+    if datetime.now(U.WIB) >= end and not max_rounds:
+        print("Sudah lewat jam selesai sesi, keluar.")
+        return
     quotes = None
     for attempt in range(20):           # Yahoo kadang menolak sementara (429/401): coba ulang ±10 menit
         try:
