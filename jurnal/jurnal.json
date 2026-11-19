@@ -13,8 +13,10 @@
 "value_in": 5993248000.0,
 "ara": 384,
 "ara_pct_in": 41.6,
-"stage": "WATCH",
-"from_high_in": -2.3
+"stage": "OUT",
+"from_high_in": -2.3,
+"t_out": "09:07",
+"H": 350.0
 },
 {
 "id": "2026-11-19:PARTY:ESIP",
@@ -127,9 +129,17 @@
 "value_in": 533808600.0,
 "ara": 91,
 "ara_pct_in": 42.0,
-"stage": "WATCH",
+"stage": "BOUNCE",
 "from_high_in": 0.0,
-"t_corr": "11:31"
+"t_corr": "11:31",
+"t_bounce": "09:31",
+"bounce_price": 82.0,
+"sl": 75,
+"tp1": 89,
+"tp2": 90,
+"H": 83.0,
+"broksum_ok": null,
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 66–74 (open ±5%)"
 },
 {
 "id": "2026-11-19:PARTY:YELO",
@@ -373,9 +383,17 @@
 "value_in": 27426187800.0,
 "ara": 82,
 "ara_pct_in": 23.4,
-"stage": "WATCH",
+"stage": "BOUNCE",
 "from_high_in": 0.0,
-"t_corr": "11:01"
+"t_corr": "11:01",
+"t_bounce": "10:34",
+"bounce_price": 64.0,
+"sl": 62,
+"tp1": 65,
+"tp2": 67,
+"H": 66.0,
+"broksum_ok": null,
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 57–63 (open ±5%)"
 },
 {
 "id": "2026-11-19:PARTY:WAPO",
@@ -451,9 +469,18 @@
 "value_in": 502070400.0,
 "ara": 126,
 "ara_pct_in": 30.4,
-"stage": "WATCH",
+"stage": "BOUNCE",
 "from_high_in": 0.0,
-"t_corr": "11:01"
+"t_corr": "11:01",
+"t_bounce": "10:33",
+"bounce_price": 110.0,
+"sl": 101,
+"tp1": 119,
+"tp2": 125,
+"H": 109.0,
+"broksum_ok": null,
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 93–103 (open ±5%)",
+"brk": 1
 },
 {
 "id": "2026-11-19:PARTY:AYLS",
@@ -489,9 +516,17 @@
 "value_in": 508827900.0,
 "ara": 124,
 "ara_pct_in": 28.0,
-"stage": "WATCH",
+"stage": "BOUNCE",
 "from_high_in": -4.7,
-"t_corr": "11:16"
+"t_corr": "11:16",
+"t_bounce": "11:04",
+"bounce_price": 102.0,
+"sl": 98,
+"tp1": 105,
+"tp2": 107,
+"H": 106.0,
+"broksum_ok": null,
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 86–96 (open ±5%)"
 },
 {
 "id": "2026-11-19:PARTY:MBTO",
@@ -507,8 +542,10 @@
 "value_in": 513992700.0,
 "ara": 141,
 "ara_pct_in": 32.7,
-"stage": "WATCH",
-"from_high_in": -3.3
+"stage": "OUT",
+"from_high_in": -3.3,
+"t_out": "11:51",
+"H": 121.0
 },
 {
 "id": "2026-11-19:BBS:ARII",
