@@ -300,6 +300,12 @@ def do_alerts(rows, presets, today, page_url, sent, cfg, stamp="", respect_windo
         new = [h for h in hits if f"scr:{pid}:{h['code']}" not in sent]
         if not new:
             continue
+        if pid == "bbs":
+            import jurnal as J
+            hm = stamp.split("data")[-1].strip() if "data" in stamp else datetime.now(WIB).strftime("%H:%M")
+            for h in new:
+                if h.get("prev"):
+                    J.add("BBS", h["code"], today, hm, float(h["close"]), float(h["prev"]), value=h.get("value"))
         lines = [f"📊 <b>{p['name']}</b> — {len(new)} saham baru{stamp}"]
         for h in new[:25]:
             line = f"• <b>{h['code']}</b> {h['close']:,.0f} ({h['ret1d']:+.1f}%) val {fmt_idr(h['value'])}"
@@ -402,6 +408,8 @@ def main():
     alog_state.write_text(txt)
     (DATA / "alerts_log.json").write_text(txt)
 
+    jp = ROOT / "jurnal" / "jurnal.json"
+    (DATA / "jurnal.json").write_text(jp.read_text() if jp.exists() else "[]")
     (DATA / "summary.json").write_text(json.dumps({"meta": meta, "rows": rows},
                                                   separators=(",", ":"), ensure_ascii=False))
     (DATA / "alerts_config.json").write_text(json.dumps(

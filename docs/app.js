@@ -32,6 +32,7 @@ function showTab(t) {
   $$(".tab").forEach(s => s.classList.toggle("active", s.id === "tab-" + t));
   $$("nav.bottom button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
   if (t === "watch") renderWatch();
+  if (t === "jurnal") renderJurnal();
   if (t === "chart" && chart) setTimeout(resizeCharts, 0);
   window.scrollTo(0, 0);
 }
@@ -221,6 +222,47 @@ $("#aMake").onclick = async () => {
   try { await navigator.clipboard.writeText(txt); $("#aMake").textContent = "Tersalin ✓"; setTimeout(() => $("#aMake").textContent = "Buat & salin", 1500); } catch {}
 };
 
+// ---------- jurnal
+let JR = null, jSetup = "ALL";
+const STAGE = { WATCH: "⏳ watchlist", BOUNCE: "🟢 memantul", FAILED: "🔴 gagal", OUT: "⚠️ bandar keluar",
+  SKIP: "⏭️ dilewati broksum", DONE: "⚪ selesai", SIGNAL: "📊 sinyal" };
+function jStats(rows, key) {
+  const g = {};
+  rows.filter(r => r.result != null).forEach(r => { const k = key ? (r[key] ?? "-") : "Total"; (g[k] = g[k] || []).push(r.result); });
+  return Object.entries(g).sort().map(([k, v]) => [k, v.length, v.filter(x => x > 0).length / v.length * 100, v.reduce((a, b) => a + b, 0) / v.length]);
+}
+function jTable(title, rows) {
+  if (!rows.length) return "";
+  return `<table class="jt"><tr><th>${title}</th><th>Sinyal</th><th>Menang</th><th>Rata-rata</th></tr>${rows.map(([k, n, w, a]) =>
+    `<tr><td>${k}</td><td>${n}</td><td>${fmtN(w)}%</td><td class="${cls(a)}">${pct(a)}</td></tr>`).join("")}</table>`;
+}
+async function renderJurnal() {
+  if (!JR) { try { JR = await (await fetch("data/jurnal.json?v=" + Date.now())).json(); } catch { JR = []; } }
+  const repo = DATA.meta.repo;
+  $("#jCsv").href = repo ? `https://github.com/${repo}/blob/main/jurnal/jurnal.csv` : "#";
+  const rows = JR.filter(r => jSetup === "ALL" || r.setup === jSetup);
+  const done = rows.filter(r => r.result != null);
+  const party = rows.filter(r => r.setup === "PARTY"), bbs = rows.filter(r => r.setup === "BBS");
+  const funnel = party.length ? `<div class="card small" style="margin:8px 0">PARTY: ${party.length} masuk watchlist · ${party.filter(r => r.t_bounce).length} memantul ·
+    ${party.filter(r => r.t_out).length} bandar keluar · ${party.filter(r => r.broksum_ok === false).length} dilewati broksum · ${party.filter(r => r.t_fail).length} gagal</div>` : "";
+  const lk = bbs.filter(r => r.locked != null);
+  const bbsInfo = lk.length ? `<div class="card small" style="margin:8px 0">BBS: ${bbs.length} sinyal · terkunci ARA saat tutup ${fmtN(lk.filter(r => r.locked).length / lk.length * 100)}%</div>` : "";
+  $("#jSummary").innerHTML = (rows.length ? "" : '<p class="muted">Jurnal masih kosong — terisi mulai sesi bursa berikutnya.</p>') + funnel + bbsInfo +
+    (done.length ? jTable("Total", jStats(done)) + jTable("Setup", jStats(done, "setup")) + jTable("Band harga", jStats(done, "band")) +
+      jTable("Sesi", jStats(done, "session")) + jTable("Broksum", jStats(done.filter(r => r.setup === "PARTY").map(r => ({ ...r, bk: r.broksum_ok === true ? "lolos" : r.broksum_ok === false ? "tidak" : "tanpa data" })), "bk"))
+      : (rows.length ? '<p class="muted">Belum ada catatan yang hasilnya lengkap (BBS terkunci menunggu open besok).</p>' : "")) +
+    '<p class="muted small">Pembanding uji 59 hari: BBS +1,38% (menang 51%) · PARTY aturan 15m ±0%.</p>';
+  $("#jList").innerHTML = rows.slice().reverse().slice(0, 60).map(r => `<div class="jrow" data-c="${r.code}">
+    <b>${r.code}</b> <span class="muted">${r.setup} · ${r.date} ${r.time_in} · ${r.band} · ${r.session}</span><br>
+    masuk ${fmtN(r.price_in)} (${pct(r.ret_in)}) · ${STAGE[r.stage] || r.stage}${r.t_bounce ? ` ${r.t_bounce} @${fmtN(r.bounce_price)}` : ""}
+    ${r.close != null ? ` · tutup ${fmtN(r.close)}${r.locked ? " (ARA)" : ""}` : ""}${r.n_open != null ? ` · open besok ${fmtN(r.n_open)}` : ""}
+    ${r.result != null ? ` · <b class="${cls(r.result)}">${pct(r.result)}</b>` : ""}</div>`).join("");
+  $$(".jrow", $("#jList")).forEach(el => el.onclick = () => openChart(el.dataset.c));
+}
+$$("#jSetup button").forEach(b => b.onclick = () => {
+  $$("#jSetup button").forEach(x => x.classList.toggle("on", x === b)); jSetup = b.dataset.s; renderJurnal();
+});
+
 // ---------- boot
 async function boot() {
   try {
@@ -235,6 +277,7 @@ async function boot() {
   renderAlerts();
   if (k === "chart" && v) openChart(v);
   else if (k === "alert") showTab("alert");
+  else if (k === "jurnal") showTab("jurnal");
 }
 boot();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});

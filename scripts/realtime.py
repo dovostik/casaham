@@ -14,6 +14,7 @@ from datetime import datetime
 
 import pandas as pd
 
+import jurnal as J
 import positions as P
 import watch as W
 import update as U
@@ -113,6 +114,7 @@ def main():
     STATE_LOG = U.STATE / "alerts_log.json"
     last_mkt_time, rounds = None, 0
     last_web = 0.0
+    filled_open = False
 
     while datetime.now(U.WIB) < end or (max_rounds and rounds < max_rounds):
         t0 = time.time()
@@ -131,6 +133,12 @@ def main():
             rounds += max_rounds > 0  # tidak ada data baru (jeda sesi)
         else:
             last_mkt_time = mkt_time
+            if not filled_open:
+                try:
+                    J.fill_next_open(today, quotes)   # open hari ini untuk sinyal kemarin
+                except Exception as e:  # noqa
+                    print("jurnal open gagal:", e)
+                filled_open = True
             # pilih kandidat: lolos filter cepat salah satu screener, atau ada di alert saham
             cand = set()
             for s, q in quotes.items():
@@ -196,11 +204,15 @@ def main():
         P.U.tg_send(P.summary_text().replace("📋 <b>Posisi</b>", "📋 <b>Ringkasan posisi — penutupan</b>"))
         sum_sent["close"] = today
         SUM_PATH.write_text(json.dumps(sum_sent))
-    # rekap penutupan BBS: status ARA saat tutup untuk saham yang dialertkan hari ini
-    bbs_codes = [k.split(":")[2] for k, v in sent.items() if k.startswith("scr:bbs:") and v == today]
-    if UNTIL >= "15:50" and bbs_codes and sum_sent.get("bbs_close") != today:
+    if UNTIL >= "15:50" and not max_rounds:
         try:
             qs = U.fetch_quotes()
+        except Exception as e:  # noqa
+            qs = {}
+            print("quote akhir gagal:", e)
+        # rekap penutupan BBS: status ARA saat tutup untuk saham yang dialertkan hari ini
+        bbs_codes = [k.split(":")[2] for k, v in sent.items() if k.startswith("scr:bbs:") and v == today]
+        if qs and bbs_codes and sum_sent.get("bbs_close") != today:
             lines = [f"📋 <b>Rekap penutupan BBS</b> · {today}"]
             for c in bbs_codes:
                 q = qs.get(c + ".JK") or {}
@@ -216,8 +228,18 @@ def main():
             U.tg_send("\n".join(lines))
             sum_sent["bbs_close"] = today
             SUM_PATH.write_text(json.dumps(sum_sent))
-        except Exception as e:  # noqa
-            print("rekap BBS gagal:", e)
+        # jurnal: lengkapi hasil hari ini
+        if qs:
+            try:
+                codes = sorted({r["code"] for r in J.load() if r["date"] == today})
+                J.close_day(today, qs, W.intraday(codes))
+            except Exception as e:  # noqa
+                print("jurnal tutup gagal:", e)
+        # laporan mingguan tiap Jumat
+        if datetime.now(U.WIB).weekday() == 4 and sum_sent.get("weekly") != today:
+            U.tg_send(J.stats_text(since=J.weekly_since(today), title="Laporan mingguan jurnal"))
+            sum_sent["weekly"] = today
+            SUM_PATH.write_text(json.dumps(sum_sent))
     if not max_rounds:
         trigger_web_update()   # data web final sesudah sesi
     print("Sesi selesai,", rounds, "putaran scan")

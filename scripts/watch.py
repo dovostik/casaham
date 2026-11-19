@@ -13,6 +13,7 @@ from datetime import datetime
 import pandas as pd
 
 import broksum as B
+import jurnal as J
 import update as U
 
 RETR = 0.35         # koreksi minimal: porsi lonjakan (open -> high) yang terhapus
@@ -196,6 +197,8 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         if all(r.get(f) is not None and U.OPS[op](r[f], v) for f, op, v in party_rules):
             items[code] = {"stage": "WATCH", "added": now_s, "added_at": data_dt.isoformat(),
                            "prev": float(prev), "price_add": float(p), "from_high_add": round(from_high, 1), "flags": []}
+            J.add("PARTY", code, today, now_s, float(p), float(prev), value=r.get("value"),
+                  extra={"from_high_in": round(from_high, 1)})
             new.append((code, r))
     if new:
         lines = [f"📌 <b>Masuk watchlist PARTY</b> — {len(new)} saham · data {data_time}"]
@@ -220,6 +223,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         it["H"] = res["H"]
         if res.get("out"):
             it["stage"] = "OUT"
+            J.update(f"{today}:PARTY:{c}", stage="OUT", t_out=res["time_out"], H=res["H"])
             send("bandar_keluar",
                  f"⚠️ <b>BANDAR KELUAR? · {c}</b> · data {data_time}\n"
                  f"Candle {res['time_out']} tutup {nf(res['price'])}, di bawah tengah lonjakan {nf(res['mid'])} "
@@ -229,17 +233,21 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         if "time" not in res:
             if res.get("corr") and "CORR" not in it["flags"]:
                 it["flags"].append("CORR")
+                J.update(f"{today}:PARTY:{c}", t_corr=now_s)
             continue
         price = float(q.get("regularMarketPrice") or res["close"])
         L = res["L"]
         sl = int(round(L - tick(L)))
         if price <= sl:
             it["stage"] = "DONE"
+            J.update(f"{today}:PARTY:{c}", stage="DONE", note="harga sudah di bawah SL saat sinyal")
             continue
         # syarat broksum: rata-rata top 3 buyer kemarin <= 5% dari open hari ini (GoAPI)
         b_ok, b_txt = B.check(c, today, float(q["regularMarketOpen"]) if q.get("regularMarketOpen") else None)
         if not b_ok:
             it.update(stage="SKIP", skip_reason=b_txt)
+            J.update(f"{today}:PARTY:{c}", stage="SKIP", t_bounce=res["time"], bounce_price=price, H=res["H"],
+                     broksum_ok=False, broksum=b_txt)
             send("memantul", f"⏭️ <b>{c}</b> memantul tapi dilewati · data {data_time}\n{b_txt}")
             sent += 1
             continue
@@ -247,6 +255,8 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         ara = U.ara_price(it["prev"])
         tp1, tp2 = resist_tp(price, sl, res["H"], ara, daily_frame(c + ".JK") if daily_frame else None)
         it.update(stage="BOUNCE", entry=price, sl=sl, tp1=tp1, tp2=tp2, L=L, bounce_at=now_s)
+        J.update(f"{today}:PARTY:{c}", stage="BOUNCE", t_bounce=res["time"], bounce_price=price, sl=sl, tp1=tp1,
+                 tp2=tp2, H=res["H"], broksum_ok=None if "belum tersedia" in b_txt else True, broksum=b_txt)
         send("memantul",
             f"🟢 <b>KOREKSI MEMANTUL · {c}</b> · data {data_time}\n"
             f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan (candle 15m)\n"
@@ -279,6 +289,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         if p <= it["sl"]:
             kind = "gagal"
             it["stage"] = "FAILED"
+            J.update(f"{today}:PARTY:{c}", stage="FAILED", t_fail=now_s)
             msg = (f"🔴 <b>KOREKSI GAGAL · {c}</b> · data {data_time}\n"
                    f"Harga {nf(p)} tembus SL {nf(it['sl'])} (dasar {nf(it['L'])}). "
                    f"Dari harga sinyal {nf(it['entry'])}: {pc((p / it['entry'] - 1) * 100)}. Pertimbangkan cut.")
@@ -290,12 +301,14 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
                 kind = "tp"
                 msg = f"🎯 <b>{c} TP1 {nf(it['tp1'])} tercapai</b> · data {data_time}\nHarga {nf(p)}. Jual sebagian, SL naik ke harga sinyal {nf(it['entry'])}."
                 it["sl"] = it["entry"]
+                J.update(f"{today}:PARTY:{c}", tp1_hit=1)
                 if rec:
                     rec["tp1_hit"] = 1
             if p >= it["tp2"] and "TP2" not in it["flags"]:
                 it["flags"].append("TP2")
                 kind = "tp"
                 msg = f"🎯 <b>{c} TP2 {nf(it['tp2'])} tercapai</b> · data {data_time}\nHarga {nf(p)}. Amankan profit."
+                J.update(f"{today}:PARTY:{c}", tp2_hit=1)
                 if rec:
                     rec["tp2_hit"] = 1
             if p > it.get("H", 1e18) and "BRK" not in it["flags"]:
@@ -306,6 +319,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
                 msg = (f"🚀 <b>{c} TEMBUS HIGH LONJAKAN {nf(it['H'])}</b> · data {data_time}\n"
                        f"Harga {nf(p)} · jarak ke ARA {pc((ara / p - 1) * 100)}. Bisa jadi titik tambah muatan — "
                        f"SL tambahan di bawah {nf(it['H'])}. Hati-hati, data telat ±10 menit.")
+                J.update(f"{today}:PARTY:{c}", brk=1)
                 if rec:
                     rec["brk"] = 1
         if msg:
