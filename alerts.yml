@@ -9,7 +9,7 @@
 # (Watchlist tetap berjalan di belakang layar; /watch tetap bisa dipakai.)
 party:
   watchlist: true     # 📌 saham masuk watchlist PARTY
-  bandar_keluar: true # ⚠️ harga di bawah tengah lonjakan (open→high), keluar watchlist
+  bandar_keluar: true # ⚠️ harga di bawah tengah lonjakan (harga kemarin→high), keluar watchlist
   memantul: true      # 🟢 koreksi memantul + SL/TP1/TP2
   gagal: true         # 🔴 koreksi gagal (tembus SL)
   tp: true            # 🎯 TP1 / TP2 tercapai

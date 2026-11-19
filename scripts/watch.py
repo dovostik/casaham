@@ -1,8 +1,8 @@
-"""Watchlist PARTY bertahap (candle 5 menit):
+"""Watchlist PARTY bertahap (candle 1 menit):
 
   1. 📌 Masuk watchlist  : saham lolos screener PARTY & masih dekat high (kapan pun di jam bursa)
-  ⚠️ Bandar keluar       : candle 15m tutup di bawah tengah lonjakan (open -> high) -> keluar watchlist
-  2. 🟢 Koreksi memantul : koreksi >= 35% lonjakan (dari open), lalu 2 candle 15m tanpa low baru,
+  ⚠️ Bandar keluar       : candle 1m tutup di bawah tengah lonjakan (harga kemarin -> high) -> keluar watchlist
+  2. 🟢 Koreksi memantul : koreksi >= 35% lonjakan (dari harga kemarin), lalu 2 candle 1m tanpa low baru,
                            volume mengering, candle hijau, harga masih >= +3%  -> kirim SL/TP1/TP2
   3. Watchlist lanjutan  : 🔴 koreksi gagal (harga <= SL) · 🎯 TP1/TP2 · 🚀 tembus high lonjakan
 Watchlist dihapus tiap hari (state per tanggal). Setiap sinyal dicatat untuk evaluasi (/evaluasi).
@@ -21,7 +21,7 @@ HALF = 0.5          # harga tutup candle di bawah tengah lonjakan = bandar diang
 DRY = 0.35          # volume 2 candle pantul <= 35% volume candle lonjakan terbesar
 MIN_UP = 1.03       # harga tetap >= +3% dari harga kemarin
 NEAR_HIGH = -5.0    # syarat masuk watchlist: harga maksimal 5% di bawah high hari ini (masih di fase lonjak)
-TF = "15m"           # hasil uji 59 hari: 15 menit lebih baik dari 5 menit untuk aturan ini
+TF = "1m"            # pilihan user: candle 1 menit (cepat, untuk saham fluktuatif ber-bandar)
 
 PATH = U.STATE / "watch.json"
 LOG = U.STATE / "watch_log.json"
@@ -88,11 +88,11 @@ def intraday(codes):
 
 def find_bounce(bars, prev, added_at, day_open=None):
     """Cari koreksi + pantulan sejak saham masuk watchlist.
-    Lonjakan diukur dari harga open. Return dict (time= sinyal pantul, out= bandar keluar) atau None."""
+    Lonjakan diukur dari harga kemarin (prev). Return dict (time= sinyal pantul, out= bandar keluar) atau None."""
     if len(bars) < 3:
         return None
-    base = float(day_open or bars["Open"].iloc[0])
-    t0 = pd.Timestamp(added_at).floor("15min")
+    base = float(prev)   # uji 1 menit: titik tengah dari harga kemarin lebih baik daripada dari open
+    t0 = pd.Timestamp(added_at).floor("1min")
     pre = bars[bars.index <= t0]
     H = float(pre["High"].max()) if len(pre) else float(bars["High"].iloc[0])
     spike_vol = float(pre["Volume"].max()) if len(pre) else 0.0
@@ -198,7 +198,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
             items[code] = {"stage": "WATCH", "added": now_s, "added_at": data_dt.isoformat(),
                            "prev": float(prev), "price_add": float(p), "from_high_add": round(from_high, 1), "flags": []}
             J.add("PARTY", code, today, now_s, float(p), float(prev), value=r.get("value"),
-                  extra={"from_high_in": round(from_high, 1)})
+                  extra={"from_high_in": round(from_high, 1), "tf": TF})
             new.append((code, r))
     if new:
         lines = [f"📌 <b>Masuk watchlist PARTY</b> — {len(new)} saham · data {data_time}"]
@@ -227,7 +227,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
             send("bandar_keluar",
                  f"⚠️ <b>BANDAR KELUAR? · {c}</b> · data {data_time}\n"
                  f"Candle {res['time_out']} tutup {nf(res['price'])}, di bawah tengah lonjakan {nf(res['mid'])} "
-                 f"(open → high {nf(res['H'])}). Dikeluarkan dari watchlist.")
+                 f"(harga kemarin → high {nf(res['H'])}). Dikeluarkan dari watchlist.")
             sent += 1
             continue
         if "time" not in res:
@@ -259,7 +259,7 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
                  tp2=tp2, H=res["H"], broksum_ok=None if "belum tersedia" in b_txt else True, broksum=b_txt)
         send("memantul",
             f"🟢 <b>KOREKSI MEMANTUL · {c}</b> · data {data_time}\n"
-            f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan (candle 15m)\n"
+            f"Harga {nf(price)} ({pc((price / it['prev'] - 1) * 100)}) · dasar {nf(L)} · koreksi {res['retr']:.0f}% lonjakan (candle 1m)\n"
             f"<b>SL {nf(sl)}</b> ({pc((sl / price - 1) * 100)}) · <b>TP1 {nf(tp1)}</b> ({pc((tp1 / price - 1) * 100)}) · "
             f"<b>TP2 {nf(tp2)}</b> ({pc((tp2 / price - 1) * 100)}) · TP di bawah resisten (perkiraan offer tebal)\n"
             f"High lonjakan {nf(res['H'])} · jarak ke ARA {pc((ara / price - 1) * 100)}\n"
@@ -362,4 +362,4 @@ def eval_text():
             f"Kena SL: {s('sl_hit') / n * 100:.0f}% · TP1: {s('tp1_hit') / n * 100:.0f}% · "
             f"TP2: {s('tp2_hit') / n * 100:.0f}% · tembus high: {s('brk') / n * 100:.0f}%\n"
             f"Rata-rata harga terakhir vs harga sinyal: {pc(avg_last)} (belum fee ±0,4%)\n"
-            f"Pembanding uji 59 hari (aturan 15m): SL 15–20%, TP1 20–32%, TP2 7–8%, tembus high 37–47%.")
+            f"Pembanding uji 19 hari (candle 1m): SL 42%, menang 38%, rata-rata −0,85%.")
