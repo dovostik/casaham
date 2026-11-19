@@ -251,7 +251,7 @@ async function renderJurnal() {
     (done.length ? jTable("Total", jStats(done)) + jTable("Setup", jStats(done, "setup")) + jTable("Band harga", jStats(done, "band")) +
       jTable("Sesi", jStats(done, "session")) + jTable("Broksum", jStats(done.filter(r => r.setup === "PARTY").map(r => ({ ...r, bk: r.broksum_ok === true ? "lolos" : r.broksum_ok === false ? "tidak" : "tanpa data" })), "bk"))
       : (rows.length ? '<p class="muted">Belum ada catatan yang hasilnya lengkap (BBS terkunci menunggu open besok).</p>' : "")) +
-    '<p class="muted small">Pembanding uji: BBS 59 hari +1,38% (menang 51%) · PARTY candle 1m 19 hari −0,85% (menang 38%).</p>';
+    '<p class="muted small">Pembanding uji: BBS 59 hari +1,38% (menang 51%) · PARTY 1m ketat 19 hari −0,26% (menang 49%).</p>';
   $("#jList").innerHTML = rows.slice().reverse().slice(0, 60).map(r => `<div class="jrow" data-c="${r.code}">
     <b>${r.code}</b> <span class="muted">${r.setup} · ${r.date} ${r.time_in} · ${r.band} · ${r.session}</span><br>
     masuk ${fmtN(r.price_in)} (${pct(r.ret_in)}) · ${STAGE[r.stage] || r.stage}${r.t_bounce ? ` ${r.t_bounce} @${fmtN(r.bounce_price)}` : ""}

@@ -184,7 +184,7 @@ def stats_text(since=None, title="Evaluasi jurnal"):
             lines.append(f"menang {sum(x > 0 for x in res) / len(res) * 100:.0f}% · rata2 {sum(res) / len(res):+.2f}% (sudah fee)".replace(".", ","))
             lines.append("per band: " + _fmt(_grp(done, "band")))
             lines.append("per sesi: " + _fmt(_grp(done, "session")))
-    lines.append("\nPembanding uji: BBS 59 hari +1,38% (menang 51%); PARTY candle 1m 19 hari −0,85% (menang 38%).")
+    lines.append("\nPembanding uji: BBS 59 hari +1,38% (menang 51%); PARTY 1m ketat 19 hari −0,26% (menang 49%).")
     lines.append("Detail: casaham.pages.dev/#jurnal")
     return "\n".join(lines)
 

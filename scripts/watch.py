@@ -2,7 +2,8 @@
 
   1. 📌 Masuk watchlist  : saham lolos screener PARTY & masih dekat high (kapan pun di jam bursa)
   ⚠️ Bandar keluar       : candle 1m tutup di bawah tengah lonjakan (harga kemarin -> high) -> keluar watchlist
-  2. 🟢 Koreksi memantul : koreksi >= 35% lonjakan (dari harga kemarin), lalu 2 candle 1m tanpa low baru,
+  2. 🟢 Koreksi memantul : koreksi >= 35% lonjakan (dari harga kemarin) selama >= 5 menit, lalu 3 candle 1m
+                           tanpa low baru dan candle hijau menembus high 5 candle sebelumnya,
                            volume mengering, candle hijau, harga masih >= +3%  -> kirim SL/TP1/TP2
   3. Watchlist lanjutan  : 🔴 koreksi gagal (harga <= SL) · 🎯 TP1/TP2 · 🚀 tembus high lonjakan
 Watchlist dihapus tiap hari (state per tanggal). Setiap sinyal dicatat untuk evaluasi (/evaluasi).
@@ -20,6 +21,10 @@ RETR = 0.35         # koreksi minimal: porsi lonjakan (open -> high) yang terhap
 HALF = 0.5          # harga tutup candle di bawah tengah lonjakan = bandar dianggap keluar
 DRY = 0.35          # volume 2 candle pantul <= 35% volume candle lonjakan terbesar
 MIN_UP = 1.03       # harga tetap >= +3% dari harga kemarin
+CONF = 3            # candle tanpa low baru sesudah titik terendah koreksi
+MIN_DUR = 5         # koreksi minimal berlangsung 5 candle (menit)
+BRK = 5             # candle pantul harus tutup di atas high 5 candle sebelumnya
+STALE_MIN = 15      # sinyal lebih tua dari ini (mis. saat scanner baru mulai) tidak dikirim
 NEAR_HIGH = -5.0    # syarat masuk watchlist: harga maksimal 5% di bawah high hari ini (masih di fase lonjak)
 TF = "1m"            # pilihan user: candle 1 menit (cepat, untuk saham fluktuatif ber-bandar)
 
@@ -105,18 +110,23 @@ def find_bounce(bars, prev, added_at, day_open=None):
             H = max(H, float(b.High))
             spike_vol = max(spike_vol, float(b.Volume))
             if (H - b.Close) >= RETR * (H - base) and b.Close >= prev * MIN_UP:
-                corr_i, L = i, float(b.Low)
+                corr_i, L, Li = i, float(b.Low), i
             continue
         if b.Close < base + HALF * (H - base):
             return {"H": H, "out": True, "price": float(b.Close), "mid": base + HALF * (H - base),
                     "time_out": idx[i].strftime("%H:%M")}
-        if i >= corr_i + 2:
-            b1 = bars.iloc[i - 1]
-            if (b1.Low > L and b.Low > L and b.Close > b.Open and b.Close >= prev * MIN_UP
-                    and (b1.Volume + b.Volume) / 2 <= DRY * spike_vol):
+        # konfirmasi pantulan (uji 1m 19 hari: lebih sedikit & lebih bersih dari versi 2 candle):
+        # koreksi sudah >= MIN_DUR menit, CONF candle terakhir tanpa low baru, candle hijau,
+        # harga tutup menembus high BRK candle sebelumnya, volume rata-rata pantulan masih kering.
+        if i >= Li + CONF and i - corr_i >= MIN_DUR:
+            win = bars.iloc[i - CONF + 1:i + 1]
+            prior_hi = float(bars["High"].iloc[max(corr_i, i - BRK):i].max())
+            if ((win["Low"] > L).all() and b.Close > b.Open and b.Close >= prev * MIN_UP
+                    and b.Close > prior_hi and float(win["Volume"].mean()) <= DRY * spike_vol):
                 return {"H": H, "L": L, "time": idx[i].strftime("%H:%M"), "close": float(b.Close),
                         "retr": (H - L) / (H - base) * 100 if H > base else 0}
-        L = min(L, float(b.Low))
+        if float(b.Low) < L:
+            L, Li = float(b.Low), i
     return {"H": H, "corr": corr_i is not None, "L": L} if corr_i is not None else {"H": H}
 
 
@@ -221,6 +231,13 @@ def step(quotes, today, data_dt, party_rules, full_row, page_url="", daily_frame
         if not res:
             continue
         it["H"] = res["H"]
+        t_sig = res.get("time") or res.get("time_out")
+        if t_sig:
+            sig_dt = pd.Timestamp(f"{today} {t_sig}").tz_localize("Asia/Jakarta")
+            if (pd.Timestamp(data_dt) - sig_dt).total_seconds() > STALE_MIN * 60:
+                it["stage"] = "OUT" if res.get("out") else "DONE"
+                J.update(f"{today}:PARTY:{c}", stage=it["stage"], note=f"sinyal {t_sig} terlewat (scanner belum jalan), tidak dikirim")
+                continue
         if res.get("out"):
             it["stage"] = "OUT"
             J.update(f"{today}:PARTY:{c}", stage="OUT", t_out=res["time_out"], H=res["H"])
@@ -362,4 +379,4 @@ def eval_text():
             f"Kena SL: {s('sl_hit') / n * 100:.0f}% · TP1: {s('tp1_hit') / n * 100:.0f}% · "
             f"TP2: {s('tp2_hit') / n * 100:.0f}% · tembus high: {s('brk') / n * 100:.0f}%\n"
             f"Rata-rata harga terakhir vs harga sinyal: {pc(avg_last)} (belum fee ±0,4%)\n"
-            f"Pembanding uji 19 hari (candle 1m): SL 42%, menang 38%, rata-rata −0,85%.")
+            f"Pembanding uji 19 hari (1m ketat): SL 34%, menang 49%, rata-rata −0,26%.")
