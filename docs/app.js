@@ -255,7 +255,7 @@ async function renderJurnal() {
   $("#jList").innerHTML = rows.slice().reverse().slice(0, 60).map(r => `<div class="jrow" data-c="${r.code}">
     <b>${r.code}</b> <span class="muted">${r.setup} · ${r.date} ${r.time_in} · ${r.band} · ${r.session}</span><br>
     masuk ${fmtN(r.price_in)} (${pct(r.ret_in)}) · ${STAGE[r.stage] || r.stage}${r.t_bounce ? ` ${r.t_bounce} @${fmtN(r.bounce_price)}` : ""}
-    ${r.close != null ? ` · tutup ${fmtN(r.close)}${r.locked ? " (ARA)" : ""}` : ""}${r.n_open != null ? ` · open besok ${fmtN(r.n_open)}` : ""}
+    ${r.close != null ? ` · tutup ${fmtN(r.close)}${r.locked ? " (ARA)" : ""}` : ""}${r.bid_lot != null ? ` · bid ${fmtN(r.bid_lot)} lot` : ""}${r.n_open != null ? ` · open besok ${fmtN(r.n_open)}` : ""}
     ${r.result != null ? ` · <b class="${cls(r.result)}">${pct(r.result)}</b>` : ""}</div>`).join("");
   $$(".jrow", $("#jList")).forEach(el => el.onclick = () => openChart(el.dataset.c));
 }

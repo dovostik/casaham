@@ -142,7 +142,8 @@ HELP = (
     "  (tanpa SL/TP → SL −2,5%, TP1 +2,5%, TP2 +4,5%; beli lagi = average)\n"
     "/sell KODE [LOT] [HARGA]\n  contoh: <code>/sell INDF 10 7125</code> · <code>/sell INDF</code> = jual semua\n"
     "/setpos KODE SL TP1 TP2\n/posisi — ringkasan\n"
-    "/watch — watchlist PARTY hari ini & tahapnya\n/evaluasi — statistik jurnal sinyal (PARTY & BBS)\n\n"
+    "/watch — watchlist PARTY hari ini & tahapnya\n/evaluasi — statistik jurnal sinyal (PARTY & BBS)\n"
+    "/bid KODE LOT — catat antrian bid ARA saat tutup\n  contoh: <code>/bid TGUK 350000</code>\n\n"
     "Perintah dibaca selama jam bursa (±08:40–16:10 WIB). Di luar itu diproses saat sesi berikutnya mulai."
 )
 
@@ -160,6 +161,8 @@ def handle(text):
     if cmd == "/evaluasi":
         import jurnal as J
         return J.stats_text()
+    if cmd == "/bid":
+        return cmd_bid(parts)
     if cmd == "/buy":
         return cmd_buy(parts)
     if cmd == "/sell":
@@ -167,6 +170,29 @@ def handle(text):
     if cmd == "/setpos":
         return cmd_setpos(parts)
     return "Perintah tidak dikenal. Ketik /help"
+
+
+def cmd_bid(parts):
+    import jurnal as J
+    if len(parts) < 3:
+        return "Format: <code>/bid KODE LOT</code>\ncontoh: <code>/bid TGUK 350000</code> (antrian bid di harga ARA saat tutup, dalam lot)"
+    code = parts[1].upper().replace(".JK", "")
+    try:
+        lot = int(float(parts[2].replace(".", "").replace(",", "").lower().replace("rb", "000").replace("k", "000")))
+    except ValueError:
+        return "Jumlah lot tidak terbaca. Contoh: <code>/bid TGUK 350000</code>"
+    r = J.set_bid(code, lot, datetime.now(U.WIB).strftime("%Y-%m-%d"))
+    if not r:
+        return f"{code} tidak ada di jurnal BBS. /bid hanya untuk saham yang tercatat sinyal BBS."
+    t = f"✅ Bid {code} ({r['date']}): {nf(lot)} lot"
+    if r.get("bid_val"):
+        t += f" ≈ Rp{nf(r['bid_val'] / 1e9, 2)} M"
+    if r.get("bid_ratio") is not None:
+        t += f" · {nf(r['bid_ratio'], 1)}% dari volume hari itu"
+    lk = r.get("locked")
+    t += "\nStatus tutup: " + ("terkunci ARA 🔒" if lk else "tidak terkunci ARA" if lk == 0 else "belum diisi (diisi akhir sesi)")
+    t += "\nHasil open besok dicatat otomatis; rekap di /evaluasi."
+    return t
 
 
 def cmd_buy(parts):

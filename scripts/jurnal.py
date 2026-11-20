@@ -17,7 +17,7 @@ FEE = 0.4
 CSV_COLS = ["id", "setup", "date", "time_in", "code", "band", "session", "price_in", "prev", "ret_in", "value_in",
             "ara", "ara_pct_in", "stage", "t_corr", "t_bounce", "bounce_price", "sl", "tp1", "tp2", "H",
             "broksum_ok", "broksum", "t_out", "t_fail", "tp1_hit", "tp2_hit", "brk",
-            "close", "locked", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
+            "close", "locked", "vol_day", "bid_lot", "bid_val", "bid_ratio", "iep_gap", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
 
 
 def load():
@@ -112,6 +112,8 @@ def close_day(today, quotes, intraday=None):
             continue
         r["close"] = float(px)
         r["locked"] = int(px >= r["ara"])
+        if q.get("regularMarketVolume"):
+            r["vol_day"] = float(q["regularMarketVolume"])
         b = (intraday or {}).get(r["code"])
         t_ref = r.get("t_bounce") or r["time_in"]
         if b is not None and len(b):
@@ -138,10 +140,55 @@ def fill_next_open(today, quotes):
         o = q.get("regularMarketOpen")
         if o:
             r["n_open"], r["n_date"] = float(o), today
+            if r.get("close"):
+                r["iep_gap"] = round((float(o) / r["close"] - 1) * 100, 2)
             finalize(r)
             changed = True
     if changed:
         save(rows)
+
+
+# ------------------------------------------------------------------ antrian bid ARA (input manual)
+def set_bid(code, lot, today):
+    """Catat antrian bid saat tutup (lot) ke catatan BBS terbaru saham itu (tanggal <= today)."""
+    rows = load()
+    cand = [r for r in rows if r["code"] == code and r["date"] <= today and r["setup"] == "BBS"]
+    if not cand:
+        return None
+    r = max(cand, key=lambda x: x["date"])
+    px = r.get("close") or r.get("ara")
+    r["bid_lot"] = int(lot)
+    r["bid_val"] = round(lot * 100 * px) if px else None
+    if r.get("vol_day"):
+        r["bid_ratio"] = round(lot * 100 / r["vol_day"] * 100, 1)
+    save(rows)
+    return r
+
+
+def bid_stats_text(rows):
+    rs = [r for r in rows if r.get("bid_lot") is not None]
+    if not rs:
+        return ""
+    def grp(name, sel):
+        g = [r for r in rs if sel(r)]
+        done = [r for r in g if r.get("iep_gap") is not None]
+        if not g:
+            return f"{name}: -"
+        if not done:
+            return f"{name}: {len(g)} catatan (menunggu open besok)"
+        gaps = [r["iep_gap"] for r in done]
+        up = sum(x > 0 for x in gaps) / len(gaps) * 100
+        return f"{name}: {len(done)} · open besok naik {up:.0f}% · rata2 {sum(gaps) / len(gaps):+.2f}%".replace(".", ",")
+    out = ["\n<b>Antrian bid ARA (input /bid)</b>",
+           grp("bid ≥ 50rb lot", lambda r: r["bid_lot"] >= 50000),
+           grp("bid < 50rb lot", lambda r: r["bid_lot"] < 50000),
+           grp("bid ≥ Rp1 M", lambda r: (r.get("bid_val") or 0) >= 1e9),
+           grp("bid < Rp1 M", lambda r: (r.get("bid_val") or 0) < 1e9)]
+    rr = [r for r in rs if r.get("bid_ratio") is not None]
+    if rr:
+        out += [grp("bid ≥ 20% vol hari itu", lambda r: (r.get("bid_ratio") or 0) >= 20),
+                grp("bid < 20% vol hari itu", lambda r: r.get("bid_ratio") is not None and r["bid_ratio"] < 20)]
+    return "\n".join(out)
 
 
 # ------------------------------------------------------------------ statistik
@@ -184,6 +231,9 @@ def stats_text(since=None, title="Evaluasi jurnal"):
             lines.append(f"menang {sum(x > 0 for x in res) / len(res) * 100:.0f}% · rata2 {sum(res) / len(res):+.2f}% (sudah fee)".replace(".", ","))
             lines.append("per band: " + _fmt(_grp(done, "band")))
             lines.append("per sesi: " + _fmt(_grp(done, "session")))
+    bt = bid_stats_text(rows)
+    if bt:
+        lines.append(bt)
     lines.append("\nPembanding uji: BBS 59 hari +1,38% (menang 51%); PARTY 1m ketat 19 hari −0,26% (menang 49%).")
     lines.append("Detail: casaham.pages.dev/#jurnal")
     return "\n".join(lines)

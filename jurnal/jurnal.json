@@ -23,7 +23,9 @@
 "win": null,
 "close": 288.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 175829900.0,
+"iep_gap": -6.94
 },
 {
 "id": "2026-11-19:PARTY:ESIP",
@@ -47,7 +49,9 @@
 "win": null,
 "close": 93.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 526448300.0,
+"iep_gap": 1.08
 },
 {
 "id": "2026-11-19:PARTY:BELL",
@@ -77,7 +81,9 @@
 "win": null,
 "close": 74.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 258518800.0,
+"iep_gap": -1.35
 },
 {
 "id": "2026-11-19:PARTY:ZATA",
@@ -103,7 +109,9 @@
 "win": null,
 "close": 40.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 158021200.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:KDTN",
@@ -129,7 +137,9 @@
 "win": null,
 "close": 185.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 10888100.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:KJEN",
@@ -155,7 +165,9 @@
 "win": null,
 "close": 123.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 42408500.0,
+"iep_gap": 1.63
 },
 {
 "id": "2026-11-19:PARTY:JAST",
@@ -188,7 +200,9 @@
 "win": 0,
 "close": 72.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 165909600.0,
+"iep_gap": 1.39
 },
 {
 "id": "2026-11-19:PARTY:YELO",
@@ -215,7 +229,9 @@
 "win": null,
 "close": 57.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 66172200.0,
+"iep_gap": 3.51
 },
 {
 "id": "2026-11-19:PARTY:FUTR",
@@ -242,7 +258,9 @@
 "win": null,
 "close": 118.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 15302500.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:FIRE",
@@ -269,7 +287,9 @@
 "win": null,
 "close": 84.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 15956400.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:TOOL",
@@ -296,7 +316,9 @@
 "win": null,
 "close": 41.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 27507600.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:PSDN",
@@ -323,7 +345,9 @@
 "win": null,
 "close": 103.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 19051700.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:BBS:JAST",
@@ -346,7 +370,9 @@
 "win": 0,
 "close": 72.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 165909600.0,
+"iep_gap": 1.39
 },
 {
 "id": "2026-11-19:BBS:PTSP",
@@ -369,7 +395,9 @@
 "win": 0,
 "close": 2670.0,
 "locked": 1,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 1992100.0,
+"iep_gap": -6.74
 },
 {
 "id": "2026-11-19:PARTY:MERI",
@@ -396,7 +424,9 @@
 "win": null,
 "close": 94.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 8951700.0,
+"iep_gap": 3.19
 },
 {
 "id": "2026-11-19:PARTY:SULI",
@@ -423,7 +453,9 @@
 "win": null,
 "close": 61.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 29204400.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:KUAS",
@@ -450,7 +482,9 @@
 "win": null,
 "close": 60.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 49860800.0,
+"iep_gap": 1.67
 },
 {
 "id": "2026-11-19:PARTY:SLIS",
@@ -477,7 +511,9 @@
 "win": null,
 "close": 56.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 24868300.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:BBS:ESIP",
@@ -500,7 +536,9 @@
 "win": 0,
 "close": 93.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 526448300.0,
+"iep_gap": 1.08
 },
 {
 "id": "2026-11-19:PARTY:KOTA",
@@ -533,7 +571,9 @@
 "win": 0,
 "close": 63.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 886645200.0,
+"iep_gap": 3.17
 },
 {
 "id": "2026-11-19:PARTY:WAPO",
@@ -560,7 +600,9 @@
 "win": null,
 "close": 162.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 7775900.0,
+"iep_gap": -1.23
 },
 {
 "id": "2026-11-19:PARTY:NASI",
@@ -587,7 +629,9 @@
 "win": null,
 "close": 142.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 25094100.0,
+"iep_gap": -0.7
 },
 {
 "id": "2026-11-19:PARTY:SAPX",
@@ -614,7 +658,9 @@
 "win": null,
 "close": 246.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 3211700.0,
+"iep_gap": -1.63
 },
 {
 "id": "2026-11-19:PARTY:OKAS",
@@ -648,7 +694,9 @@
 "win": 0,
 "close": 99.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 71275500.0,
+"iep_gap": -2.02
 },
 {
 "id": "2026-11-19:PARTY:AYLS",
@@ -675,7 +723,9 @@
 "win": null,
 "close": 180.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 16537300.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:MHKI",
@@ -708,7 +758,9 @@
 "win": 0,
 "close": 94.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 14086100.0,
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-19:PARTY:MBTO",
@@ -734,7 +786,9 @@
 "win": null,
 "close": 104.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 11694500.0,
+"iep_gap": 0.96
 },
 {
 "id": "2026-11-19:BBS:ARII",
@@ -757,7 +811,9 @@
 "win": 0,
 "close": 680.0,
 "locked": 0,
-"note": " [close diisi susulan]"
+"note": " [close diisi susulan]",
+"vol_day": 3771800.0,
+"iep_gap": 1.47
 },
 {
 "id": "2026-11-20:PARTY:HRME",
@@ -784,7 +840,8 @@
 "high_after": 71.0,
 "low_after": 54.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 953838600.0
 },
 {
 "id": "2026-11-20:PARTY:ESIP",
@@ -811,7 +868,8 @@
 "high_after": 102.0,
 "low_after": 87.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 156006200.0
 },
 {
 "id": "2026-11-20:PARTY:KKES",
@@ -838,7 +896,8 @@
 "high_after": 61.0,
 "low_after": 51.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 138388400.0
 },
 {
 "id": "2026-11-20:PARTY:ICON",
@@ -863,7 +922,8 @@
 "high_after": 103.0,
 "low_after": 86.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 185519600.0
 },
 {
 "id": "2026-11-20:PARTY:YELO",
@@ -890,7 +950,8 @@
 "high_after": 63.0,
 "low_after": 58.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 36962200.0
 },
 {
 "id": "2026-11-20:PARTY:PCAR",
@@ -917,7 +978,8 @@
 "high_after": 71.0,
 "low_after": 65.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 88270200.0
 },
 {
 "id": "2026-11-20:PARTY:CCSI",
@@ -944,7 +1006,8 @@
 "high_after": 308.0,
 "low_after": 246.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 18299700.0
 },
 {
 "id": "2026-11-20:PARTY:NTBK",
@@ -974,7 +1037,8 @@
 "high_after": 65.0,
 "low_after": 52.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 261610100.0
 },
 {
 "id": "2026-11-20:BBS:VOKS",
@@ -996,7 +1060,8 @@
 "high_after": 320.0,
 "low_after": 292.0,
 "result": -1.72,
-"win": 0
+"win": 0,
+"vol_day": 18197600.0
 },
 {
 "id": "2026-11-20:BBS:ICON",
@@ -1018,7 +1083,8 @@
 "high_after": 103.0,
 "low_after": 86.0,
 "result": -5.61,
-"win": 0
+"win": 0,
+"vol_day": 185519600.0
 },
 {
 "id": "2026-11-20:BBS:CCSI",
@@ -1040,7 +1106,8 @@
 "high_after": 308.0,
 "low_after": 246.0,
 "result": -15.43,
-"win": 0
+"win": 0,
+"vol_day": 18299700.0
 },
 {
 "id": "2026-11-20:PARTY:JAYA",
@@ -1065,7 +1132,8 @@
 "high_after": 136.0,
 "low_after": 122.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 7956000.0
 },
 {
 "id": "2026-11-20:PARTY:LAND",
@@ -1090,7 +1158,8 @@
 "high_after": 45.0,
 "low_after": 41.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 22250800.0
 },
 {
 "id": "2026-11-20:PARTY:BBSS",
@@ -1117,7 +1186,8 @@
 "high_after": 81.0,
 "low_after": 74.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 19428800.0
 },
 {
 "id": "2026-11-20:PARTY:TGUK",
@@ -1144,7 +1214,8 @@
 "high_after": 106.0,
 "low_after": 84.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 133693200.0
 },
 {
 "id": "2026-11-20:BBS:TGUK",
@@ -1166,7 +1237,8 @@
 "high_after": 106.0,
 "low_after": 96.0,
 "result": null,
-"win": null
+"win": null,
+"vol_day": 133693200.0
 },
 {
 "id": "2026-11-20:BBS:NTBK",
@@ -1188,6 +1260,7 @@
 "high_after": 65.0,
 "low_after": 58.0,
 "result": -0.4,
-"win": 0
+"win": 0,
+"vol_day": 261610100.0
 }
 ]
