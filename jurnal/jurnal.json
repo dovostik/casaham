@@ -16,7 +16,11 @@
 "stage": "OUT",
 "from_high_in": -2.3,
 "t_out": "09:07",
-"H": 350.0
+"H": 350.0,
+"n_open": 268.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:ESIP",
@@ -33,7 +37,11 @@
 "ara": 117,
 "ara_pct_in": 26.3,
 "stage": "WATCH",
-"from_high_in": -1.0
+"from_high_in": -1.0,
+"n_open": 94.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:BELL",
@@ -56,7 +64,11 @@
 "bounce_price": 82.0,
 "H": 85.0,
 "broksum_ok": false,
-"broksum": "Broksum 2026-11-18: top 3 buyer XL, YP, PD rata-rata 75 (+8.7% dari open 69) ❌"
+"broksum": "Broksum 2026-11-18: top 3 buyer XL, YP, PD rata-rata 75 (+8.7% dari open 69) ❌",
+"n_open": 73.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:ZATA",
@@ -75,7 +87,11 @@
 "stage": "OUT",
 "from_high_in": 0.0,
 "t_out": "09:30",
-"H": 44.0
+"H": 44.0,
+"n_open": 40.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:KDTN",
@@ -94,7 +110,11 @@
 "stage": "OUT",
 "from_high_in": 0.0,
 "t_out": "09:30",
-"H": 208.0
+"H": 208.0,
+"n_open": 185.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:KJEN",
@@ -113,7 +133,11 @@
 "stage": "OUT",
 "from_high_in": 0.0,
 "t_out": "09:30",
-"H": 143.0
+"H": 143.0,
+"n_open": 125.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:JAST",
@@ -139,7 +163,11 @@
 "tp2": 90,
 "H": 83.0,
 "broksum_ok": null,
-"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 66–74 (open ±5%)"
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 66–74 (open ±5%)",
+"n_open": 73.0,
+"n_date": "2026-11-20",
+"result": -0.4,
+"win": 0
 },
 {
 "id": "2026-11-19:PARTY:YELO",
@@ -159,7 +187,11 @@
 "from_high_in": 0.0,
 "t_corr": "10:01",
 "t_out": "10:00",
-"H": 66.0
+"H": 66.0,
+"n_open": 59.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:FUTR",
@@ -179,7 +211,11 @@
 "from_high_in": 0.0,
 "t_corr": "09:48",
 "t_out": "09:45",
-"H": 121.0
+"H": 121.0,
+"n_open": 118.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:FIRE",
@@ -199,7 +235,11 @@
 "from_high_in": -1.1,
 "t_corr": "10:04",
 "t_out": "10:00",
-"H": 90.0
+"H": 90.0,
+"n_open": 84.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:TOOL",
@@ -219,7 +259,11 @@
 "from_high_in": 0.0,
 "t_corr": "11:10",
 "t_out": "11:00",
-"H": 46.0
+"H": 46.0,
+"n_open": 41.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:PSDN",
@@ -239,7 +283,11 @@
 "from_high_in": 0.0,
 "t_corr": "10:01",
 "t_out": "10:45",
-"H": 116.0
+"H": 116.0,
+"n_open": 103.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:BBS:JAST",
@@ -255,7 +303,11 @@
 "value_in": 3168093800.0,
 "ara": 91,
 "ara_pct_in": 75.6,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"n_open": 73.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:BBS:PTSP",
@@ -271,7 +323,11 @@
 "value_in": 1148533000.0,
 "ara": 2670,
 "ara_pct_in": 80.4,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"n_open": 2490.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:SULI",
@@ -291,7 +347,11 @@
 "from_high_in": -1.4,
 "t_corr": "10:17",
 "t_out": "10:15",
-"H": 74.0
+"H": 74.0,
+"n_open": 61.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:MERI",
@@ -311,7 +371,11 @@
 "from_high_in": -1.9,
 "t_corr": "10:18",
 "t_out": "10:15",
-"H": 104.0
+"H": 104.0,
+"n_open": 97.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:KUAS",
@@ -331,7 +395,11 @@
 "from_high_in": -1.5,
 "t_corr": "10:31",
 "t_out": "10:30",
-"H": 68.0
+"H": 68.0,
+"n_open": 61.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:SLIS",
@@ -351,7 +419,11 @@
 "from_high_in": -1.6,
 "t_corr": "10:31",
 "t_out": "10:30",
-"H": 61.0
+"H": 61.0,
+"n_open": 56.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:BBS:ESIP",
@@ -367,7 +439,11 @@
 "value_in": 23196540700.0,
 "ara": 117,
 "ara_pct_in": 72.2,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"n_open": 94.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:KOTA",
@@ -393,7 +469,11 @@
 "tp2": 67,
 "H": 66.0,
 "broksum_ok": null,
-"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 57–63 (open ±5%)"
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 57–63 (open ±5%)",
+"n_open": 65.0,
+"n_date": "2026-11-20",
+"result": -0.4,
+"win": 0
 },
 {
 "id": "2026-11-19:PARTY:WAPO",
@@ -413,7 +493,11 @@
 "from_high_in": -4.1,
 "t_corr": "10:31",
 "t_out": "10:30",
-"H": 194.0
+"H": 194.0,
+"n_open": 160.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:NASI",
@@ -433,7 +517,11 @@
 "from_high_in": -1.3,
 "t_corr": "10:31",
 "t_out": "11:00",
-"H": 157.0
+"H": 157.0,
+"n_open": 141.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:SAPX",
@@ -453,7 +541,11 @@
 "from_high_in": -4.9,
 "t_corr": "10:48",
 "t_out": "10:45",
-"H": 284.0
+"H": 284.0,
+"n_open": 242.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:OKAS",
@@ -480,7 +572,11 @@
 "H": 109.0,
 "broksum_ok": null,
 "broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 93–103 (open ±5%)",
-"brk": 1
+"brk": 1,
+"n_open": 97.0,
+"n_date": "2026-11-20",
+"result": -0.4,
+"win": 0
 },
 {
 "id": "2026-11-19:PARTY:AYLS",
@@ -500,7 +596,11 @@
 "from_high_in": -2.6,
 "t_corr": "11:16",
 "t_out": "11:30",
-"H": 202.0
+"H": 202.0,
+"n_open": 180.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:PARTY:MHKI",
@@ -526,7 +626,11 @@
 "tp2": 107,
 "H": 106.0,
 "broksum_ok": null,
-"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 86–96 (open ±5%)"
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 86–96 (open ±5%)",
+"n_open": 94.0,
+"n_date": "2026-11-20",
+"result": -0.4,
+"win": 0
 },
 {
 "id": "2026-11-19:PARTY:MBTO",
@@ -545,7 +649,11 @@
 "stage": "OUT",
 "from_high_in": -3.3,
 "t_out": "11:51",
-"H": 121.0
+"H": 121.0,
+"n_open": 105.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
 },
 {
 "id": "2026-11-19:BBS:ARII",
@@ -561,6 +669,226 @@
 "value_in": 1561680000.0,
 "ara": 755,
 "ara_pct_in": 76.0,
+"stage": "SIGNAL",
+"n_open": 690.0,
+"n_date": "2026-11-20",
+"result": null,
+"win": null
+},
+{
+"id": "2026-11-20:PARTY:HRME",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "08:58",
+"code": "HRME",
+"band": "<200",
+"session": "pagi",
+"price_in": 63.0,
+"prev": 43.0,
+"ret_in": 46.51,
+"value_in": 17484112800.0,
+"ara": 58,
+"ara_pct_in": 132.9,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:25",
+"t_out": "09:44",
+"H": 71.0
+},
+{
+"id": "2026-11-20:PARTY:ESIP",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:03",
+"code": "ESIP",
+"band": "<200",
+"session": "pagi",
+"price_in": 101.0,
+"prev": 93.0,
+"ret_in": 8.6,
+"value_in": 4371290100.0,
+"ara": 125,
+"ara_pct_in": 24.6,
+"stage": "OUT",
+"from_high_in": -1.0,
+"tf": "1m",
+"t_corr": "09:08",
+"t_out": "09:15",
+"H": 102.0
+},
+{
+"id": "2026-11-20:PARTY:KKES",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:06",
+"code": "KKES",
+"band": "<200",
+"session": "pagi",
+"price_in": 57.0,
+"prev": 50.0,
+"ret_in": 14.0,
+"value_in": 659592600.0,
+"ara": 67,
+"ara_pct_in": 40.0,
+"stage": "OUT",
+"from_high_in": -1.7,
+"tf": "1m",
+"t_corr": "09:10",
+"t_out": "09:58",
+"H": 58.0
+},
+{
+"id": "2026-11-20:PARTY:YELO",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:08",
+"code": "YELO",
+"band": "<200",
+"session": "pagi",
+"price_in": 62.0,
+"prev": 57.0,
+"ret_in": 8.77,
+"value_in": 681969000.0,
+"ara": 76,
+"ara_pct_in": 25.1,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:16",
+"t_out": "09:15",
+"H": 63.0
+},
+{
+"id": "2026-11-20:PARTY:ICON",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:08",
+"code": "ICON",
+"band": "<200",
+"session": "pagi",
+"price_in": 89.0,
+"prev": 77.0,
+"ret_in": 15.58,
+"value_in": 724130700.0,
+"ara": 103,
+"ara_pct_in": 44.5,
+"stage": "WATCH",
+"from_high_in": 0.0,
+"tf": "1m"
+},
+{
+"id": "2026-11-20:PARTY:PCAR",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:27",
+"code": "PCAR",
+"band": "<200",
+"session": "pagi",
+"price_in": 70.0,
+"prev": 64.0,
+"ret_in": 9.38,
+"value_in": 1148812000.0,
+"ara": 86,
+"ara_pct_in": 26.8,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:34",
+"t_out": "09:44",
+"H": 71.0
+},
+{
+"id": "2026-11-20:PARTY:CCSI",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:37",
+"code": "CCSI",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 282.0,
+"prev": 260.0,
+"ret_in": 8.46,
+"value_in": 544683000.0,
+"ara": 324,
+"ara_pct_in": 33.8,
+"stage": "OUT",
+"from_high_in": -4.7,
+"tf": "1m",
+"t_corr": "09:40",
+"t_out": "09:39",
+"H": 296.0
+},
+{
+"id": "2026-11-20:PARTY:NTBK",
+"setup": "PARTY",
+"date": "2026-11-20",
+"time_in": "09:38",
+"code": "NTBK",
+"band": "<200",
+"session": "pagi",
+"price_in": 56.0,
+"prev": 49.0,
+"ret_in": 14.29,
+"value_in": 632923200.0,
+"ara": 66,
+"ara_pct_in": 40.8,
+"stage": "SKIP",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:45",
+"t_bounce": "10:02",
+"bounce_price": 55.0,
+"H": 57.0,
+"broksum_ok": false,
+"broksum": "Broksum 2026-11-18: top 3 buyer CC, KK, YP rata-rata 53 (+6.6% dari open 50) ❌"
+},
+{
+"id": "2026-11-20:BBS:VOKS",
+"setup": "BBS",
+"date": "2026-11-20",
+"time_in": "09:47",
+"code": "VOKS",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 302.0,
+"prev": 256.0,
+"ret_in": 17.97,
+"value_in": 1831630000.0,
+"ara": 320,
+"ara_pct_in": 71.9,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-20:BBS:ICON",
+"setup": "BBS",
+"date": "2026-11-20",
+"time_in": "10:01",
+"code": "ICON",
+"band": "<200",
+"session": "pagi",
+"price_in": 96.0,
+"prev": 77.0,
+"ret_in": 24.68,
+"value_in": 5331657600.0,
+"ara": 103,
+"ara_pct_in": 70.5,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-20:BBS:CCSI",
+"setup": "BBS",
+"date": "2026-11-20",
+"time_in": "10:15",
+"code": "CCSI",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 306.0,
+"prev": 260.0,
+"ret_in": 17.69,
+"value_in": 2969485200.0,
+"ara": 324,
+"ara_pct_in": 70.8,
 "stage": "SIGNAL"
 }
 ]
