@@ -1,5 +1,5 @@
 // network-first: selalu ambil data terbaru, pakai cache bila offline
-const C = "casaham-v1";
+const C = "casaham-v2";
 self.addEventListener("install", e => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", e => {

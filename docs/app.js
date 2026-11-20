@@ -281,3 +281,15 @@ async function boot() {
 }
 boot();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+// tombol pasang aplikasi (Android/Chrome)
+let deferredInstall = null;
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault(); deferredInstall = e;
+  const b = document.getElementById("btnInstall"); if (b) b.hidden = false;
+});
+document.getElementById("btnInstall")?.addEventListener("click", async () => {
+  if (!deferredInstall) return;
+  deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall = null;
+  document.getElementById("btnInstall").hidden = true;
+});
+window.addEventListener("appinstalled", () => { const b = document.getElementById("btnInstall"); if (b) b.hidden = true; });

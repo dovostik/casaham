@@ -56,3 +56,5 @@ nav.bottom button.on{color:var(--acc)}
 .jt th{color:var(--mut);font-weight:600}
 .jrow{padding:8px 2px;border-bottom:1px solid var(--line);font-size:12px}
 .jrow b{font-size:13px}
+
+.install{background:#16c784;color:#0f1419;border:0;border-radius:8px;padding:6px 10px;font-weight:700;font-size:13px;margin-left:auto;margin-right:8px;cursor:pointer}
