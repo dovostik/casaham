@@ -27,6 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Ambil jurnal terbaru dari repo
+        run: git fetch -q origin main && git checkout origin/main -- jurnal 2>/dev/null || true
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -72,12 +75,19 @@ jobs:
       - name: Simpan jurnal ke repo
         if: always()
         run: |
+          [ -f jurnal/jurnal.json ] || { echo "tidak ada jurnal"; exit 0; }
           git config user.name "casaham-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add jurnal 2>/dev/null || true
-          if git diff --cached --quiet; then echo "jurnal tidak berubah"; exit 0; fi
-          git commit -q -m "Jurnal $(TZ=Asia/Jakarta date '+%Y-%m-%d %H:%M') WIB"
-          for i in 1 2 3; do git pull -q --rebase origin main && git push -q origin HEAD:main && break; sleep 5; done
+          cp jurnal/jurnal.json /tmp/jurnal_local.json
+          for i in 1 2 3 4; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            (cd scripts && python jurnal_merge.py /tmp/jurnal_local.json)
+            git add jurnal
+            if git diff --cached --quiet; then echo "jurnal tidak berubah"; exit 0; fi
+            git commit -q -m "Jurnal $(TZ=Asia/Jakarta date '+%Y-%m-%d %H:%M') WIB"
+            git push -q origin HEAD:main && exit 0
+            sleep 5
+          done
 
       - name: Simpan status alert
         if: always()

@@ -63,6 +63,26 @@ def with_today(d, q, today):
     return pd.concat([d, bar])
 
 
+def vwap_grade(b, ara):
+    """Kekuatan kunci ARA dari rata-rata harga transaksi hari itu (VWAP).
+    Uji 55 hari (164 hari ARA saham syariah): VWAP <= 2% di bawah ARA -> open besok naik 91%,
+    rata-rata +13%; 2–5% -> 76%, +8,6%; > 5% -> <= 73%, +6%."""
+    if b is None or not len(b) or float(b["Volume"].sum()) <= 0:
+        return None
+    tp = (b["High"] + b["Low"] + b["Close"]) / 3
+    vwap = float((tp * b["Volume"]).sum() / b["Volume"].sum())
+    gap = (ara / vwap - 1) * 100
+    at_ara = float(b[b["Close"] >= ara]["Volume"].sum() / b["Volume"].sum() * 100)
+    touch = b[b["High"] >= ara]
+    t = touch.index[0].strftime("%H:%M") if len(touch) else "penutupan"
+    grade = ("💪 KUAT (historis open besok naik 91%, rata-rata +13%)" if gap <= 2 else
+             "👍 SEDANG (historis naik 76%, rata-rata +8,6%)" if gap <= 5 else
+             "⚠️ LEMAH (historis naik ≤73%, rata-rata +6%)")
+    vw = f"{vwap:,.0f}".replace(",", ".")
+    gp = f"{gap:.1f}".replace(".", ",")
+    return f"VWAP {vw} ({gp}% di bawah ARA) · ARA sejak {t} · volume di ARA {at_ara:.0f}% → {grade}"
+
+
 def trigger_web_update():
     """Picu workflow 'Update data web' (jadwal GitHub tidak bisa diandalkan)."""
     import urllib.request
@@ -217,6 +237,10 @@ def main():
         bbs_codes = [k.split(":")[2] for k, v in sent.items() if k.startswith("scr:bbs:") and v == today]
         if qs and bbs_codes and sum_sent.get("bbs_close") != today:
             lines = [f"📋 <b>Rekap penutupan BBS</b> · {today}"]
+            try:
+                bars_all = W.intraday(bbs_codes)
+            except Exception:  # noqa
+                bars_all = {}
             for c in bbs_codes:
                 q = qs.get(c + ".JK") or {}
                 px, prev = q.get("regularMarketPrice"), q.get("regularMarketPreviousClose")
@@ -225,6 +249,9 @@ def main():
                 ara = U.ara_price(prev)
                 if px >= ara:
                     lines.append(f"• <b>{c}</b> {px:,.0f} = ARA ✅ terkunci saat tutup → cek antrean jual (harus kosong) & IEP besok")
+                    v = vwap_grade(bars_all.get(c), ara)
+                    if v:
+                        lines.append("   " + v)
                 else:
                     lines.append(f"• <b>{c}</b> {px:,.0f} (ARA {ara:,.0f}, {((px / prev) - 1) * 100:+.1f}%) ❌ tidak terkunci → tidak valid ditahan")
             lines.append("Antrean jual di buku penutupan tidak terlihat di data gratis — pastikan di Stockbit.")
