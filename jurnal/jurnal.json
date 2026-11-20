@@ -1238,7 +1238,10 @@
 "low_after": 96.0,
 "result": null,
 "win": null,
-"vol_day": 133693200.0
+"vol_day": 133693200.0,
+"bid_lot": 196764,
+"bid_val": 2085698400,
+"bid_ratio": 14.7
 },
 {
 "id": "2026-11-20:BBS:NTBK",
