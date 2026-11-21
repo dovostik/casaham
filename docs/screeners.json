@@ -1,317 +1,359 @@
 {
-  "_info": "Preset screener. Dipakai halaman web DAN alert Telegram. Format rule: [field, operator, nilai]. Operator: > >= < <= == !=",
-  "presets": [
-    {
-      "id": "bbs",
-      "name": "BBS 70·3·1 (syariah)",
-      "desc": "Mengejar ARA: progres ≥ 70% dari batas ARA, harga ≤ 3% di bawah high (harga < 100: ≤ 2 tick), value > 1 M. Syariah, mcap < 6 T, volume > 100 rb, harga > 50. Frequency > 300 tidak tersedia di data gratis. Kunci ARA & IEP tetap cek manual di Stockbit.",
-      "rules": [
-        [
-          "issi",
-          "==",
-          1
-        ],
-        [
-          "araPct",
-          ">=",
-          70
-        ],
-        [
-          "nearHighBBS",
-          "==",
-          1
-        ],
-        [
-          "value",
-          ">",
-          1000000000.0
-        ],
-        [
-          "mcap",
-          "<",
-          6000000000000.0
-        ],
-        [
-          "volume",
-          ">",
-          100000
-        ],
-        [
-          "close",
-          ">",
-          50
-        ]
-      ],
-      "detail": "ara",
-      "note": "<b>Cara menilai:</b>\n✅ <b>VALID</b> (boleh tahan semalam): terkunci ARA <i>tanpa antrean jual</i> di buku penutupan 15:45–15:49.\n❌ <b>TIDAK VALID</b>: tidak terkunci ARA / ada antrean jual saat penutupan → jual hari ini.\n🌅 <b>Besok, cek IEP di Stockbit</b>: IEP ≥ 70% jarak ARA = berpotensi ARA lagi (5 dari 7) · IEP 40–69% = zona jual · IEP ≤ harga kemarin = tidak valid, jual.\n🚪 <b>Keluar</b>: high besok biasanya di 15 menit pertama → jual di lelang pembukaan 08:58 atau 09:01–09:04."
-    },
-    {
-      "id": "bbs_lama",
-      "name": "BBS trial lama (versi Yahoo)",
-      "desc": "Rule BBS trial lama: naik > 10%, RSI > 30, Stoch > 20. Frequency & Frequency Analyzer tidak tersedia di data gratis.",
-      "rules": [
-        [
-          "ret1d",
-          ">",
-          10
-        ],
-        [
-          "mcap",
-          "<",
-          6000000000000.0
-        ],
-        [
-          "close",
-          ">",
-          50
-        ],
-        [
-          "volume",
-          ">",
-          100000
-        ],
-        [
-          "value",
-          ">",
-          150000000
-        ],
-        [
-          "rsi14",
-          ">",
-          30
-        ],
-        [
-          "stochK",
-          ">",
-          20
-        ]
-      ]
-    },
-    {
-      "id": "party",
-      "name": "PARTY (syariah)",
-      "desc": "Saham syariah yang sedang dilonjakkan: harga < 400, naik ≥ 7%, value ≥ 500 jt, mcap ≤ 1 T, return 1 minggu −25% s/d +35%. Lolos = masuk watchlist PARTY (alert koreksi memantul / gagal otomatis lewat Telegram).",
-      "rules": [
-        [
-          "issi",
-          "==",
-          1
-        ],
-        [
-          "close",
-          "<",
-          400
-        ],
-        [
-          "ret5d",
-          ">=",
-          -25
-        ],
-        [
-          "ret5d",
-          "<=",
-          35
-        ],
-        [
-          "mcap",
-          "<=",
-          1000000000000.0
-        ],
-        [
-          "value",
-          ">=",
-          500000000
-        ],
-        [
-          "ret1d",
-          ">=",
-          7
-        ]
-      ]
-    },
-    {
-      "id": "party_koreksi",
-      "name": "PARTY KOREKSI",
-      "desc": "Tampilan cepat: high hari ini ≥ +10%, harga kini 5–20% di bawah high, masih ≥ +3%. Sinyal pantulan resmi dikirim oleh watchlist PARTY (candle 5 menit).",
-      "rules": [
-        [
-          "issi",
-          "==",
-          1
-        ],
-        [
-          "close",
-          "<",
-          400
-        ],
-        [
-          "ret5d",
-          ">=",
-          -25
-        ],
-        [
-          "ret5d",
-          "<=",
-          35
-        ],
-        [
-          "mcap",
-          "<=",
-          1000000000000.0
-        ],
-        [
-          "value",
-          ">=",
-          500000000
-        ],
-        [
-          "ret1d",
-          ">=",
-          3
-        ],
-        [
-          "highRet1d",
-          ">=",
-          10
-        ],
-        [
-          "fromHighD",
-          "<=",
-          -5
-        ],
-        [
-          "fromHighD",
-          ">=",
-          -20
-        ]
-      ]
-    },
-    {
-      "id": "near_ara",
-      "name": "Mendekati ARA",
-      "desc": "Kenaikan hari ini >= 80% dari batas ARA fraksinya, value > 1 M",
-      "rules": [
-        [
-          "araPct",
-          ">=",
-          80
-        ],
-        [
-          "value",
-          ">",
-          1000000000
-        ]
-      ]
-    },
-    {
-      "id": "vol_spike",
-      "name": "Volume Spike",
-      "desc": "Volume > 3x rata-rata 20 hari, harga naik, value > 1 M",
-      "rules": [
-        [
-          "volRatio",
-          ">",
-          3
-        ],
-        [
-          "ret1d",
-          ">",
-          0
-        ],
-        [
-          "value",
-          ">",
-          1000000000
-        ]
-      ]
-    },
-    {
-      "id": "golden_cross",
-      "name": "Golden Cross MA20/MA50",
-      "desc": "MA20 memotong ke atas MA50 dalam 3 hari terakhir",
-      "rules": [
-        [
-          "gc2050",
-          "==",
-          1
-        ],
-        [
-          "avgValue20",
-          ">",
-          500000000
-        ]
-      ]
-    },
-    {
-      "id": "oversold",
-      "name": "Oversold mulai pantul",
-      "desc": "RSI < 35 dan harga hijau hari ini",
-      "rules": [
-        [
-          "rsi14",
-          "<",
-          35
-        ],
-        [
-          "ret1d",
-          ">",
-          0
-        ],
-        [
-          "avgValue20",
-          ">",
-          500000000
-        ]
-      ]
-    },
-    {
-      "id": "breakout52",
-      "name": "Dekat High 52 Minggu",
-      "desc": "Harga dalam 3% dari tertinggi 52 minggu",
-      "rules": [
-        [
-          "fromHigh52",
-          ">",
-          -3
-        ],
-        [
-          "avgValue20",
-          ">",
-          1000000000
-        ]
-      ]
-    },
-    {
-      "id": "value_fund",
-      "name": "Fundamental murah",
-      "desc": "PER 0–10, PBV < 1.5, ROE > 10%",
-      "rules": [
-        [
-          "per",
-          ">",
-          0
-        ],
-        [
-          "per",
-          "<",
-          10
-        ],
-        [
-          "pbv",
-          "<",
-          1.5
-        ],
-        [
-          "roe",
-          ">",
-          10
-        ],
-        [
-          "mcap",
-          ">",
-          1000000000000.0
-        ]
-      ]
-    }
-  ]
+ "_info": "Preset screener. Dipakai halaman web DAN alert Telegram. Format rule: [field, operator, nilai]. Operator: > >= < <= == !=",
+ "presets": [
+  {
+   "id": "bbs",
+   "name": "BBS 70·3·1 (syariah)",
+   "desc": "Mengejar ARA: progres ≥ 70% dari batas ARA, harga ≤ 3% di bawah high (harga < 100: ≤ 2 tick), value > 1 M. Syariah, mcap < 6 T, volume > 100 rb, harga > 50. Frequency > 300 tidak tersedia di data gratis. Kunci ARA & IEP tetap cek manual di Stockbit.",
+   "rules": [
+    [
+     "issi",
+     "==",
+     1
+    ],
+    [
+     "araPct",
+     ">=",
+     70
+    ],
+    [
+     "nearHighBBS",
+     "==",
+     1
+    ],
+    [
+     "value",
+     ">",
+     1000000000.0
+    ],
+    [
+     "mcap",
+     "<",
+     6000000000000.0
+    ],
+    [
+     "volume",
+     ">",
+     100000
+    ],
+    [
+     "close",
+     ">",
+     50
+    ]
+   ],
+   "detail": "ara",
+   "note": "<b>Cara menilai:</b>\n✅ <b>VALID</b> (boleh tahan semalam): terkunci ARA <i>tanpa antrean jual</i> di buku penutupan 15:45–15:49.\n❌ <b>TIDAK VALID</b>: tidak terkunci ARA / ada antrean jual saat penutupan → jual hari ini.\n🌅 <b>Besok, cek IEP di Stockbit</b>: IEP ≥ 70% jarak ARA = berpotensi ARA lagi (5 dari 7) · IEP 40–69% = zona jual · IEP ≤ harga kemarin = tidak valid, jual.\n🚪 <b>Keluar</b>: high besok biasanya di 15 menit pertama → jual di lelang pembukaan 08:58 atau 09:01–09:04."
+  },
+  {
+   "id": "bbs_lama",
+   "name": "BBS trial lama (versi Yahoo)",
+   "desc": "Rule BBS trial lama: naik > 10%, RSI > 30, Stoch > 20. Frequency & Frequency Analyzer tidak tersedia di data gratis.",
+   "rules": [
+    [
+     "ret1d",
+     ">",
+     10
+    ],
+    [
+     "mcap",
+     "<",
+     6000000000000.0
+    ],
+    [
+     "close",
+     ">",
+     50
+    ],
+    [
+     "volume",
+     ">",
+     100000
+    ],
+    [
+     "value",
+     ">",
+     150000000
+    ],
+    [
+     "rsi14",
+     ">",
+     30
+    ],
+    [
+     "stochK",
+     ">",
+     20
+    ]
+   ]
+  },
+  {
+   "id": "party",
+   "name": "PARTY (syariah)",
+   "desc": "Saham syariah yang sedang dilonjakkan: harga < 400, naik ≥ 7%, value ≥ 500 jt, mcap ≤ 1 T, return 1 minggu −25% s/d +35%. Lolos = masuk watchlist PARTY (alert koreksi memantul / gagal otomatis lewat Telegram).",
+   "rules": [
+    [
+     "issi",
+     "==",
+     1
+    ],
+    [
+     "close",
+     "<",
+     400
+    ],
+    [
+     "ret5d",
+     ">=",
+     -25
+    ],
+    [
+     "ret5d",
+     "<=",
+     35
+    ],
+    [
+     "mcap",
+     "<=",
+     1000000000000.0
+    ],
+    [
+     "value",
+     ">=",
+     500000000
+    ],
+    [
+     "ret1d",
+     ">=",
+     7
+    ]
+   ]
+  },
+  {
+   "id": "calon_ara",
+   "name": "CALON ARA HACK (syariah)",
+   "desc": "Versi Stockbit kamu: syariah, harga ≥ 50, naik 6–35%, volume ≥ 100 rb lembar, value ≥ 1 M, mcap ≤ 6 T. Daftar pantauan, BUKAN sinyal beli (uji 58 hari: ±26 saham/hari, beli saat masuk rata-rata −1,0%). Masuk hanya bila progres ARA ≥ 70% (+1,6%, 53% terkunci ARA); hindari harga < 100. Urutkan per progres ARA.",
+   "rules": [
+    [
+     "issi",
+     "==",
+     1
+    ],
+    [
+     "close",
+     ">=",
+     50
+    ],
+    [
+     "ret1d",
+     ">=",
+     6
+    ],
+    [
+     "ret1d",
+     "<=",
+     35
+    ],
+    [
+     "volume",
+     ">=",
+     100000
+    ],
+    [
+     "value",
+     ">=",
+     1000000000.0
+    ],
+    [
+     "mcap",
+     "<=",
+     6000000000000.0
+    ]
+   ]
+  },
+  {
+   "id": "party_koreksi",
+   "name": "PARTY KOREKSI",
+   "desc": "Tampilan cepat: high hari ini ≥ +10%, harga kini 5–20% di bawah high, masih ≥ +3%. Sinyal pantulan resmi dikirim oleh watchlist PARTY (candle 5 menit).",
+   "rules": [
+    [
+     "issi",
+     "==",
+     1
+    ],
+    [
+     "close",
+     "<",
+     400
+    ],
+    [
+     "ret5d",
+     ">=",
+     -25
+    ],
+    [
+     "ret5d",
+     "<=",
+     35
+    ],
+    [
+     "mcap",
+     "<=",
+     1000000000000.0
+    ],
+    [
+     "value",
+     ">=",
+     500000000
+    ],
+    [
+     "ret1d",
+     ">=",
+     3
+    ],
+    [
+     "highRet1d",
+     ">=",
+     10
+    ],
+    [
+     "fromHighD",
+     "<=",
+     -5
+    ],
+    [
+     "fromHighD",
+     ">=",
+     -20
+    ]
+   ]
+  },
+  {
+   "id": "near_ara",
+   "name": "Mendekati ARA",
+   "desc": "Kenaikan hari ini >= 80% dari batas ARA fraksinya, value > 1 M",
+   "rules": [
+    [
+     "araPct",
+     ">=",
+     80
+    ],
+    [
+     "value",
+     ">",
+     1000000000
+    ]
+   ]
+  },
+  {
+   "id": "vol_spike",
+   "name": "Volume Spike",
+   "desc": "Volume > 3x rata-rata 20 hari, harga naik, value > 1 M",
+   "rules": [
+    [
+     "volRatio",
+     ">",
+     3
+    ],
+    [
+     "ret1d",
+     ">",
+     0
+    ],
+    [
+     "value",
+     ">",
+     1000000000
+    ]
+   ]
+  },
+  {
+   "id": "golden_cross",
+   "name": "Golden Cross MA20/MA50",
+   "desc": "MA20 memotong ke atas MA50 dalam 3 hari terakhir",
+   "rules": [
+    [
+     "gc2050",
+     "==",
+     1
+    ],
+    [
+     "avgValue20",
+     ">",
+     500000000
+    ]
+   ]
+  },
+  {
+   "id": "oversold",
+   "name": "Oversold mulai pantul",
+   "desc": "RSI < 35 dan harga hijau hari ini",
+   "rules": [
+    [
+     "rsi14",
+     "<",
+     35
+    ],
+    [
+     "ret1d",
+     ">",
+     0
+    ],
+    [
+     "avgValue20",
+     ">",
+     500000000
+    ]
+   ]
+  },
+  {
+   "id": "breakout52",
+   "name": "Dekat High 52 Minggu",
+   "desc": "Harga dalam 3% dari tertinggi 52 minggu",
+   "rules": [
+    [
+     "fromHigh52",
+     ">",
+     -3
+    ],
+    [
+     "avgValue20",
+     ">",
+     1000000000
+    ]
+   ]
+  },
+  {
+   "id": "value_fund",
+   "name": "Fundamental murah",
+   "desc": "PER 0–10, PBV < 1.5, ROE > 10%",
+   "rules": [
+    [
+     "per",
+     ">",
+     0
+    ],
+    [
+     "per",
+     "<",
+     10
+    ],
+    [
+     "pbv",
+     "<",
+     1.5
+    ],
+    [
+     "roe",
+     ">",
+     10
+    ],
+    [
+     "mcap",
+     ">",
+     1000000000000.0
+    ]
+   ]
+  }
+ ]
 }
