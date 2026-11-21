@@ -3,7 +3,7 @@
  "presets": [
   {
    "id": "bbs",
-   "name": "BBS 70·3·1 (syariah)",
+   "name": "BBS 70·3·1 (syariah) — pantau, jangan kejar",
    "desc": "Mengejar ARA: progres ≥ 70% dari batas ARA, harga ≤ 3% di bawah high (harga < 100: ≤ 2 tick), value > 1 M. Syariah, mcap < 6 T, volume > 100 rb, harga > 50. Frequency > 300 tidak tersedia di data gratis. Kunci ARA & IEP tetap cek manual di Stockbit.",
    "rules": [
     [
@@ -43,7 +43,7 @@
     ]
    ],
    "detail": "ara",
-   "note": "<b>Cara menilai:</b>\n✅ <b>VALID</b> (boleh tahan semalam): terkunci ARA <i>tanpa antrean jual</i> di buku penutupan 15:45–15:49.\n❌ <b>TIDAK VALID</b>: tidak terkunci ARA / ada antrean jual saat penutupan → jual hari ini.\n🌅 <b>Besok, cek IEP di Stockbit</b>: IEP ≥ 70% jarak ARA = berpotensi ARA lagi (5 dari 7) · IEP 40–69% = zona jual · IEP ≤ harga kemarin = tidak valid, jual.\n🚪 <b>Keluar</b>: high besok biasanya di 15 menit pertama → jual di lelang pembukaan 08:58 atau 09:01–09:04."
+   "note": "👀 <b>PANTAU, JANGAN KEJAR</b>: uji 59 hari entry di bawah ARA rata-rata −0,2%, entry tepat di harga ARA +7,3%. Tunggu alert 🔒 TERKUNCI ARA untuk masuk.\n<b>Cara menilai:</b>\n✅ <b>VALID</b> (boleh tahan semalam): terkunci ARA <i>tanpa antrean jual</i> di buku penutupan 15:45–15:49.\n❌ <b>TIDAK VALID</b>: tidak terkunci ARA / ada antrean jual saat penutupan → jual hari ini.\n🌅 <b>Besok, cek IEP di Stockbit</b>: IEP ≥ 70% jarak ARA = berpotensi ARA lagi (5 dari 7) · IEP 40–69% = zona jual · IEP ≤ harga kemarin = tidak valid, jual.\n🚪 <b>Keluar</b>: high besok biasanya di 15 menit pertama → jual di lelang pembukaan 08:58 atau 09:01–09:04."
   },
   {
    "id": "bbs_lama",

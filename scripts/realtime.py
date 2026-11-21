@@ -15,6 +15,7 @@ from datetime import datetime
 import pandas as pd
 
 import jurnal as J
+import ara_lock as A
 import positions as P
 import watch as W
 import update as U
@@ -151,6 +152,11 @@ def main():
         mkt_dt = datetime.fromtimestamp(mkt_time, U.WIB)
         if mkt_dt.strftime("%Y-%m-%d") != today:
             print(datetime.now(U.WIB).strftime("%H:%M"), "pasar belum buka")
+            if datetime.now(U.WIB).strftime("%H:%M") >= "08:45":
+                try:
+                    A.morning(today)
+                except Exception as e:  # noqa
+                    print("pengingat pagi gagal:", e)
             rounds += max_rounds > 0
         elif mkt_time == last_mkt_time:
             rounds += max_rounds > 0  # tidak ada data baru (jeda sesi)
@@ -185,6 +191,12 @@ def main():
             stamp = f" · data {mkt_dt:%H:%M}"
             log = U.do_alerts(rows, presets, today, page_url, sent, cfg, stamp)
             U.save_sent(sent)
+            try:
+                if mkt_dt.hour < 10:
+                    A.morning(today)
+                A.scan(quotes, today, mkt_dt, page_url)
+            except Exception as e:  # noqa
+                print("ARA lock error:", e)
             if log:
                 old = json.loads(STATE_LOG.read_text()) if STATE_LOG.exists() else []
                 old.insert(0, {"time": datetime.now(U.WIB).strftime("%Y-%m-%d %H:%M WIB"), "items": log})
@@ -235,8 +247,14 @@ def main():
             print("quote akhir gagal:", e)
         # rekap penutupan BBS: status ARA saat tutup untuk saham yang dialertkan hari ini
         bbs_codes = [k.split(":")[2] for k, v in sent.items() if k.startswith("scr:bbs:") and v == today]
-        if qs and bbs_codes and sum_sent.get("bbs_close") != today:
-            lines = [f"📋 <b>Rekap penutupan BBS</b> · {today}"]
+        ara_lines = []
+        if qs:
+            try:
+                ara_lines = A.close_recap(qs, today)
+            except Exception as e:  # noqa
+                print("rekap ARA gagal:", e)
+        if qs and (bbs_codes or ara_lines) and sum_sent.get("bbs_close") != today:
+            lines = [f"📋 <b>Rekap penutupan BBS & ARA</b> · {today}"]
             try:
                 bars_all = W.intraday(bbs_codes)
             except Exception:  # noqa
@@ -254,6 +272,7 @@ def main():
                         lines.append("   " + v)
                 else:
                     lines.append(f"• <b>{c}</b> {px:,.0f} (ARA {ara:,.0f}, {((px / prev) - 1) * 100:+.1f}%) ❌ tidak terkunci → tidak valid ditahan")
+            lines += ara_lines
             lines.append("Antrean jual di buku penutupan tidak terlihat di data gratis — pastikan di Stockbit.")
             U.tg_send("\n".join(lines))
             sum_sent["bbs_close"] = today

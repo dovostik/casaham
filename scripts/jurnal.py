@@ -152,7 +152,7 @@ def fill_next_open(today, quotes):
 def set_bid(code, lot, today):
     """Catat antrian bid saat tutup (lot) ke catatan BBS terbaru saham itu (tanggal <= today)."""
     rows = load()
-    cand = [r for r in rows if r["code"] == code and r["date"] <= today and r["setup"] == "BBS"]
+    cand = [r for r in rows if r["code"] == code and r["date"] <= today and r["setup"] in ("BBS", "ARA")]
     if not cand:
         return None
     r = max(cand, key=lambda x: x["date"])
@@ -211,7 +211,7 @@ def stats_text(since=None, title="Evaluasi jurnal"):
     if not rows:
         return "Jurnal masih kosong."
     lines = [f"📊 <b>{title}</b>" + (f" (sejak {since})" if since else "") + f" · {len(rows)} catatan"]
-    for setup in ("PARTY", "BBS"):
+    for setup in ("PARTY", "BBS", "ARA"):
         rs = [r for r in rows if r["setup"] == setup]
         if not rs:
             continue
@@ -234,7 +234,7 @@ def stats_text(since=None, title="Evaluasi jurnal"):
     bt = bid_stats_text(rows)
     if bt:
         lines.append(bt)
-    lines.append("\nPembanding uji: BBS 59 hari +1,38% (menang 51%); PARTY 1m ketat 19 hari −0,26% (menang 49%).")
+    lines.append("\nPembanding uji: BBS 59 hari +1,38% (menang 51%); PARTY 1m ketat 19 hari −0,26% (menang 49%); entry di ARA +7,3% (menang 77%).")
     lines.append("Detail: casaham.pages.dev/#jurnal")
     return "\n".join(lines)
 
