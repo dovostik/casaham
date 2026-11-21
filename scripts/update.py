@@ -144,6 +144,24 @@ def in_window(preset, now=None):
     return w[0] <= hm <= w[1]
 
 
+def merge_quote(d, q):
+    """Pastikan bar terakhir = hari bursa quote (riwayat harian Yahoo kadang belum memuat hari terakhir)."""
+    t, px = q.get("regularMarketTime"), q.get("regularMarketPrice")
+    if not t or not px:
+        return d
+    day = pd.Timestamp(datetime.fromtimestamp(t, WIB).date())
+    idx = d.index.tz_localize(None) if getattr(d.index, "tz", None) is not None else d.index
+    last = idx[-1].normalize()
+    if day < last:
+        return d
+    bar = pd.DataFrame([{
+        "Open": q.get("regularMarketOpen") or px, "High": q.get("regularMarketDayHigh") or px,
+        "Low": q.get("regularMarketDayLow") or px, "Close": px, "Volume": q.get("regularMarketVolume") or 0,
+    }], index=[day])
+    d = d.copy(); d.index = idx
+    return pd.concat([d[d.index.normalize() < day], bar])
+
+
 def build_row(sym, d, q):
     c, h, l, v = d["Close"], d["High"], d["Low"], d["Volume"]
     last = c.iloc[-1]
@@ -372,6 +390,8 @@ def main():
         if len(d) < 15:
             continue
         try:
+            d = merge_quote(d, quotes.get(s, {}))
+            frames[s] = d
             row = build_row(s, d, quotes.get(s, {}))
         except Exception as e:  # noqa
             print("skip", s, e)
