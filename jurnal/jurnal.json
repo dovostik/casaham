@@ -2585,7 +2585,10 @@
 "high_after": 148.0,
 "low_after": 128.0,
 "result": -7.88,
-"win": 0
+"win": 0,
+"n_open": 126.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.8
 },
 {
 "id": "2026-11-24:PARTY:ENAK",
@@ -2637,7 +2640,10 @@
 "high_after": 153.0,
 "low_after": 128.0,
 "result": -18.7,
-"win": 0
+"win": 0,
+"n_open": 126.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.8
 },
 {
 "id": "2026-11-24:PARTY:NELY",
@@ -3070,7 +3076,12 @@
 "stage": "WATCH",
 "from_high_in": 0.0,
 "tf": "1m",
-"t_corr": "09:05"
+"t_corr": "09:05",
+"close": 238.0,
+"locked": 0,
+"vol_day": 8675400.0,
+"high_after": 258.0,
+"low_after": 238.0
 },
 {
 "id": "2026-11-25:PARTY:SAPX",
@@ -3086,7 +3097,7 @@
 "value_in": 657484400.0,
 "ara": 304,
 "ara_pct_in": 39.3,
-"stage": "BOUNCE",
+"stage": "FAILED",
 "from_high_in": 0.0,
 "tf": "1m",
 "t_corr": "09:05",
@@ -3098,7 +3109,15 @@
 "H": 258.0,
 "broksum_ok": true,
 "broksum": "Broksum 2026-11-24: top 3 buyer MG, NI, TP rata-rata 256 (-4.6% dari open 268) ✅",
-"brk": 1
+"brk": 1,
+"t_fail": "15:41",
+"close": 250.0,
+"locked": 0,
+"vol_day": 1478600.0,
+"high_after": 270.0,
+"low_after": 248.0,
+"result": -7.81,
+"win": 0
 },
 {
 "id": "2026-11-25:PARTY:KOTA",
@@ -3119,7 +3138,12 @@
 "tf": "1m",
 "t_corr": "09:48",
 "t_out": "10:53",
-"H": 71.0
+"H": 71.0,
+"close": 63.0,
+"locked": 0,
+"vol_day": 2355977400.0,
+"high_after": 71.0,
+"low_after": 61.0
 },
 {
 "id": "2026-11-25:PARTY:TMPO",
@@ -3140,7 +3164,12 @@
 "tf": "1m",
 "t_corr": "10:14",
 "t_out": "10:13",
-"H": 268.0
+"H": 268.0,
+"close": 244.0,
+"locked": 0,
+"vol_day": 358198900.0,
+"high_after": 268.0,
+"low_after": 226.0
 },
 {
 "id": "2026-11-25:BBS:TMPO",
@@ -3156,7 +3185,14 @@
 "value_in": 30659999800.0,
 "ara": 276,
 "ara_pct_in": 72.1,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"close": 244.0,
+"locked": 0,
+"vol_day": 358198900.0,
+"high_after": 268.0,
+"low_after": 226.0,
+"result": -7.27,
+"win": 0
 },
 {
 "id": "2026-11-25:PARTY:MERI",
@@ -3177,7 +3213,12 @@
 "tf": "1m",
 "t_corr": "09:17",
 "t_out": "09:16",
-"H": 101.0
+"H": 101.0,
+"close": 86.0,
+"locked": 0,
+"vol_day": 12743700.0,
+"high_after": 99.0,
+"low_after": 87.0
 },
 {
 "id": "2026-11-25:PARTY:NASI",
@@ -3198,7 +3239,12 @@
 "tf": "1m",
 "t_corr": "09:19",
 "t_out": "09:23",
-"H": 159.0
+"H": 159.0,
+"close": 154.0,
+"locked": 0,
+"vol_day": 30491900.0,
+"high_after": 159.0,
+"low_after": 146.0
 },
 {
 "id": "2026-11-25:PARTY:BRRC",
@@ -3219,7 +3265,12 @@
 "tf": "1m",
 "t_corr": "09:40",
 "t_out": "09:39",
-"H": 57.0
+"H": 57.0,
+"close": 47.0,
+"locked": 0,
+"vol_day": 134554700.0,
+"high_after": 57.0,
+"low_after": 47.0
 },
 {
 "id": "2026-11-25:PARTY:DGNS",
@@ -3240,7 +3291,12 @@
 "tf": "1m",
 "t_corr": "09:23",
 "t_out": "09:31",
-"H": 314.0
+"H": 314.0,
+"close": 302.0,
+"locked": 0,
+"vol_day": 9634300.0,
+"high_after": 308.0,
+"low_after": 290.0
 },
 {
 "id": "2026-11-25:PARTY:NTBK",
@@ -3261,7 +3317,12 @@
 "tf": "1m",
 "t_corr": "09:30",
 "t_out": "09:29",
-"H": 67.0
+"H": 67.0,
+"close": 59.0,
+"locked": 0,
+"vol_day": 91832100.0,
+"high_after": 67.0,
+"low_after": 57.0
 },
 {
 "id": "2026-11-25:PARTY:ESIP",
@@ -3282,7 +3343,12 @@
 "tf": "1m",
 "t_corr": "09:39",
 "t_out": "09:38",
-"H": 98.0
+"H": 98.0,
+"close": 90.0,
+"locked": 0,
+"vol_day": 63835400.0,
+"high_after": 98.0,
+"low_after": 89.0
 },
 {
 "id": "2026-11-25:PARTY:ICON",
@@ -3303,7 +3369,12 @@
 "tf": "1m",
 "t_corr": "09:37",
 "t_out": "09:37",
-"H": 94.0
+"H": 94.0,
+"close": 83.0,
+"locked": 0,
+"vol_day": 29729400.0,
+"high_after": 94.0,
+"low_after": 83.0
 },
 {
 "id": "2026-11-25:BBS:VOKS",
@@ -3319,7 +3390,12 @@
 "value_in": 1000376400.0,
 "ara": 450,
 "ara_pct_in": 93.3,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"close": 450.0,
+"locked": 1,
+"vol_day": 4600900.0,
+"high_after": 450.0,
+"low_after": 442.0
 },
 {
 "id": "2026-11-25:PARTY:NELY",
@@ -3340,7 +3416,12 @@
 "tf": "1m",
 "t_corr": "09:51",
 "t_out": "09:54",
-"H": 208.0
+"H": 208.0,
+"close": 177.0,
+"locked": 0,
+"vol_day": 7501800.0,
+"high_after": 206.0,
+"low_after": 175.0
 },
 {
 "id": "2026-11-25:ARA:VOKS",
@@ -3356,7 +3437,12 @@
 "value_in": 1150245000,
 "ara": 450,
 "ara_pct_in": 100.0,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"close": 450.0,
+"locked": 1,
+"vol_day": 4600900.0,
+"high_after": 450.0,
+"low_after": 442.0
 },
 {
 "id": "2026-11-25:PARTY:BDKR",
@@ -3372,10 +3458,26 @@
 "value_in": 838811000.0,
 "ara": 153,
 "ara_pct_in": 20.1,
-"stage": "WATCH",
+"stage": "BOUNCE",
 "from_high_in": 0.0,
 "tf": "1m",
-"t_corr": "10:43"
+"t_corr": "10:43",
+"t_bounce": "15:39",
+"bounce_price": 125.0,
+"sl": 118,
+"tp1": 139,
+"tp2": 144,
+"H": 123.0,
+"broksum_ok": true,
+"broksum": "Broksum 2026-11-24: top 3 buyer SH, LG, AZ rata-rata 112 (-1.4% dari open 114) ✅",
+"brk": 1,
+"close": 122.0,
+"locked": 0,
+"vol_day": 14066300.0,
+"high_after": 126.0,
+"low_after": 122.0,
+"result": -2.8,
+"win": 0
 },
 {
 "id": "2026-11-25:PARTY:HOPE",
@@ -3403,7 +3505,14 @@
 "H": 163.0,
 "broksum_ok": true,
 "broksum": "Broksum 2026-11-24: top 3 buyer AG, XL, CC rata-rata 158 (+4.6% dari open 151) ✅",
-"t_fail": "10:24"
+"t_fail": "10:24",
+"close": 150.0,
+"locked": 0,
+"vol_day": 59736800.0,
+"high_after": 160.0,
+"low_after": 147.0,
+"result": -3.52,
+"win": 0
 },
 {
 "id": "2026-11-25:PARTY:CITY",
@@ -3421,7 +3530,12 @@
 "ara_pct_in": 64.0,
 "stage": "WATCH",
 "from_high_in": -0.6,
-"tf": "1m"
+"tf": "1m",
+"close": 168.0,
+"locked": 1,
+"vol_day": 18296800.0,
+"high_after": 168.0,
+"low_after": 146.0
 },
 {
 "id": "2026-11-25:BBS:CITY",
@@ -3437,7 +3551,12 @@
 "value_in": 1098779400.0,
 "ara": 168,
 "ara_pct_in": 75.4,
-"stage": "SIGNAL"
+"stage": "SIGNAL",
+"close": 168.0,
+"locked": 1,
+"vol_day": 18296800.0,
+"high_after": 168.0,
+"low_after": 148.0
 },
 {
 "id": "2026-11-25:PARTY:MPPA",
@@ -3458,6 +3577,143 @@
 "tf": "1m",
 "t_corr": "11:11",
 "t_out": "11:15",
-"H": 28.0
+"H": 28.0,
+"close": 26.0,
+"locked": 0,
+"vol_day": 183336700.0,
+"high_after": 28.0,
+"low_after": 25.0
+},
+{
+"id": "2026-11-25:PARTY:KKES",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "13:33",
+"code": "KKES",
+"band": "<200",
+"session": "siang",
+"price_in": 58.0,
+"prev": 53.0,
+"ret_in": 9.43,
+"value_in": 795533800.0,
+"ara": 71,
+"ara_pct_in": 27.0,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "13:41",
+"t_out": "13:56",
+"H": 61.0,
+"close": 53.0,
+"locked": 0,
+"vol_day": 68871600.0,
+"high_after": 61.0,
+"low_after": 53.0,
+"result": null,
+"win": null
+},
+{
+"id": "2026-11-25:PARTY:KDTN",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "13:39",
+"code": "KDTN",
+"band": "200-5000",
+"session": "siang",
+"price_in": 218.0,
+"prev": 202.0,
+"ret_in": 7.92,
+"value_in": 1848727200.0,
+"ara": 252,
+"ara_pct_in": 31.7,
+"stage": "OUT",
+"from_high_in": -0.9,
+"tf": "1m",
+"t_corr": "13:44",
+"t_out": "13:43",
+"H": 220.0,
+"close": 234.0,
+"locked": 0,
+"vol_day": 26290300.0,
+"high_after": 238.0,
+"low_after": 208.0,
+"result": null,
+"win": null
+},
+{
+"id": "2026-11-25:PARTY:TAXI",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "14:30",
+"code": "TAXI",
+"band": "<200",
+"session": "siang",
+"price_in": 10.0,
+"prev": 9.0,
+"ret_in": 11.11,
+"value_in": 541488000.0,
+"ara": 12,
+"ara_pct_in": 31.7,
+"stage": "WATCH",
+"from_high_in": 0.0,
+"tf": "1m",
+"close": 10.0,
+"locked": 0,
+"vol_day": 58250100.0,
+"high_after": 10.0,
+"low_after": 9.0,
+"result": null,
+"win": null
+},
+{
+"id": "2026-11-25:PARTY:AXIO",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "14:36",
+"code": "AXIO",
+"band": "<200",
+"session": "siang",
+"price_in": 153.0,
+"prev": 142.0,
+"ret_in": 7.75,
+"value_in": 508189500.0,
+"ara": 191,
+"ara_pct_in": 22.1,
+"stage": "OUT",
+"from_high_in": -3.8,
+"tf": "1m",
+"t_corr": "14:43",
+"t_out": "14:44",
+"H": 159.0,
+"close": 154.0,
+"locked": 0,
+"vol_day": 4553600.0,
+"high_after": 155.0,
+"low_after": 150.0,
+"result": null,
+"win": null
+},
+{
+"id": "2026-11-25:ARA:CITY",
+"setup": "ARA",
+"date": "2026-11-25",
+"time_in": "14:50",
+"code": "CITY",
+"band": "<200",
+"session": "siang",
+"price_in": 168.0,
+"prev": 125.0,
+"ret_in": 34.4,
+"value_in": 2940067200,
+"ara": 168,
+"ara_pct_in": 98.3,
+"stage": "SIGNAL",
+"close": 168.0,
+"locked": 1,
+"vol_day": 18296800.0,
+"high_after": 168.0,
+"low_after": 168.0,
+"result": null,
+"win": null
 }
 ]
