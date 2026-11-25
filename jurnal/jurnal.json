@@ -2020,7 +2020,10 @@
 "high_after": 1680.0,
 "low_after": 1435.0,
 "result": -8.98,
-"win": 0
+"win": 0,
+"n_open": 1540.0,
+"n_date": "2026-11-25",
+"iep_gap": -0.32
 },
 {
 "id": "2026-11-24:BBS:FAST",
@@ -2043,7 +2046,10 @@
 "high_after": 364.0,
 "low_after": 304.0,
 "result": -15.78,
-"win": 0
+"win": 0,
+"n_open": 308.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:WMUU",
@@ -2079,7 +2085,10 @@
 "high_after": 54.0,
 "low_after": 40.0,
 "result": -12.4,
-"win": 0
+"win": 0,
+"n_open": 52.0,
+"n_date": "2026-11-25",
+"iep_gap": 4.0
 },
 {
 "id": "2026-11-24:PARTY:TRON",
@@ -2114,7 +2123,10 @@
 "high_after": 94.0,
 "low_after": 82.0,
 "result": -6.85,
-"win": 0
+"win": 0,
+"n_open": 87.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:JGLE",
@@ -2140,7 +2152,10 @@
 "locked": 0,
 "vol_day": 161541600.0,
 "high_after": 34.0,
-"low_after": 29.0
+"low_after": 29.0,
+"n_open": 31.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:FIRE",
@@ -2166,7 +2181,10 @@
 "locked": 0,
 "vol_day": 26251200.0,
 "high_after": 95.0,
-"low_after": 85.0
+"low_after": 85.0,
+"n_open": 86.0,
+"n_date": "2026-11-25",
+"iep_gap": -1.15
 },
 {
 "id": "2026-11-24:PARTY:PPRI",
@@ -2192,7 +2210,10 @@
 "locked": 0,
 "vol_day": 95629700.0,
 "high_after": 97.0,
-"low_after": 81.0
+"low_after": 81.0,
+"n_open": 85.0,
+"n_date": "2026-11-25",
+"iep_gap": 2.41
 },
 {
 "id": "2026-11-24:PARTY:SOLA",
@@ -2218,7 +2239,10 @@
 "locked": 0,
 "vol_day": 30450300.0,
 "high_after": 75.0,
-"low_after": 69.0
+"low_after": 69.0,
+"n_open": 74.0,
+"n_date": "2026-11-25",
+"iep_gap": 2.78
 },
 {
 "id": "2026-11-24:PARTY:KJEN",
@@ -2244,7 +2268,10 @@
 "locked": 0,
 "vol_day": 15232400.0,
 "high_after": 132.0,
-"low_after": 120.0
+"low_after": 120.0,
+"n_open": 124.0,
+"n_date": "2026-11-25",
+"iep_gap": -0.8
 },
 {
 "id": "2026-11-24:PARTY:DEFI",
@@ -2270,7 +2297,10 @@
 "locked": 0,
 "vol_day": 110151800.0,
 "high_after": 88.0,
-"low_after": 74.0
+"low_after": 74.0,
+"n_open": 77.0,
+"n_date": "2026-11-25",
+"iep_gap": 1.32
 },
 {
 "id": "2026-11-24:PARTY:KREN",
@@ -2293,7 +2323,10 @@
 "locked": 0,
 "vol_day": 60277300.0,
 "high_after": 14.0,
-"low_after": 12.0
+"low_after": 12.0,
+"n_open": 13.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:AREA",
@@ -2317,7 +2350,10 @@
 "locked": 1,
 "vol_day": 10243400.0,
 "high_after": 254.0,
-"low_after": 224.0
+"low_after": 224.0,
+"n_open": 290.0,
+"n_date": "2026-11-25",
+"iep_gap": 14.17
 },
 {
 "id": "2026-11-24:BBS:AREA",
@@ -2338,7 +2374,12 @@
 "locked": 1,
 "vol_day": 10243400.0,
 "high_after": 254.0,
-"low_after": 232.0
+"low_after": 232.0,
+"n_open": 290.0,
+"n_date": "2026-11-25",
+"iep_gap": 14.17,
+"result": 18.45,
+"win": 1
 },
 {
 "id": "2026-11-24:PARTY:ELIT",
@@ -2364,7 +2405,10 @@
 "locked": 0,
 "vol_day": 17609600.0,
 "high_after": 226.0,
-"low_after": 194.0
+"low_after": 194.0,
+"n_open": 204.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:ARA:AREA",
@@ -2385,7 +2429,12 @@
 "locked": 1,
 "vol_day": 10243400.0,
 "high_after": 254.0,
-"low_after": 254.0
+"low_after": 254.0,
+"n_open": 290.0,
+"n_date": "2026-11-25",
+"iep_gap": 14.17,
+"result": 13.77,
+"win": 1
 },
 {
 "id": "2026-11-24:PARTY:MUTU",
@@ -2411,7 +2460,10 @@
 "locked": 0,
 "vol_day": 39777400.0,
 "high_after": 118.0,
-"low_after": 107.0
+"low_after": 107.0,
+"n_open": 109.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:MITI",
@@ -2437,7 +2489,10 @@
 "locked": 0,
 "vol_day": 8525200.0,
 "high_after": 228.0,
-"low_after": 198.0
+"low_after": 198.0,
+"n_open": 204.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:GRPH",
@@ -2463,7 +2518,10 @@
 "locked": 0,
 "vol_day": 28784100.0,
 "high_after": 102.0,
-"low_after": 90.0
+"low_after": 90.0,
+"n_open": 92.0,
+"n_date": "2026-11-25",
+"iep_gap": -1.08
 },
 {
 "id": "2026-11-24:PARTY:ICON",
@@ -2489,7 +2547,10 @@
 "locked": 0,
 "vol_day": 40839800.0,
 "high_after": 96.0,
-"low_after": 84.0
+"low_after": 84.0,
+"n_open": 87.0,
+"n_date": "2026-11-25",
+"iep_gap": 2.35
 },
 {
 "id": "2026-11-24:PARTY:CITY",
@@ -2550,7 +2611,10 @@
 "locked": 0,
 "vol_day": 12084200.0,
 "high_after": 184.0,
-"low_after": 155.0
+"low_after": 155.0,
+"n_open": 159.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:BBS:CITY",
@@ -2599,7 +2663,10 @@
 "locked": 0,
 "vol_day": 19123600.0,
 "high_after": 220.0,
-"low_after": 182.0
+"low_after": 182.0,
+"n_open": 188.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:KBAG",
@@ -2625,7 +2692,10 @@
 "locked": 0,
 "vol_day": 69074600.0,
 "high_after": 37.0,
-"low_after": 28.0
+"low_after": 28.0,
+"n_open": 29.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:BBS:NZIA",
@@ -2648,7 +2718,10 @@
 "high_after": 139.0,
 "low_after": 113.0,
 "result": -16.23,
-"win": 0
+"win": 0,
+"n_open": 117.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:AXIO",
@@ -2676,7 +2749,10 @@
 "high_after": 172.0,
 "low_after": 136.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 142.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:ZYRX",
@@ -2704,7 +2780,10 @@
 "high_after": 132.0,
 "low_after": 113.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 119.0,
+"n_date": "2026-11-25",
+"iep_gap": 5.31
 },
 {
 "id": "2026-11-24:PARTY:LAND",
@@ -2732,7 +2811,10 @@
 "high_after": 52.0,
 "low_after": 41.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 41.0,
+"n_date": "2026-11-25",
+"iep_gap": -2.38
 },
 {
 "id": "2026-11-24:PARTY:HDIT",
@@ -2760,7 +2842,10 @@
 "high_after": 36.0,
 "low_after": 31.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 33.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:RODA",
@@ -2788,7 +2873,10 @@
 "high_after": 37.0,
 "low_after": 31.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 31.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:PAMG",
@@ -2816,7 +2904,10 @@
 "high_after": 49.0,
 "low_after": 40.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 42.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:AKKU",
@@ -2844,7 +2935,10 @@
 "high_after": 76.0,
 "low_after": 67.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 75.0,
+"n_date": "2026-11-25",
+"iep_gap": 2.74
 },
 {
 "id": "2026-11-24:PARTY:PCAR",
@@ -2872,7 +2966,10 @@
 "high_after": 71.0,
 "low_after": 67.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 67.0,
+"n_date": "2026-11-25",
+"iep_gap": -1.47
 },
 {
 "id": "2026-11-24:BBS:WMUU",
@@ -2895,7 +2992,10 @@
 "high_after": 54.0,
 "low_after": 48.0,
 "result": -4.25,
-"win": 0
+"win": 0,
+"n_open": 52.0,
+"n_date": "2026-11-25",
+"iep_gap": 4.0
 },
 {
 "id": "2026-11-24:PARTY:MIRA",
@@ -2920,7 +3020,10 @@
 "high_after": 19.0,
 "low_after": 17.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 19.0,
+"n_date": "2026-11-25",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-24:PARTY:BRRC",
@@ -2945,6 +3048,416 @@
 "high_after": 49.0,
 "low_after": 48.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 48.0,
+"n_date": "2026-11-25",
+"iep_gap": 2.13
+},
+{
+"id": "2026-11-25:PARTY:AREA",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "08:58",
+"code": "AREA",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 290.0,
+"prev": 204.0,
+"ret_in": 42.16,
+"value_in": 3246376000.0,
+"ara": 254,
+"ara_pct_in": 168.6,
+"stage": "WATCH",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:05"
+},
+{
+"id": "2026-11-25:PARTY:SAPX",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "08:58",
+"code": "SAPX",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 268.0,
+"prev": 244.0,
+"ret_in": 9.84,
+"value_in": 657484400.0,
+"ara": 304,
+"ara_pct_in": 39.3,
+"stage": "BOUNCE",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:05",
+"t_bounce": "09:38",
+"bounce_price": 270.0,
+"sl": 250,
+"tp1": 298,
+"tp2": 302,
+"H": 258.0,
+"broksum_ok": true,
+"broksum": "Broksum 2026-11-24: top 3 buyer MG, NI, TP rata-rata 256 (-4.6% dari open 268) ✅",
+"brk": 1
+},
+{
+"id": "2026-11-25:PARTY:KOTA",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:00",
+"code": "KOTA",
+"band": "<200",
+"session": "pagi",
+"price_in": 67.0,
+"prev": 59.0,
+"ret_in": 13.56,
+"value_in": 12918002000.0,
+"ara": 79,
+"ara_pct_in": 38.7,
+"stage": "OUT",
+"from_high_in": -2.9,
+"tf": "1m",
+"t_corr": "09:48",
+"t_out": "10:53",
+"H": 71.0
+},
+{
+"id": "2026-11-25:PARTY:TMPO",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:01",
+"code": "TMPO",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 244.0,
+"prev": 222.0,
+"ret_in": 9.91,
+"value_in": 13209623200.0,
+"ara": 276,
+"ara_pct_in": 39.6,
+"stage": "OUT",
+"from_high_in": -3.2,
+"tf": "1m",
+"t_corr": "10:14",
+"t_out": "10:13",
+"H": 268.0
+},
+{
+"id": "2026-11-25:BBS:TMPO",
+"setup": "BBS",
+"date": "2026-11-25",
+"time_in": "09:07",
+"code": "TMPO",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 262.0,
+"prev": 222.0,
+"ret_in": 18.02,
+"value_in": 30659999800.0,
+"ara": 276,
+"ara_pct_in": 72.1,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-25:PARTY:MERI",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:12",
+"code": "MERI",
+"band": "<200",
+"session": "pagi",
+"price_in": 97.0,
+"prev": 86.0,
+"ret_in": 12.79,
+"value_in": 513624700.0,
+"ara": 116,
+"ara_pct_in": 36.5,
+"stage": "OUT",
+"from_high_in": -4.0,
+"tf": "1m",
+"t_corr": "09:17",
+"t_out": "09:16",
+"H": 101.0
+},
+{
+"id": "2026-11-25:PARTY:NASI",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:12",
+"code": "NASI",
+"band": "<200",
+"session": "pagi",
+"price_in": 157.0,
+"prev": 144.0,
+"ret_in": 9.03,
+"value_in": 967905000.0,
+"ara": 194,
+"ara_pct_in": 25.8,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:19",
+"t_out": "09:23",
+"H": 159.0
+},
+{
+"id": "2026-11-25:PARTY:BRRC",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:19",
+"code": "BRRC",
+"band": "<200",
+"session": "pagi",
+"price_in": 54.0,
+"prev": 47.0,
+"ret_in": 14.89,
+"value_in": 545140800.0,
+"ara": 63,
+"ara_pct_in": 42.6,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:40",
+"t_out": "09:39",
+"H": 57.0
+},
+{
+"id": "2026-11-25:PARTY:DGNS",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:19",
+"code": "DGNS",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 312.0,
+"prev": 286.0,
+"ret_in": 9.09,
+"value_in": 655293600.0,
+"ara": 356,
+"ara_pct_in": 36.4,
+"stage": "OUT",
+"from_high_in": -0.6,
+"tf": "1m",
+"t_corr": "09:23",
+"t_out": "09:31",
+"H": 314.0
+},
+{
+"id": "2026-11-25:PARTY:NTBK",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:21",
+"code": "NTBK",
+"band": "<200",
+"session": "pagi",
+"price_in": 65.0,
+"prev": 58.0,
+"ret_in": 12.07,
+"value_in": 1424852000.0,
+"ara": 78,
+"ara_pct_in": 34.5,
+"stage": "OUT",
+"from_high_in": -1.5,
+"tf": "1m",
+"t_corr": "09:30",
+"t_out": "09:29",
+"H": 67.0
+},
+{
+"id": "2026-11-25:PARTY:ESIP",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:24",
+"code": "ESIP",
+"band": "<200",
+"session": "pagi",
+"price_in": 96.0,
+"prev": 89.0,
+"ret_in": 7.87,
+"value_in": 993264000.0,
+"ara": 120,
+"ara_pct_in": 22.5,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:39",
+"t_out": "09:38",
+"H": 98.0
+},
+{
+"id": "2026-11-25:PARTY:ICON",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:32",
+"code": "ICON",
+"band": "<200",
+"session": "pagi",
+"price_in": 92.0,
+"prev": 85.0,
+"ret_in": 8.24,
+"value_in": 826436000.0,
+"ara": 114,
+"ara_pct_in": 23.5,
+"stage": "OUT",
+"from_high_in": -1.1,
+"tf": "1m",
+"t_corr": "09:37",
+"t_out": "09:37",
+"H": 94.0
+},
+{
+"id": "2026-11-25:BBS:VOKS",
+"setup": "BBS",
+"date": "2026-11-25",
+"time_in": "09:41",
+"code": "VOKS",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 444.0,
+"prev": 360.0,
+"ret_in": 23.33,
+"value_in": 1000376400.0,
+"ara": 450,
+"ara_pct_in": 93.3,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-25:PARTY:NELY",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "09:41",
+"code": "NELY",
+"band": "<200",
+"session": "pagi",
+"price_in": 202.0,
+"prev": 188.0,
+"ret_in": 7.45,
+"value_in": 881992600.0,
+"ara": 252,
+"ara_pct_in": 21.3,
+"stage": "OUT",
+"from_high_in": -2.9,
+"tf": "1m",
+"t_corr": "09:51",
+"t_out": "09:54",
+"H": 208.0
+},
+{
+"id": "2026-11-25:ARA:VOKS",
+"setup": "ARA",
+"date": "2026-11-25",
+"time_in": "09:56",
+"code": "VOKS",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 450.0,
+"prev": 360.0,
+"ret_in": 25.0,
+"value_in": 1150245000,
+"ara": 450,
+"ara_pct_in": 100.0,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-25:PARTY:BDKR",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "10:04",
+"code": "BDKR",
+"band": "<200",
+"session": "pagi",
+"price_in": 122.0,
+"prev": 114.0,
+"ret_in": 7.02,
+"value_in": 838811000.0,
+"ara": 153,
+"ara_pct_in": 20.1,
+"stage": "WATCH",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "10:43"
+},
+{
+"id": "2026-11-25:PARTY:HOPE",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "10:06",
+"code": "HOPE",
+"band": "<200",
+"session": "pagi",
+"price_in": 162.0,
+"prev": 148.0,
+"ret_in": 9.46,
+"value_in": 8128900800.0,
+"ara": 199,
+"ara_pct_in": 27.0,
+"stage": "FAILED",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "10:12",
+"t_bounce": "10:15",
+"bounce_price": 160.0,
+"sl": 155,
+"tp1": 164,
+"tp2": 169,
+"H": 163.0,
+"broksum_ok": true,
+"broksum": "Broksum 2026-11-24: top 3 buyer AG, XL, CC rata-rata 158 (+4.6% dari open 151) ✅",
+"t_fail": "10:24"
+},
+{
+"id": "2026-11-25:PARTY:CITY",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "10:56",
+"code": "CITY",
+"band": "<200",
+"session": "pagi",
+"price_in": 153.0,
+"prev": 125.0,
+"ret_in": 22.4,
+"value_in": 910105200.0,
+"ara": 168,
+"ara_pct_in": 64.0,
+"stage": "WATCH",
+"from_high_in": -0.6,
+"tf": "1m"
+},
+{
+"id": "2026-11-25:BBS:CITY",
+"setup": "BBS",
+"date": "2026-11-25",
+"time_in": "10:57",
+"code": "CITY",
+"band": "<200",
+"session": "pagi",
+"price_in": 158.0,
+"prev": 125.0,
+"ret_in": 26.4,
+"value_in": 1098779400.0,
+"ara": 168,
+"ara_pct_in": 75.4,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-25:PARTY:MPPA",
+"setup": "PARTY",
+"date": "2026-11-25",
+"time_in": "11:03",
+"code": "MPPA",
+"band": "<200",
+"session": "pagi",
+"price_in": 27.0,
+"prev": 24.0,
+"ret_in": 12.5,
+"value_in": 737583300.0,
+"ara": 32,
+"ara_pct_in": 35.7,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "11:11",
+"t_out": "11:15",
+"H": 28.0
 }
 ]
