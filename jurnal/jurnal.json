@@ -5197,6 +5197,9 @@
 "high_after": 141.0,
 "low_after": 132.0,
 "result": null,
-"win": null
+"win": null,
+"bid_lot": 115165,
+"bid_val": 1623826500,
+"bid_ratio": 13.8
 }
 ]
