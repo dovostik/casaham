@@ -3820,7 +3820,10 @@
 "locked": 0,
 "vol_day": 67430800.0,
 "high_after": 86.0,
-"low_after": 74.0
+"low_after": 74.0,
+"n_open": 77.0,
+"n_date": "2026-11-27",
+"iep_gap": 1.32
 },
 {
 "id": "2026-11-26:PARTY:KOKA",
@@ -3846,7 +3849,10 @@
 "locked": 0,
 "vol_day": 22528300.0,
 "high_after": 127.0,
-"low_after": 117.0
+"low_after": 117.0,
+"n_open": 119.0,
+"n_date": "2026-11-27",
+"iep_gap": 1.71
 },
 {
 "id": "2026-11-26:PARTY:NASI",
@@ -3872,7 +3878,10 @@
 "locked": 0,
 "vol_day": 88352400.0,
 "high_after": 187.0,
-"low_after": 156.0
+"low_after": 156.0,
+"n_open": 183.0,
+"n_date": "2026-11-27",
+"iep_gap": 2.23
 },
 {
 "id": "2026-11-26:PARTY:NZIA",
@@ -3898,7 +3907,10 @@
 "locked": 0,
 "vol_day": 16280400.0,
 "high_after": 120.0,
-"low_after": 111.0
+"low_after": 111.0,
+"n_open": 118.0,
+"n_date": "2026-11-27",
+"iep_gap": 1.72
 },
 {
 "id": "2026-11-26:BBS:VOKS",
@@ -3921,7 +3933,10 @@
 "high_after": 555.0,
 "low_after": 464.0,
 "result": -5.96,
-"win": 0
+"win": 0,
+"n_open": 515.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.98
 },
 {
 "id": "2026-11-26:PARTY:TNCA",
@@ -3957,7 +3972,10 @@
 "high_after": 178.0,
 "low_after": 147.0,
 "result": -11.78,
-"win": 0
+"win": 0,
+"n_open": 150.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:RBMS",
@@ -3983,7 +4001,10 @@
 "locked": 0,
 "vol_day": 130676500.0,
 "high_after": 48.0,
-"low_after": 41.0
+"low_after": 41.0,
+"n_open": 42.0,
+"n_date": "2026-11-27",
+"iep_gap": -2.33
 },
 {
 "id": "2026-11-26:BBS:TNCA",
@@ -4006,7 +4027,10 @@
 "high_after": 178.0,
 "low_after": 147.0,
 "result": -13.69,
-"win": 0
+"win": 0,
+"n_open": 150.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:RAAM",
@@ -4030,7 +4054,10 @@
 "locked": 0,
 "vol_day": 13367200.0,
 "high_after": 136.0,
-"low_after": 116.0
+"low_after": 116.0,
+"n_open": 121.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:MCAS",
@@ -4054,7 +4081,10 @@
 "locked": 0,
 "vol_day": 6655600.0,
 "high_after": 222.0,
-"low_after": 181.0
+"low_after": 181.0,
+"n_open": 174.0,
+"n_date": "2026-11-27",
+"iep_gap": -4.4
 },
 {
 "id": "2026-11-26:PARTY:ZATA",
@@ -4079,7 +4109,10 @@
 "locked": 0,
 "vol_day": 133025300.0,
 "high_after": 46.0,
-"low_after": 38.0
+"low_after": 38.0,
+"n_open": 39.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:BAUT",
@@ -4105,7 +4138,10 @@
 "locked": 0,
 "vol_day": 54018700.0,
 "high_after": 29.0,
-"low_after": 23.0
+"low_after": 23.0,
+"n_open": 24.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:SAPX",
@@ -4129,7 +4165,10 @@
 "locked": 1,
 "vol_day": 10609800.0,
 "high_after": 312.0,
-"low_after": 266.0
+"low_after": 266.0,
+"n_open": 330.0,
+"n_date": "2026-11-27",
+"iep_gap": 5.77
 },
 {
 "id": "2026-11-26:BBS:SAPX",
@@ -4151,8 +4190,11 @@
 "vol_day": 10609800.0,
 "high_after": 312.0,
 "low_after": 290.0,
-"result": null,
-"win": null
+"result": 11.84,
+"win": 1,
+"n_open": 330.0,
+"n_date": "2026-11-27",
+"iep_gap": 5.77
 },
 {
 "id": "2026-11-26:PARTY:AISA",
@@ -4180,7 +4222,10 @@
 "high_after": 105.0,
 "low_after": 97.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 97.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:UNIQ",
@@ -4205,7 +4250,10 @@
 "high_after": 175.0,
 "low_after": 171.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 170.0,
+"n_date": "2026-11-27",
+"iep_gap": -0.58
 },
 {
 "id": "2026-11-26:PARTY:LABA",
@@ -4233,7 +4281,10 @@
 "high_after": 98.0,
 "low_after": 90.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 92.0,
+"n_date": "2026-11-27",
+"iep_gap": 1.1
 },
 {
 "id": "2026-11-26:ARA:SAPX",
@@ -4255,8 +4306,11 @@
 "vol_day": 10609800.0,
 "high_after": 312.0,
 "low_after": 312.0,
-"result": null,
-"win": null
+"result": 5.37,
+"win": 1,
+"n_open": 330.0,
+"n_date": "2026-11-27",
+"iep_gap": 5.77
 },
 {
 "id": "2026-11-26:PARTY:IPTV",
@@ -4284,7 +4338,10 @@
 "high_after": 20.0,
 "low_after": 16.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 18.0,
+"n_date": "2026-11-27",
+"iep_gap": 5.88
 },
 {
 "id": "2026-11-26:PARTY:SEMA",
@@ -4312,7 +4369,10 @@
 "high_after": 356.0,
 "low_after": 308.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 306.0,
+"n_date": "2026-11-27",
+"iep_gap": -0.65
 },
 {
 "id": "2026-11-26:BBS:IRSX",
@@ -4335,7 +4395,10 @@
 "high_after": 234.0,
 "low_after": 206.0,
 "result": -2.17,
-"win": 0
+"win": 0,
+"n_open": 222.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:PADA",
@@ -4363,7 +4426,10 @@
 "high_after": 92.0,
 "low_after": 84.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 86.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:BBS:TOBA",
@@ -4385,8 +4451,11 @@
 "vol_day": 86530200.0,
 "high_after": 412.0,
 "low_after": 374.0,
-"result": null,
-"win": null
+"result": 15.06,
+"win": 1,
+"n_open": 448.0,
+"n_date": "2026-11-27",
+"iep_gap": 8.74
 },
 {
 "id": "2026-11-26:PARTY:MHKI",
@@ -4411,7 +4480,10 @@
 "high_after": 122.0,
 "low_after": 99.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 116.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:PARTY:PSDN",
@@ -4439,7 +4511,10 @@
 "high_after": 107.0,
 "low_after": 105.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 105.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:BBS:MHKI",
@@ -4462,7 +4537,10 @@
 "high_after": 122.0,
 "low_after": 111.0,
 "result": -0.4,
-"win": 0
+"win": 0,
+"n_open": 116.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.0
 },
 {
 "id": "2026-11-26:BBS:OASA",
@@ -4485,7 +4563,10 @@
 "high_after": 206.0,
 "low_after": 189.0,
 "result": -0.91,
-"win": 0
+"win": 0,
+"n_open": 199.0,
+"n_date": "2026-11-27",
+"iep_gap": 1.02
 },
 {
 "id": "2026-11-26:ARA:TOBA",
@@ -4507,8 +4588,11 @@
 "vol_day": 86530200.0,
 "high_after": 412.0,
 "low_after": 412.0,
-"result": null,
-"win": null
+"result": 8.34,
+"win": 1,
+"n_open": 448.0,
+"n_date": "2026-11-27",
+"iep_gap": 8.74
 },
 {
 "id": "2026-11-26:PARTY:KJEN",
@@ -4534,6 +4618,300 @@
 "high_after": 134.0,
 "low_after": 128.0,
 "result": null,
-"win": null
+"win": null,
+"n_open": 131.0,
+"n_date": "2026-11-27",
+"iep_gap": 0.77
+},
+{
+"id": "2026-11-27:PARTY:TRON",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:00",
+"code": "TRON",
+"band": "<200",
+"session": "pagi",
+"price_in": 84.0,
+"prev": 78.0,
+"ret_in": 7.69,
+"value_in": 597290400.0,
+"ara": 105,
+"ara_pct_in": 22.0,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:06",
+"t_out": "09:05",
+"H": 89.0
+},
+{
+"id": "2026-11-27:PARTY:RGAS",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:02",
+"code": "RGAS",
+"band": "<200",
+"session": "pagi",
+"price_in": 74.0,
+"prev": 65.0,
+"ret_in": 13.85,
+"value_in": 538283400.0,
+"ara": 87,
+"ara_pct_in": 39.6,
+"stage": "OUT",
+"from_high_in": -2.6,
+"tf": "1m",
+"t_corr": "09:13",
+"t_out": "09:16",
+"H": 76.0
+},
+{
+"id": "2026-11-27:PARTY:CSMI",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:04",
+"code": "CSMI",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 252.0,
+"prev": 232.0,
+"ret_in": 8.62,
+"value_in": 3052879200.0,
+"ara": 290,
+"ara_pct_in": 34.5,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:31",
+"t_out": "09:30",
+"H": 252.0
+},
+{
+"id": "2026-11-27:PARTY:FOLK",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:04",
+"code": "FOLK",
+"band": "<200",
+"session": "pagi",
+"price_in": 95.0,
+"prev": 88.0,
+"ret_in": 7.95,
+"value_in": 673293500.0,
+"ara": 118,
+"ara_pct_in": 22.7,
+"stage": "DONE",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:12",
+"note": "sinyal 10:16 terlewat (scanner belum jalan), tidak dikirim"
+},
+{
+"id": "2026-11-27:PARTY:PSDN",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:04",
+"code": "PSDN",
+"band": "<200",
+"session": "pagi",
+"price_in": 115.0,
+"prev": 105.0,
+"ret_in": 9.52,
+"value_in": 555599500.0,
+"ara": 141,
+"ara_pct_in": 27.2,
+"stage": "OUT",
+"from_high_in": -3.4,
+"tf": "1m",
+"t_corr": "09:07",
+"t_out": "09:11",
+"H": 119.0
+},
+{
+"id": "2026-11-27:PARTY:TFAS",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:05",
+"code": "TFAS",
+"band": "<200",
+"session": "pagi",
+"price_in": 160.0,
+"prev": 130.0,
+"ret_in": 23.08,
+"value_in": 618064000.0,
+"ara": 175,
+"ara_pct_in": 65.9,
+"stage": "FAILED",
+"from_high_in": -0.6,
+"tf": "1m",
+"t_corr": "09:11",
+"t_bounce": "09:44",
+"bounce_price": 157.0,
+"sl": 145,
+"tp1": 169,
+"tp2": 174,
+"H": 161.0,
+"broksum_ok": null,
+"broksum": "Broksum kemarin belum tersedia, cek manual: rata-rata top 3 buyer harus di 132–146 (open ±5%)",
+"t_fail": "10:21"
+},
+{
+"id": "2026-11-27:BBS:TFAS",
+"setup": "BBS",
+"date": "2026-11-27",
+"time_in": "09:15",
+"code": "TFAS",
+"band": "<200",
+"session": "pagi",
+"price_in": 163.0,
+"prev": 130.0,
+"ret_in": 25.38,
+"value_in": 1432036500.0,
+"ara": 175,
+"ara_pct_in": 72.5,
+"stage": "SIGNAL"
+},
+{
+"id": "2026-11-27:PARTY:PICO",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:20",
+"code": "PICO",
+"band": "<200",
+"session": "pagi",
+"price_in": 132.0,
+"prev": 118.0,
+"ret_in": 11.86,
+"value_in": 556050000.0,
+"ara": 159,
+"ara_pct_in": 33.9,
+"stage": "OUT",
+"from_high_in": -1.5,
+"tf": "1m",
+"t_corr": "09:28",
+"t_out": "09:29",
+"H": 143.0
+},
+{
+"id": "2026-11-27:PARTY:HRME",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:25",
+"code": "HRME",
+"band": "<200",
+"session": "pagi",
+"price_in": 55.0,
+"prev": 51.0,
+"ret_in": 7.84,
+"value_in": 808032500.0,
+"ara": 68,
+"ara_pct_in": 22.4,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:40",
+"t_out": "09:43",
+"H": 57.0
+},
+{
+"id": "2026-11-27:PARTY:WAPO",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:31",
+"code": "WAPO",
+"band": "<200",
+"session": "pagi",
+"price_in": 189.0,
+"prev": 163.0,
+"ret_in": 15.95,
+"value_in": 511963200.0,
+"ara": 220,
+"ara_pct_in": 45.6,
+"stage": "OUT",
+"from_high_in": -4.1,
+"tf": "1m",
+"t_corr": "09:35",
+"t_out": "09:34",
+"H": 197.0
+},
+{
+"id": "2026-11-27:PARTY:TNCA",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:35",
+"code": "TNCA",
+"band": "<200",
+"session": "pagi",
+"price_in": 174.0,
+"prev": 150.0,
+"ret_in": 16.0,
+"value_in": 564856200.0,
+"ara": 202,
+"ara_pct_in": 45.7,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:48",
+"t_out": "09:48",
+"H": 176.0
+},
+{
+"id": "2026-11-27:PARTY:AREA",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "09:39",
+"code": "AREA",
+"band": "200-5000",
+"session": "pagi",
+"price_in": 238.0,
+"prev": 222.0,
+"ret_in": 7.21,
+"value_in": 1089611600.0,
+"ara": 276,
+"ara_pct_in": 28.8,
+"stage": "OUT",
+"from_high_in": 0.0,
+"tf": "1m",
+"t_corr": "09:44",
+"t_out": "09:45",
+"H": 262.0
+},
+{
+"id": "2026-11-27:PARTY:NELY",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "11:02",
+"code": "NELY",
+"band": "<200",
+"session": "pagi",
+"price_in": 204.0,
+"prev": 178.0,
+"ret_in": 14.61,
+"value_in": 571832400.0,
+"ara": 240,
+"ara_pct_in": 41.7,
+"stage": "OUT",
+"from_high_in": -1.9,
+"tf": "1m",
+"t_out": "11:09",
+"H": 210.0
+},
+{
+"id": "2026-11-27:PARTY:MAXI",
+"setup": "PARTY",
+"date": "2026-11-27",
+"time_in": "11:23",
+"code": "MAXI",
+"band": "<200",
+"session": "pagi",
+"price_in": 20.0,
+"prev": 17.0,
+"ret_in": 17.65,
+"value_in": 523134000.0,
+"ara": 22,
+"ara_pct_in": 50.4,
+"stage": "WATCH",
+"from_high_in": 0.0,
+"tf": "1m"
 }
 ]
