@@ -113,9 +113,74 @@ def vwap_line(b, ara):
     return f"VWAP {W.nf(vwap)} ({W.nf(gap, 1)}% di bawah ARA) → {grade}"
 
 
+def intraday_day(codes, day):
+    """Candle 1 menit untuk tanggal tertentu (aman dipakai sesudah tutup / akhir pekan)."""
+    import yfinance as yf
+    if not codes:
+        return {}
+    syms = [c + ".JK" for c in codes]
+    df = yf.download(syms, period="5d", interval="1m", group_by="ticker", progress=False, threads=True)
+    out = {}
+    for c, s in zip(codes, syms):
+        try:
+            d = (df[s] if len(syms) > 1 else df).dropna(subset=["Close"])
+            d = d[d["Volume"] > 0]
+            d.index = d.index.tz_convert("Asia/Jakarta")
+            d = d[d.index.strftime("%Y-%m-%d") == day]
+            if len(d):
+                out[c] = d
+        except Exception:  # noqa
+            pass
+    return out
+
+
+def ciri(b, ara):
+    """Ciri hari ARA dari candle 1 menit: selisih VWAP, jam pertama sentuh ARA, porsi volume di ARA."""
+    if b is None or not len(b) or float(b["Volume"].sum()) <= 0:
+        return {}
+    tp = (b["High"] + b["Low"] + b["Close"]) / 3
+    vw = float((tp * b["Volume"]).sum() / b["Volume"].sum())
+    at = b[b["High"] >= ara]
+    return {"vwap": round(vw, 2), "vwap_gap": round((ara / vw - 1) * 100, 2),
+            "t_ara": at.index[0].strftime("%H:%M") if len(at) else None,
+            "vol_ara_pct": round(float(b.loc[b["Close"] >= ara, "Volume"].sum() / b["Volume"].sum() * 100), 1)}
+
+
+def record_all(qs, today):
+    """Catat SEMUA saham yang terkunci ARA saat tutup (syariah maupun tidak, harga berapa pun)
+    ke jurnal sebagai ARA_TUTUP, untuk menguji ciri ARA valid (bid, VWAP, jam kunci) vs IEP besok."""
+    items = []
+    for s, q in qs.items():
+        code = s.replace(".JK", "")
+        t = q.get("regularMarketTime")
+        px, prev = q.get("regularMarketPrice"), q.get("regularMarketPreviousClose")
+        if not t or not px or not prev or datetime.fromtimestamp(t, U.WIB).strftime("%Y-%m-%d") != today:
+            continue
+        ara = U.ara_price(prev)
+        if px >= ara and (q.get("regularMarketVolume") or 0) > 0:
+            items.append((code, float(px), float(prev), ara, q))
+    if not items:
+        return 0
+    try:
+        bars = intraday_day([c for c, *_ in items], today)
+    except Exception as ex:  # noqa
+        print("intraday ARA tutup gagal:", ex)
+        bars = {}
+    for code, px, prev, ara, q in items:
+        c = ciri(bars.get(code), ara)
+        J.add("ARA_TUTUP", code, today, c.get("t_ara") or "15:59", float(ara), prev,
+              value=round(px * (q.get("regularMarketVolume") or 0)),
+              extra={"syariah": int(code in U.ISSI), "mcap": q.get("marketCap"), **c})
+    return len(items)
+
+
 def close_recap(qs, today):
     """Akhir sesi: simpan semua saham syariah yang terkunci ARA (untuk pengingat pagi besok),
     kembalikan baris teks untuk rekap penutupan."""
+    try:
+        print("ARA tutup dicatat:", record_all(qs, today))
+    except Exception as ex:  # noqa
+        print("catat ARA tutup gagal:", ex)
     st = _load()
     items = []
     for s, q in qs.items():

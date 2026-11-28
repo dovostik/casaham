@@ -183,7 +183,7 @@ def cmd_bid(parts):
         return "Jumlah lot tidak terbaca. Contoh: <code>/bid TGUK 350000</code>"
     r = J.set_bid(code, lot, datetime.now(U.WIB).strftime("%Y-%m-%d"))
     if not r:
-        return f"{code} tidak ada di jurnal BBS/ARA. /bid hanya untuk saham yang tercatat sinyal BBS atau 🔒 ARA."
+        return f"{code} tidak tercatat terkunci ARA di jurnal. /bid untuk saham yang terkunci ARA saat tutup (semua saham, syariah maupun tidak; tercatat otomatis setelah ±16:00)."
     t = f"✅ Bid {code} ({r['date']}): {nf(lot)} lot"
     if r.get("bid_val"):
         t += f" ≈ Rp{nf(r['bid_val'] / 1e9, 2)} M"

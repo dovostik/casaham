@@ -17,7 +17,7 @@ FEE = 0.4
 CSV_COLS = ["id", "setup", "date", "time_in", "code", "band", "session", "price_in", "prev", "ret_in", "value_in",
             "ara", "ara_pct_in", "stage", "t_corr", "t_bounce", "bounce_price", "sl", "tp1", "tp2", "H",
             "broksum_ok", "broksum", "t_out", "t_fail", "tp1_hit", "tp2_hit", "brk",
-            "close", "locked", "vol_day", "bid_lot", "bid_val", "bid_ratio", "iep_gap", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
+            "syariah", "vwap_gap", "t_ara", "vol_ara_pct", "close", "locked", "vol_day", "bid_lot", "bid_val", "bid_ratio", "iep_gap", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
 
 
 def load():
@@ -152,21 +152,47 @@ def fill_next_open(today, quotes):
 def set_bid(code, lot, today):
     """Catat antrian bid saat tutup (lot) ke catatan BBS terbaru saham itu (tanggal <= today)."""
     rows = load()
-    cand = [r for r in rows if r["code"] == code and r["date"] <= today and r["setup"] in ("BBS", "ARA")]
+    cand = [r for r in rows if r["code"] == code and r["date"] <= today and r["setup"] in ("BBS", "ARA", "ARA_TUTUP")]
     if not cand:
         return None
-    r = max(cand, key=lambda x: x["date"])
-    px = r.get("close") or r.get("ara")
-    r["bid_lot"] = int(lot)
-    r["bid_val"] = round(lot * 100 * px) if px else None
-    if r.get("vol_day"):
-        r["bid_ratio"] = round(lot * 100 / r["vol_day"] * 100, 1)
+    last = max(r["date"] for r in cand)
+    for r in [x for x in cand if x["date"] == last]:
+        px = r.get("close") or r.get("ara")
+        r["bid_lot"] = int(lot)
+        r["bid_val"] = round(lot * 100 * px) if px else None
+        if r.get("vol_day"):
+            r["bid_ratio"] = round(lot * 100 / r["vol_day"] * 100, 1)
     save(rows)
-    return r
+    order = {"ARA_TUTUP": 0, "ARA": 1, "BBS": 2}
+    return min([x for x in cand if x["date"] == last], key=lambda x: order[x["setup"]])
+
+
+def ara_ciri_text(rows):
+    """Uji ciri ARA valid: semua saham terkunci ARA saat tutup vs open besok (iep_gap)."""
+    rs = [r for r in rows if r["setup"] == "ARA_TUTUP" and r.get("iep_gap") is not None]
+    if not rs:
+        return ""
+    def g(name, sel):
+        x = [r["iep_gap"] for r in rs if sel(r)]
+        if not x:
+            return None
+        return f"{name}: {len(x)} · naik {sum(v > 0 for v in x) / len(x) * 100:.0f}% · rata2 {sum(x) / len(x):+.1f}%".replace(".", ",")
+    out = ["\n<b>Ciri ARA (semua saham terkunci saat tutup → open besok)</b>",
+           g("semua", lambda r: True),
+           g("VWAP ≤ 2% di bawah ARA", lambda r: r.get("vwap_gap") is not None and r["vwap_gap"] <= 2),
+           g("VWAP 2–5%", lambda r: r.get("vwap_gap") is not None and 2 < r["vwap_gap"] <= 5),
+           g("VWAP > 5%", lambda r: r.get("vwap_gap") is not None and r["vwap_gap"] > 5),
+           g("terkunci sebelum 11:00", lambda r: (r.get("t_ara") or "99") < "11:00"),
+           g("terkunci 14:00 ke atas", lambda r: (r.get("t_ara") or "") >= "14:00"),
+           g("volume di ARA ≥ 30%", lambda r: (r.get("vol_ara_pct") or 0) >= 30),
+           g("volume di ARA < 10%", lambda r: r.get("vol_ara_pct") is not None and r["vol_ara_pct"] < 10),
+           g("syariah", lambda r: r.get("syariah") == 1),
+           g("non-syariah", lambda r: r.get("syariah") == 0)]
+    return "\n".join(x for x in out if x)
 
 
 def bid_stats_text(rows):
-    rs = [r for r in rows if r.get("bid_lot") is not None]
+    rs = [r for r in rows if r.get("bid_lot") is not None and r["setup"] == "ARA_TUTUP"]
     if not rs:
         return ""
     def grp(name, sel):
@@ -211,7 +237,7 @@ def stats_text(since=None, title="Evaluasi jurnal"):
     if not rows:
         return "Jurnal masih kosong."
     lines = [f"📊 <b>{title}</b>" + (f" (sejak {since})" if since else "") + f" · {len(rows)} catatan"]
-    for setup in ("PARTY", "BBS", "ARA"):
+    for setup in ("PARTY", "BBS", "ARA", "ARA_TUTUP"):
         rs = [r for r in rows if r["setup"] == setup]
         if not rs:
             continue
@@ -231,6 +257,9 @@ def stats_text(since=None, title="Evaluasi jurnal"):
             lines.append(f"menang {sum(x > 0 for x in res) / len(res) * 100:.0f}% · rata2 {sum(res) / len(res):+.2f}% (sudah fee)".replace(".", ","))
             lines.append("per band: " + _fmt(_grp(done, "band")))
             lines.append("per sesi: " + _fmt(_grp(done, "session")))
+    ct = ara_ciri_text(rows)
+    if ct:
+        lines.append(ct)
     bt = bid_stats_text(rows)
     if bt:
         lines.append(bt)
