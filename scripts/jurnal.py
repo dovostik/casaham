@@ -17,7 +17,7 @@ FEE = 0.4
 CSV_COLS = ["id", "setup", "date", "time_in", "code", "band", "session", "price_in", "prev", "ret_in", "value_in",
             "ara", "ara_pct_in", "stage", "t_corr", "t_bounce", "bounce_price", "sl", "tp1", "tp2", "H",
             "broksum_ok", "broksum", "t_out", "t_fail", "tp1_hit", "tp2_hit", "brk",
-            "syariah", "vwap_gap", "t_ara", "vol_ara_pct", "close", "locked", "vol_day", "bid_lot", "bid_val", "bid_ratio", "iep_gap", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
+            "syariah", "vwap_gap", "t_ara", "vol_ara_pct", "broke", "close", "locked", "vol_day", "bid_lot", "bid_val", "bid_ratio", "iep_gap", "high_after", "low_after", "n_date", "n_open", "result", "win", "note"]
 
 
 def load():
@@ -186,6 +186,10 @@ def ara_ciri_text(rows):
            g("terkunci 14:00 ke atas", lambda r: (r.get("t_ara") or "") >= "14:00"),
            g("volume di ARA ≥ 30%", lambda r: (r.get("vol_ara_pct") or 0) >= 30),
            g("volume di ARA < 10%", lambda r: r.get("vol_ara_pct") is not None and r["vol_ara_pct"] < 10),
+           g("kunci tak pernah jebol", lambda r: r.get("broke") == 0),
+           g("kunci sempat jebol", lambda r: r.get("broke") == 1),
+           g("✅ tak jebol & vol di ARA ≥ 30%", lambda r: r.get("broke") == 0 and (r.get("vol_ara_pct") or 0) >= 30),
+           g("hari ARA ke-2+", lambda r: (r.get("streak") or 1) >= 2),
            g("syariah", lambda r: r.get("syariah") == 1),
            g("non-syariah", lambda r: r.get("syariah") == 0)]
     return "\n".join(x for x in out if x)

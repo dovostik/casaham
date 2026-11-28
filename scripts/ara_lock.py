@@ -143,7 +143,24 @@ def ciri(b, ara):
     at = b[b["High"] >= ara]
     return {"vwap": round(vw, 2), "vwap_gap": round((ara / vw - 1) * 100, 2),
             "t_ara": at.index[0].strftime("%H:%M") if len(at) else None,
-            "vol_ara_pct": round(float(b.loc[b["Close"] >= ara, "Volume"].sum() / b["Volume"].sum() * 100), 1)}
+            "vol_ara_pct": round(float(b.loc[b["Close"] >= ara, "Volume"].sum() / b["Volume"].sum() * 100), 1),
+            "broke": int(len(at) > 0 and bool((b.loc[at.index[0]:, "Close"] < ara).any()))}
+
+
+def verdict(c):
+    """Kaidah uji 1 bulan (76 ARA, semua saham): kunci tidak pernah jebol sejak pertama sentuh ARA
+    + ≥30% volume di harga ARA → IEP besok naik 94%, rata-rata +14%, tidak ada yang minus (16 kasus).
+    Kunci jebol + volume di ARA <30% → naik 61%, rata-rata +4,5%, 23% minus."""
+    if not c or c.get("broke") is None:
+        return None
+    v = c.get("vol_ara_pct") or 0
+    if not c["broke"] and v >= 30:
+        return "✅ VALID KUAT (kunci tak pernah jebol, volume di ARA ≥ 30%)"
+    if not c["broke"]:
+        return "🟡 cukup (kunci tak jebol, tapi volume di ARA < 30%)"
+    if v >= 30:
+        return "🟡 cukup (kunci sempat jebol, volume di ARA ≥ 30%)"
+    return "⚠️ LEMAH (kunci sempat jebol & volume di ARA < 30%)"
 
 
 def record_all(qs, today):
@@ -193,11 +210,13 @@ def close_recap(qs, today):
             items.append({"code": code, "ara": e[2], "prev": e[1]})
     if items:
         try:
-            bars = W.intraday([i["code"] for i in items])
+            bars = intraday_day([i["code"] for i in items], today)
         except Exception:  # noqa
             bars = {}
         for i in items:
-            i["grade"] = vwap_line(bars.get(i["code"]), i["ara"])
+            c = ciri(bars.get(i["code"]), i["ara"])
+            v = verdict(c)
+            i["grade"] = " · ".join(x for x in [vwap_line(bars.get(i["code"]), i["ara"]), v] if x)
     st["locked_close"] = {"date": today, "items": items}
     _save(st)
     if not items:
